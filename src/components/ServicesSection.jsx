@@ -1,6 +1,14 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Star, MessageSquare, Brain, Phone, TrendingUp, Users, Zap, Clock } from 'lucide-react';
+import { Star, MessageSquare, Brain, Phone, TrendingUp, Users, Zap, Clock, Puzzle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+
+const brandColors = {
+  coralBlue: '#27a1c2',
+  orange: '#db5439',
+  tan: '#fdf3d9',
+};
 
 const ServicesSection = () => {
   const services = [
@@ -39,161 +47,95 @@ const ServicesSection = () => {
       results: "During busy periods when your staff can't answer phones, your AI ensures every potential customer gets immediate, professional service. It can handle multiple calls simultaneously, never gets overwhelmed.",
       proof: "Giuseppe's Trattoria captured an additional $8,400 monthly revenue from calls that would have gone to voicemail during busy periods.",
       color: "warning-orange"
+    },
+    {
+      icon: Puzzle,
+      title: 'Custom AI Solutions',
+      subtitle: 'Tailored Automation for Your Unique Needs',
+      description: 'We build bespoke AI tools and automations for restaurants with unique challenges or ambitious goals. If you can dream it, we can build it.',
+      results: 'From custom loyalty programs to AI-driven menu optimization, our team delivers solutions that set you apart.',
+      proof: 'See how our custom solutions have transformed unique restaurants.',
+      color: 'coralBlue',
+      modalContent: {
+        heading: 'Custom AI Solutions',
+        body: 'This is a detailed article about custom AI solutions. Replace this with your own content. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur consectetur, nisl nisi consectetur nisi, eu consectetur nisl nisi euismod nisi.'
+      }
     }
   ];
 
+  const [openIndex, setOpenIndex] = useState(null);
+
   return (
-    <section id="services" className="py-16 lg:py-24 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-              Your Unfair AI Advantage Over{' '}
-              <span className="text-primary">Every Other Restaurant</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-              Every service your restaurant needs to dominate your local market, all running automatically in the background while you focus on what you do best.
-            </p>
-          </div>
-
-          <div className="space-y-16">
-            {services.map((service, index) => {
-              const IconComponent = service.icon;
-              const isEven = index % 2 === 0;
-              
-              return (
-                <div key={index} className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${!isEven ? 'lg:grid-flow-col-dense' : ''}`}>
-                  <div className={`${!isEven ? 'lg:col-start-2' : ''}`}>
-                    <Card className="h-full shadow-xl border-0 bg-gradient-to-br from-white to-gray-50">
-                      <CardHeader className="pb-6">
-                        <div className={`w-16 h-16 bg-${service.color}/10 rounded-2xl flex items-center justify-center mb-4`}>
-                          <IconComponent className={`h-8 w-8 text-${service.color}`} />
-                        </div>
-                        <CardTitle className="text-2xl lg:text-3xl font-bold text-foreground mb-2">
-                          {service.title}
-                        </CardTitle>
-                        <p className={`text-lg font-semibold text-${service.color}`}>
-                          {service.subtitle}
-                        </p>
-                      </CardHeader>
-                      <CardContent className="space-y-6">
-                        <p className="text-muted-foreground leading-relaxed text-lg">
-                          {service.description}
-                        </p>
-                        
-                        <div className={`p-4 bg-${service.color}/5 rounded-xl border border-${service.color}/20`}>
-                          <div className="flex items-start space-x-3">
-                            <TrendingUp className={`h-5 w-5 text-${service.color} mt-0.5 flex-shrink-0`} />
-                            <p className="text-foreground font-medium">
-                              {service.results}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="bg-white p-4 rounded-xl border-2 border-gray-100">
-                          <div className="flex items-start space-x-3">
-                            <Users className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
-                            <p className="text-muted-foreground">
-                              <span className="font-bold text-foreground">Success Story:</span> {service.proof}
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  <div className={`${!isEven ? 'lg:col-start-1 lg:row-start-1' : ''}`}>
-                    <div className="relative">
-                      {/* Mock Dashboard/Interface */}
-                      <div className="bg-white rounded-2xl shadow-2xl p-6 border">
-                        <div className="flex items-center justify-between mb-6">
-                          <div className="flex items-center space-x-3">
-                            <div className={`w-8 h-8 bg-${service.color}/10 rounded-lg flex items-center justify-center`}>
-                              <IconComponent className={`h-4 w-4 text-${service.color}`} />
-                            </div>
-                            <span className="font-semibold text-foreground">Bot & Table AI</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <div className={`w-2 h-2 bg-${service.color} rounded-full animate-pulse`}></div>
-                            <span className="text-sm text-muted-foreground">Active</span>
-                          </div>
-                        </div>
-
-                        <div className="space-y-4">
-                          {index === 0 && (
-                            <>
-                              <div className="flex justify-between items-center p-3 bg-success-green/10 rounded-lg">
-                                <span className="text-sm text-foreground">New Reviews This Week</span>
-                                <span className="font-bold text-success-green">+12</span>
-                              </div>
-                              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                                <span className="text-sm text-foreground">Average Rating</span>
-                                <div className="flex items-center space-x-1">
-                                  {[1,2,3,4,5].map(i => (
-                                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                                  ))}
-                                  <span className="ml-1 font-bold">4.8</span>
-                                </div>
-                              </div>
-                            </>
-                          )}
-
-                          {index === 1 && (
-                            <>
-                              <div className="flex justify-between items-center p-3 bg-tech-blue/10 rounded-lg">
-                                <span className="text-sm text-foreground">Messages Handled Today</span>
-                                <span className="font-bold text-tech-blue">47</span>
-                              </div>
-                              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                                <span className="text-sm text-foreground">Response Time</span>
-                                <span className="font-bold text-foreground">&lt; 30 sec</span>
-                              </div>
-                            </>
-                          )}
-
-                          {index === 2 && (
-                            <>
-                              <div className="flex justify-between items-center p-3 bg-primary/10 rounded-lg">
-                                <span className="text-sm text-foreground">Campaigns Active</span>
-                                <span className="font-bold text-primary">8</span>
-                              </div>
-                              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                                <span className="text-sm text-foreground">Open Rate</span>
-                                <span className="font-bold text-foreground">89%</span>
-                              </div>
-                            </>
-                          )}
-
-                          {index === 3 && (
-                            <>
-                              <div className="flex justify-between items-center p-3 bg-warning-orange/10 rounded-lg">
-                                <span className="text-sm text-foreground">Calls Answered Today</span>
-                                <span className="font-bold text-warning-orange">23</span>
-                              </div>
-                              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                                <span className="text-sm text-foreground">Reservations Booked</span>
-                                <span className="font-bold text-foreground">15</span>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Floating Elements */}
-                      <div className="absolute -top-4 -right-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center animate-float">
-                        <Zap className={`h-6 w-6 text-${service.color}`} />
-                      </div>
-                      <div className="absolute -bottom-4 -left-4 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center animate-float" style={{animationDelay: '1s'}}>
-                        <Clock className="h-5 w-5 text-muted-foreground" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+    <section className="py-16 px-4 max-w-7xl mx-auto">
+      <h2 className="text-4xl font-bold text-center mb-8" style={{ color: brandColors.coralBlue }}>
+        Your Unfair AI Advantage Over Every Other Restaurant
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {services.map((service, idx) => (
+          <motion.div
+            key={service.title}
+            className={
+              `relative rounded-3xl p-8 flex flex-col items-center justify-between shadow-xl border transition-all duration-300 cursor-pointer ` +
+              `backdrop-blur-lg bg-white/30 border-2 ` +
+              (idx % 2 === 0 ? 'border-[#27a1c2]/40' : 'border-[#db5439]/40')
+            }
+            style={{ minHeight: '320px' }}
+            whileHover={{ scale: 1.04, boxShadow: '0 8px 32px 0 rgba(39,161,194,0.15)' }}
+            onClick={() => setOpenIndex(idx)}
+          >
+            <div className="flex flex-col items-center mb-4">
+              <div
+                className="rounded-full p-4 mb-4 shadow-lg"
+                style={{
+                  background: idx % 2 === 0 ? brandColors.coralBlue + '22' : brandColors.orange + '22',
+                  border: `2px solid ${idx % 2 === 0 ? brandColors.coralBlue : brandColors.orange}`,
+                }}
+              >
+                {(() => { const Icon = service.icon; return <Icon className="h-12 w-12" style={{ color: idx % 2 === 0 ? brandColors.coralBlue : brandColors.orange }} />; })()}
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 text-center mb-2">{service.title}</h3>
+              <p className="text-gray-600 text-center text-base mb-2">{service.subtitle}</p>
+            </div>
+            <motion.button
+              className="absolute bottom-6 left-1/2 -translate-x-1/2 px-5 py-2 rounded-full bg-white/70 text-[#27a1c2] font-semibold shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 border border-[#27a1c2]/30"
+              whileHover={{ backgroundColor: brandColors.coralBlue, color: '#fff' }}
+              onClick={e => { e.stopPropagation(); setOpenIndex(idx); }}
+            >
+              Learn More
+            </motion.button>
+          </motion.div>
+        ))}
       </div>
+      <AnimatePresence>
+        {openIndex !== null && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setOpenIndex(null)}
+          >
+            <motion.div
+              className="relative bg-white/80 rounded-3xl shadow-2xl p-10 max-w-lg w-full border-2 border-[#27a1c2]/40 backdrop-blur-xl"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={e => e.stopPropagation()}
+            >
+              <button className="absolute top-4 right-4 text-gray-500 hover:text-gray-900 text-2xl" onClick={() => setOpenIndex(null)}>&times;</button>
+              <div className="flex items-center mb-6">
+                <div className="rounded-xl p-3 mr-4" style={{ background: brandColors.coralBlue + '22' }}>
+                  {(() => { const ModalIcon = services[openIndex].icon; return <ModalIcon className="h-8 w-8" style={{ color: brandColors.coralBlue }} />; })()}
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900">{services[openIndex].modalContent?.heading || services[openIndex].title}</h3>
+              </div>
+              <div className="text-gray-700 text-base leading-relaxed">
+                {services[openIndex].modalContent?.body || 'Detailed article content goes here.'}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

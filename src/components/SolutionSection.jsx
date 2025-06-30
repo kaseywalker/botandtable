@@ -1,5 +1,7 @@
 import React from 'react';
 import { Bot, Zap, Shield, Clock } from 'lucide-react';
+import Testimonials from './ui/Testimonials';
+import DisplayCardsDemo from './ui/display-cards-demo';
 
 const SolutionSection = () => {
   return (
@@ -69,35 +71,11 @@ const SolutionSection = () => {
             </div>
 
             <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-8 border">
-                <div className="text-center mb-6">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Bot className="h-8 w-8 text-primary" />
-                  </div>
-                  <h4 className="text-xl font-bold text-foreground">Your AI Marketing Assistant</h4>
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-3 p-3 bg-success-green/10 rounded-lg">
-                    <div className="w-3 h-3 bg-success-green rounded-full animate-pulse"></div>
-                    <span className="text-sm text-foreground">Generating personalized customer campaigns...</span>
-                  </div>
-                  <div className="flex items-center space-x-3 p-3 bg-tech-blue/10 rounded-lg">
-                    <div className="w-3 h-3 bg-tech-blue rounded-full animate-pulse"></div>
-                    <span className="text-sm text-foreground">Responding to customer inquiries...</span>
-                  </div>
-                  <div className="flex items-center space-x-3 p-3 bg-primary/10 rounded-lg">
-                    <div className="w-3 h-3 bg-primary rounded-full animate-pulse"></div>
-                    <span className="text-sm text-foreground">Collecting Google reviews automatically...</span>
-                  </div>
-                  <div className="flex items-center space-x-3 p-3 bg-warning-orange/10 rounded-lg">
-                    <div className="w-3 h-3 bg-warning-orange rounded-full animate-pulse"></div>
-                    <span className="text-sm text-foreground">Analyzing customer behavior patterns...</span>
-                  </div>
-                </div>
-              </div>
+              <DisplayCardsDemo />
             </div>
           </div>
+
+          <Testimonials />
 
           <div className="text-center bg-white rounded-2xl p-8 shadow-xl border">
             <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">

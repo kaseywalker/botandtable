@@ -41,17 +41,23 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <button 
-              onClick={() => scrollToSection('services')}
+            <Link 
+              to="/"
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
-              Services
-            </button>
-            <button 
-              onClick={() => scrollToSection('how-it-works')}
+              Home
+            </Link>
+            <Link 
+              to="/homepage2"
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
-              How It Works
+              Homepage 2
+            </Link>
+            <button 
+              onClick={() => window.location.href = '/solutions'}
+              className="text-foreground hover:text-primary transition-colors font-medium"
+            >
+              Solutions
             </button>
             <Link 
               to="/about"
@@ -59,12 +65,12 @@ const Header = () => {
             >
               About
             </Link>
-            <button 
-              onClick={() => scrollToSection('resources')}
+            <Link 
+              to="/resources"
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
               Resources
-            </button>
+            </Link>
           </nav>
 
           {/* Desktop CTA */}
@@ -97,17 +103,25 @@ const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden py-4 border-t border-border bg-white">
             <nav className="flex flex-col space-y-4">
+              <Link 
+                to="/"
+                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link 
+                to="/homepage2"
+                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Homepage 2
+              </Link>
               <button 
-                onClick={() => scrollToSection('services')}
+                onClick={() => window.location.href = '/solutions'}
                 className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
               >
-                Services
-              </button>
-              <button 
-                onClick={() => scrollToSection('how-it-works')}
-                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
-              >
-                How It Works
+                Solutions
               </button>
               <Link 
                 to="/about"
@@ -116,12 +130,13 @@ const Header = () => {
               >
                 About
               </Link>
-              <button 
-                onClick={() => scrollToSection('resources')}
+              <Link 
+                to="/resources"
                 className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
+                onClick={() => setIsMenuOpen(false)}
               >
                 Resources
-              </button>
+              </Link>
               <div className="pt-4 border-t border-border">
                 <a 
                   href="tel:+1234567890" 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Calendar } from './ui/calendar';
 
 const FinalCTASection = () => {
   return (
@@ -74,69 +75,26 @@ const FinalCTASection = () => {
             </div>
           </div>
 
-          {/* Right Column - Image */}
-          <div className="relative">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-              <img 
-                src="/confident-business-person.jpg" 
-                alt="Confident restaurant owner who transformed their business with Bot & Table" 
-                className="w-full h-[600px] object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-              
-              {/* Success Overlay */}
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-6 shadow-lg">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600">Monthly Revenue Increase</p>
-                      <p className="text-3xl font-bold text-green-600">+$12,400</p>
-                    </div>
-                    <div className="text-green-500 text-3xl">📈</div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <p className="text-lg font-bold text-gray-800">+89</p>
-                      <p className="text-xs text-gray-600">New Reviews</p>
-                    </div>
-                    <div>
-                      <p className="text-lg font-bold text-gray-800">+340%</p>
-                      <p className="text-xs text-gray-600">Online Orders</p>
-                    </div>
-                    <div>
-                      <p className="text-lg font-bold text-gray-800">0hrs</p>
-                      <p className="text-xs text-gray-600">Daily Management</p>
-                    </div>
-                  </div>
-                </div>
+          {/* Right Column - Booking Calendar */}
+          <div className="flex items-center justify-center h-full">
+            <div className="bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center w-full max-w-lg mx-auto text-gray-900">
+              <h3 className="text-2xl font-bold text-navy-900 mb-4">Book a Free Strategy Call</h3>
+              <Calendar />
+              <div className="w-full flex flex-col sm:flex-row gap-4 mt-6">
+                <select className="flex-1 border rounded-lg px-4 py-3 text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary bg-white">
+                  <option>Select a time</option>
+                  <option>10:00 AM</option>
+                  <option>11:00 AM</option>
+                  <option>1:00 PM</option>
+                  <option>2:00 PM</option>
+                  <option>3:00 PM</option>
+                  <option>4:00 PM</option>
+                </select>
+                <button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 py-4 rounded-lg transition-all hover:scale-105 w-full sm:w-auto mt-2 sm:mt-0">
+                  Book Strategy Call
+                </button>
               </div>
-            </div>
-            
-            {/* Floating Badge */}
-            <div className="absolute -top-4 -right-4 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg transform rotate-12">
-              <span className="text-sm font-bold">✓ Proven Results</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Trust Indicators */}
-        <div className="mt-16 pt-8 border-t border-gray-700">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-2xl font-bold text-coral-500 mb-2">500+</div>
-              <p className="text-gray-400">Restaurants Transformed</p>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-coral-500 mb-2">$2.3M+</div>
-              <p className="text-gray-400">Revenue Generated</p>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-coral-500 mb-2">4.9★</div>
-              <p className="text-gray-400">Client Satisfaction</p>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-coral-500 mb-2">24/7</div>
-              <p className="text-gray-400">AI Working For You</p>
+              <p className="text-sm text-gray-400 mt-4">No spam, no obligation—just actionable insights for your restaurant.</p>
             </div>
           </div>
         </div>

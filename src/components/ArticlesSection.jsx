@@ -1,8 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const ArticlesSection = () => {
   const articles = [
+    {
+      id: 6,
+      category: "REPUTATION MANAGEMENT",
+      title: "Stop Bad Reviews Before They Go Public: AI Private Feedback Channels",
+      readTime: "6 min read",
+      date: "June 29, 2025",
+      image: "/happy-restaurant-owner.jpg",
+      slug: "ai-private-feedback-channels",
+      author: "Bot & Table"
+    },
+    {
+      id: 5,
+      category: "GOOGLE REVIEWS AI",
+      title: "Boosting Google Reviews: Let AI Do the Work with Automated Requests",
+      readTime: "12 min read",
+      date: "June 28, 2025",
+      image: "/confident-business-person.jpg",
+      slug: "ai-google-reviews-automation",
+      author: "Bot & Table"
+    },
+    {
+      id: 4,
+      category: "AI LISTINGS SYNC",
+      title: "Sync Your Listings: How AI Keeps Your Restaurant Info Accurate Everywhere",
+      readTime: "8 min read",
+      date: "June 27, 2025",
+      image: "/restaurant-atmosphere.jpg",
+      slug: "ai-listings-sync",
+      author: "Bot & Table"
+    },
     {
       id: 1,
       category: "MARKETING STRATEGY",
@@ -32,17 +62,30 @@ const ArticlesSection = () => {
     }
   ];
 
+  const [startIdx, setStartIdx] = useState(0);
+  const visibleCount = 3;
+  const canGoLeft = startIdx > 0;
+  const canGoRight = startIdx + visibleCount < articles.length;
+
+  const handleLeft = () => {
+    if (canGoLeft) setStartIdx(startIdx - 1);
+  };
+  const handleRight = () => {
+    if (canGoRight) setStartIdx(startIdx + 1);
+  };
+
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Related articles
-          </h2>
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-4xl font-bold text-gray-900">Related articles</h2>
+          <div className="flex items-center gap-2">
+            <button onClick={handleLeft} disabled={!canGoLeft} className={`text-3xl px-2 py-1 rounded transition-colors ${canGoLeft ? 'hover:bg-gray-200' : 'text-gray-300 cursor-not-allowed'}`}>{'<'}</button>
+            <button onClick={handleRight} disabled={!canGoRight} className={`text-3xl px-2 py-1 rounded transition-colors ${canGoRight ? 'hover:bg-gray-200' : 'text-gray-300 cursor-not-allowed'}`}>{'>'}</button>
+          </div>
         </div>
-
         <div className="grid md:grid-cols-3 gap-8">
-          {articles.map((article) => (
+          {articles.slice(startIdx, startIdx + visibleCount).map((article) => (
             <Link 
               key={article.id}
               to={`/articles/${article.slug}`}
@@ -55,18 +98,15 @@ const ArticlesSection = () => {
                   className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              
               <div className="p-6">
                 <div className="mb-3">
                   <span className="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full uppercase tracking-wide">
                     {article.category}
                   </span>
                 </div>
-                
                 <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-coral-600 transition-colors line-clamp-2">
                   {article.title}
                 </h3>
-                
                 <div className="flex items-center text-sm text-gray-500 space-x-4">
                   <span>{article.readTime}</span>
                   <span>|</span>

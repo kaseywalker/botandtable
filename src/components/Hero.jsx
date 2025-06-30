@@ -1,30 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 import EnhancedRevenueLeakDetector from './EnhancedRevenueLeakDetector';
+import SparklesText from "./ui/SparklesText";
+import { AICommunicationIconCloudWithRobot } from "./ai-communication-demo-with-robot";
 
 const Hero = () => {
   return (
-    <section className="bg-gradient-to-br from-cream-50 to-white py-20">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
-            See How Much Revenue Your Restaurant Is{' '}
-            <span className="text-coral-500">Losing Every Day</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto">
-            Our AI found restaurants like yours are missing{' '}
-            <span className="font-bold text-coral-500">$3,200+ monthly</span> in hidden revenue.{' '}
-            Discover your exact number in 60 seconds.
-          </p>
+    <section className="bg-gradient-to-br from-cream-50 to-white pt-20 pb-20">
+      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-16 px-4 md:px-8">
+        {/* Left: Text Content */}
+        <div className="flex-1 flex flex-col items-start justify-center max-w-xl text-left">
+          <SparklesText text="Restaurant Growth, Automated" colors={{ first: "#27a1c2", second: "#db5439" }} className="mb-6" />
+          <h2 className="text-2xl md:text-3xl text-gray-700 font-semibold mb-4">
+            Set it up once. Watch your customer base grow—while you focus on running your restaurant.
+          </h2>
+          <button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-4 rounded-lg text-lg transition-all duration-200 shadow-md">
+            Book Strategy Call
+          </button>
         </div>
-
+        {/* Right: Animated Icon Cloud with Robot */}
+        <div className="flex-1 flex items-center justify-center w-full max-w-md mb-8 md:mb-0">
+          <AICommunicationIconCloudWithRobot />
+        </div>
+      </div>
+      {/* Analyzer below hero */}
+      <div className="container mx-auto px-6 mt-4">
         <EnhancedRevenueLeakDetector />
-
-        <div className="text-center mt-12">
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Every day you wait is another day your competitors are capturing customers that should be yours.{' '}
-            <span className="font-semibold text-coral-500">Stop the revenue bleeding now.</span>
-          </p>
-        </div>
       </div>
     </section>
   );

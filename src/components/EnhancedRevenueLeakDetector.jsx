@@ -161,11 +161,10 @@ const EnhancedRevenueLeakDetector = () => {
       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
-            <span className="text-4xl mr-3">🤖</span>
-            <h2 className="text-3xl font-bold text-gray-800">AI Restaurant Revenue Analyzer</h2>
+            <h2 className="text-3xl font-bold text-gray-800">See How Much Revenue Your Restaurant Is Losing Every Day</h2>
           </div>
           <p className="text-lg text-gray-600">
-            I'll analyze your restaurant in real-time and show you exactly how much revenue you're losing every month
+            Enter your restaurant details below and watch our AI analyze exactly how much money is slipping through the cracks while you're busy running your business
           </p>
         </div>
 
@@ -221,8 +220,7 @@ const EnhancedRevenueLeakDetector = () => {
       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
-            <span className="text-4xl mr-3">🤖</span>
-            <h2 className="text-3xl font-bold text-gray-800">AI Restaurant Revenue Analyzer</h2>
+            <h2 className="text-3xl font-bold text-gray-800">See How Much Revenue Your Restaurant Is Losing Every Day</h2>
           </div>
           <p className="text-lg text-gray-600">
             Perfect! I found your restaurant. Now let's analyze your revenue opportunities.
