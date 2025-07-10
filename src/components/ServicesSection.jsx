@@ -43,7 +43,7 @@ const ServicesSection = () => {
       icon: Phone,
       title: "AI Phone Answering & Booking",
       subtitle: "Capture Every Opportunity, Even During Rush Hour",
-      description: "Your AI phone assistant handles calls with the professionalism of your best host and the availability of a 24/7 service. It takes reservations, answers menu questions, provides directions, and even handles special requests - all while you're focused on serving customers.",
+      description: "Don't miss a phone call—or potential revenue—with AI-powered technology that answers your phone 24/7, 365 days a year",
       results: "During busy periods when your staff can't answer phones, your AI ensures every potential customer gets immediate, professional service. It can handle multiple calls simultaneously, never gets overwhelmed.",
       proof: "Giuseppe's Trattoria captured an additional $8,400 monthly revenue from calls that would have gone to voicemail during busy periods.",
       color: "warning-orange"
@@ -66,7 +66,7 @@ const ServicesSection = () => {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <section className="py-16 px-4 max-w-7xl mx-auto">
+    <section className="pt-0 pb-8 px-4 max-w-7xl mx-auto">
       <h2 className="text-4xl font-bold text-center mb-8" style={{ color: brandColors.coralBlue }}>
         Your Unfair AI Advantage Over Every Other Restaurant
       </h2>

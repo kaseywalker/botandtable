@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -206,9 +207,6 @@
   }
 }
 
-/* Inter font import */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 /* Floating Pills Animations */
 .float-pill-1 {
   animation: float-pill-1 7s ease-in-out infinite;
@@ -335,4 +333,40 @@
   0%, 80%, 100% { opacity: 0.2; }
   40% { opacity: 1; }
 }
+
+/* Fade transition for step content */
+.fade-enter {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 350ms, transform 350ms;
+}
+.fade-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-exit-active {
+  opacity: 0;
+  transform: translateY(-16px);
+  transition: opacity 350ms, transform 350ms;
+}
+
+/* Input and button polish */
+input:focus, input:active {
+  border-color: #27a1c2 !important;
+  box-shadow: 0 0 0 2px #27a1c233 !important;
+  outline: none;
+}
+button:focus, button:active {
+  outline: 2px solid #27a1c2;
+}
+button:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+/* Modal and progress bar polish */
+/* (Most modal/progress bar styles are inline, but you can add more here if needed) */
 

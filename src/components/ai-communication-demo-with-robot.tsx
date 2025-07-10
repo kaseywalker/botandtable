@@ -5,15 +5,12 @@ const aiCommunicationSlugs = [
   "gmail", "gmail", "gmail",
   // Phone/SMS
   "whatsapp", "whatsapp", "whatsapp", "whatsapp", "whatsapp",
-  "skype", "ringcentral",
-  // Chat/Message
-  "messages", "messages", "messages", "messages",
   // Social
   "instagram", "facebook",
   // AI
   "openai", "huggingface",
   // Cloud
-  "amazonaws", "googlecloud", "microsoftazure"
+  "googlecloud"
 ]
 
 export function AICommunicationIconCloudWithRobot() {

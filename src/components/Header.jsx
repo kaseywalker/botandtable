@@ -71,6 +71,18 @@ const Header = () => {
             >
               Resources
             </Link>
+            <Link 
+              to="/report"
+              className="text-foreground hover:text-primary transition-colors font-medium"
+            >
+              Report
+            </Link>
+            <Link 
+              to="/test"
+              className="text-foreground hover:text-primary transition-colors font-medium"
+            >
+              Test
+            </Link>
           </nav>
 
           {/* Desktop CTA */}
@@ -136,6 +148,20 @@ const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Resources
+              </Link>
+              <Link 
+                to="/report"
+                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Report
+              </Link>
+              <Link 
+                to="/test"
+                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Test
               </Link>
               <div className="pt-4 border-t border-border">
                 <a 

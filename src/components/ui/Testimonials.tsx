@@ -118,8 +118,20 @@ const thirdColumn = testimonials.slice(6, 9);
 
 const Testimonials = () => {
   return (
-    <section className="bg-background my-10 relative">
-      <div className="container z-10 mx-auto">
+    <section
+      className="my-10 relative overflow-hidden"
+      style={{ background: '#fdf3d9' }}
+    >
+      {/* Gradient overlay */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background: 'linear-gradient(to bottom, #fff 0%, #fdf3d9 60%, #fdf3d9 100%)',
+          opacity: 0.7,
+        }}
+      />
+      <div className="container z-10 mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

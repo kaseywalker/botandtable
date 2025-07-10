@@ -139,6 +139,23 @@ export function IconCloudWithRobot({ iconSlugs }: DynamicCloudProps) {
         )
       }
       const icon = data.simpleIcons[slug]
+      if (!icon) {
+        // Fallback: render a generic placeholder icon if not found
+        return (
+          <svg
+            key={slug + "-fallback"}
+            width="42"
+            height="42"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ display: "inline-block", verticalAlign: "middle" }}
+          >
+            <rect width="24" height="24" rx="12" fill={theme === "dark" ? "#232629" : "#f3f2ef"} />
+            <text x="12" y="16" textAnchor="middle" fontSize="10" fill="#888">?</text>
+          </svg>
+        )
+      }
       return renderCustomIcon(icon, theme || "light")
     })
   }, [data, theme, iconSlugs])
@@ -174,7 +191,7 @@ export function IconCloudWithRobot({ iconSlugs }: DynamicCloudProps) {
           zIndex: 5,
         }}
       />
-      <style jsx>{`
+      <style>{`
         @keyframes pulse {
           0% {
             transform: translate(-50%, -50%) scale(1);

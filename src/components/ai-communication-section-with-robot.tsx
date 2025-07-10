@@ -7,7 +7,7 @@ import { ArrowRight, Clock, MessageSquare, Phone, Mail, Smartphone, Users, Bot }
 
 export function AICommunicationSectionWithRobot() {
   return (
-    <section className="py-24" style={{ background: '#fdf3d9' }}>
+    <section className="py-8" style={{ background: '#fdf3d9' }}>
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4 px-4 py-2 text-sm font-medium">
