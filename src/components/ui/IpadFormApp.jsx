@@ -42,6 +42,8 @@ const IpadFormApp = () => {
   const [typewriterDone, setTypewriterDone] = useState(false);
   const [showSecondTypewriter, setShowSecondTypewriter] = useState(false);
   const [secondTypewriterDone, setSecondTypewriterDone] = useState(false);
+  const [showFormIntro, setShowFormIntro] = useState(false);
+  const [formIntroDone, setFormIntroDone] = useState(false);
   const navigate = useNavigate();
 
   const steps = [
@@ -163,6 +165,25 @@ const IpadFormApp = () => {
     }
   }, [typewriterDone, showSecondTypewriter]);
 
+  // Show the form intro typewriter when on NameEmail step
+  useEffect(() => {
+    if (steps[currentStep] === 'NameEmail') {
+      setShowFormIntro(true);
+      setFormIntroDone(false);
+    } else {
+      setShowFormIntro(false);
+      setFormIntroDone(false);
+    }
+  }, [currentStep, steps]);
+
+  // Fallback: ensure form appears after a few seconds even if animation fails
+  useEffect(() => {
+    if (showFormIntro && !formIntroDone) {
+      const timer = setTimeout(() => setFormIntroDone(true), 4000); // fallback after 4s
+      return () => clearTimeout(timer);
+    }
+  }, [showFormIntro, formIntroDone]);
+
   // Add a ref for CSSTransition node
   const nodeRef = useRef(null);
 
@@ -227,14 +248,25 @@ const IpadFormApp = () => {
     }
     if (steps[currentStep] === 'NameEmail') {
       return (
-        <ContactStep
-          name={formData.name}
-          email={formData.email}
-          onNameChange={val => setFormData(f => ({ ...f, name: val }))}
-          onEmailChange={val => setFormData(f => ({ ...f, email: val }))}
-          showError={showError}
-          darkMode={true}
-        />
+        <div style={{ width: '100%' }}>
+            <div style={{ marginBottom: 32, textAlign: 'center' }}>
+              <TypewriterText
+                text="Thanks for the information, one last step before we build your free custom report."
+                speed={32}
+                className="block text-base md:text-lg font-mono"
+              />
+            </div>
+            <div style={{ width: '100%' }}>
+              <ContactStep
+                name={formData.name}
+                email={formData.email}
+                onNameChange={val => setFormData(f => ({ ...f, name: val }))}
+                onEmailChange={val => setFormData(f => ({ ...f, email: val }))}
+                showError={showError}
+                darkMode={true}
+              />
+            </div>
+        </div>
       );
     }
     return null;
@@ -304,12 +336,14 @@ const IpadFormApp = () => {
                 </div>
               )}
               {/* Restaurant input field always visible under intro text */}
-              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 24 }}>
+              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 24, position: 'relative' }}>
                 <GooglePlacesAutocomplete
                   value={formData.restaurant}
                   onChange={() => {}}
                   onPlaceSelected={handleRestaurantSelect}
                   darkMode={true}
+                  prompt="Start here – it’s free and instant!"
+                  animatedPlaceholders={["Type your restaurant name...", "e.g. Bella Italia", "e.g. Sushi House", "e.g. The Green Spoon"]}
                   style={{
                     width: '80%',
                     maxWidth: 320,

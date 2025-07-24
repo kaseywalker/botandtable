@@ -5,8 +5,9 @@ import { useRef, useState } from 'react';
 import { Confetti } from './ui/confetti';
 import { Feature } from './ui/feature-with-advantages';
 import { AnimatedBeamDemo } from './ui/animated-beam-demo';
+import { Link } from 'react-router-dom';
 
-const TestPage = () => {
+const HomePage = () => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [confettiOrigin, setConfettiOrigin] = useState({ x: 0.5, y: 0.2 });
   // This callback will be passed to the hero and called when the heading appears
@@ -24,6 +25,14 @@ const TestPage = () => {
   };
   return (
     <div style={{ position: 'relative' }}>
+      <div className="w-full flex justify-end p-6">
+        <Link
+          to="/ai-phone-answering"
+          className="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition-colors"
+        >
+          Home
+        </Link>
+      </div>
       {/* Global confetti canvas, absolutely positioned over the whole page */}
       {showConfetti && (
         <Confetti
@@ -40,12 +49,6 @@ const TestPage = () => {
         />
       )}
       <HeroScrollDemo onHeadingMount={handleFireConfetti} />
-      {/* Animated Beam Demo Section */}
-      {/* <section className="w-full flex justify-center py-12 bg-white">
-        <div className="max-w-3xl w-full">
-          <AnimatedBeamDemo />
-        </div>
-      </section> */}
       {/* Google Reviews Section (Testimonials) below the hero */}
       <Testimonials />
       {/* Feature With Advantages Section */}
@@ -55,4 +58,4 @@ const TestPage = () => {
   );
 };
 
-export default TestPage; 
+export default HomePage; 

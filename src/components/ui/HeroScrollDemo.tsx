@@ -9,6 +9,7 @@ import { Avatar, AvatarImage, AvatarFallback } from './avatar';
 import { Loader } from '@googlemaps/js-api-loader';
 import { useEffect } from 'react';
 import { Confetti } from './confetti';
+import TypewriterText from './TypewriterText';
 
 export const ContainerScroll = ({
   titleComponent,
@@ -103,7 +104,7 @@ export const Card = ({
       }}
       className="max-w-5xl -mt-12 mx-auto h-[30rem] md:h-[40rem] w-full border-4 border-[#6C6C6C] p-2 md:p-6 bg-[#222222] rounded-[30px] shadow-2xl"
     >
-      <div className=" h-full w-full  overflow-hidden rounded-2xl bg-gray-100 dark:bg-zinc-900 md:rounded-2xl md:p-4 ">
+      <div className="h-full w-full overflow-hidden rounded-2xl bg-gray-100 dark:bg-zinc-900 md:rounded-2xl md:p-4 ">
         {children}
       </div>
     </motion.div>
@@ -125,7 +126,7 @@ const InitialTypewriterMessage = React.memo(() => (
 ));
 
 // Add utility functions at the top:
-function formatCurrency(value: string) {
+function formatCurrency(value: string): string {
   if (!value) return '';
   const num = value.replace(/[^\d]/g, '');
   if (!num) return '';
@@ -163,28 +164,73 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
   const [showListSizeField, setShowListSizeField] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', revenue: '', hasList: '', listSize: '' });
 
-  const stepRef = useRef(step);
-  useEffect(() => { stepRef.current = step; }, [step]);
-  // Push a new history state on step change (except initial render):
+  // Remove the modal-related state and effects
+  const [showFormIntro, setShowFormIntro] = useState(false);
+  const [formIntroDone, setFormIntroDone] = useState(false);
+  // Remove these lines:
+  // const [showLeadModal, setShowLeadModal] = useState(false);
+  // const modalTriggeredRef = useRef(false);
+
+  // Debug component lifecycle
   useEffect(() => {
-    if (step > 1) {
-      window.history.pushState({ funnelStep: step }, '', window.location.pathname);
+    console.log('HeroScrollDemo component mounted');
+    return () => {
+      console.log('HeroScrollDemo component unmounted');
+    };
+  }, []);
+
+  // Debug step changes with more detail
+  useEffect(() => {
+    console.log('Step changed to:', step, 'at', new Date().toISOString());
+    console.trace('Step change stack trace');
+  }, [step]);
+
+  // Debug form state changes
+  useEffect(() => {
+    console.log('showFormIntro changed to:', showFormIntro);
+  }, [showFormIntro]);
+
+  useEffect(() => {
+    console.log('formIntroDone changed to:', formIntroDone);
+  }, [formIntroDone]);
+
+  useEffect(() => {
+    if (step === 5) {
+      setShowFormIntro(true);
+      setFormIntroDone(false);
+      // Fallback: show form after 1.5 seconds if typewriter doesn't complete
+      const fallbackTimer = setTimeout(() => {
+        console.log('Fallback: showing form after timeout');
+        setFormIntroDone(true);
+      }, 1500);
+      return () => clearTimeout(fallbackTimer);
+    } else {
+      setShowFormIntro(false);
+      setFormIntroDone(false);
     }
   }, [step]);
-  // Listen for popstate and update step:
-  useEffect(() => {
-    const onPopState = (e: PopStateEvent) => {
-      if (e.state && typeof e.state.funnelStep === 'number') {
-        setStep(e.state.funnelStep);
-      }
-    };
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, []);
-  // On initial mount, replace state with current step:
-  useEffect(() => {
-    window.history.replaceState({ funnelStep: stepRef.current }, '', window.location.pathname);
-  }, []);
+
+  const stepRef = useRef(step);
+  useEffect(() => { stepRef.current = step; }, [step]);
+  
+  // Remove the problematic history management that's causing resets
+  // useEffect(() => {
+  //   if (step > 1) {
+  //     window.history.pushState({ funnelStep: step }, '', window.location.pathname);
+  //   }
+  // }, [step]);
+  // useEffect(() => {
+  //   const onPopState = (e: PopStateEvent) => {
+  //     if (e.state && typeof e.state.funnelStep === 'number') {
+  //       setStep(e.state.funnelStep);
+  //     }
+  //   };
+  //   window.addEventListener('popstate', onPopState);
+  //   return () => window.removeEventListener('popstate', onPopState);
+  // }, []);
+  // useEffect(() => {
+  //   window.history.replaceState({ funnelStep: stepRef.current }, '', window.location.pathname);
+  // }, []);
 
   React.useEffect(() => {
     if (mainTyped) {
@@ -247,7 +293,7 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
         const mapDiv = document.createElement('div');
         const service = new window.google.maps.places.PlacesService(mapDiv);
         service.getDetails({
-          placeId: selectedPlace.place_id,
+          placeId: selectedPlace.place_id!,
           fields: ['reviews'],
         }, (result: any, status: any) => {
           if (status === window.google.maps.places.PlacesServiceStatus.OK && result && result.reviews) {
@@ -289,10 +335,26 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
       const timer = setTimeout(() => {
         setShowPostMarketingMessage(false);
         setStep(5);
-      }, 4000);
+      }, 5000); // Increased delay by 1 second
       return () => clearTimeout(timer);
     }
   }, [step, userSecondAnswers]);
+
+  // Remove all the modal-related useEffect hooks
+  // useEffect(() => {
+  //   console.log('Step changed to:', step);
+  //   if (step === 5 && !modalTriggeredRef.current) {
+  //     console.log('Step 5 reached, opening modal...');
+  //     modalTriggeredRef.current = true;
+  //     const timer = setTimeout(() => {
+  //       console.log('Setting showLeadModal to true');
+  //       setShowLeadModal(true);
+  //     }, 1000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [step]);
+
+  // Remove the fallback useEffect and debug useEffect for modal
 
   // Step 3: Review + Q1
   if (step === 3) {
@@ -397,7 +459,7 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
             <div className="w-full max-w-2xl mx-auto sticky bottom-0 bg-transparent pt-2 pb-2 z-10">
               <input
                 type="text"
-                value={userAnswer}
+                value={userAnswer || ''}
                 onChange={e => setUserAnswer(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') { setUserAnswers([userAnswer.trim()]); setUserAnswer(''); setStep(4); } }}
                 onBlur={() => { if (userAnswer.trim()) { setUserAnswers([userAnswer.trim()]); setUserAnswer(''); setStep(4); } }}
@@ -490,7 +552,7 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
             <div className="w-full max-w-2xl mx-auto sticky bottom-0 bg-transparent pt-2 pb-2 z-10">
               <input
                 type="text"
-                value={userSecondAnswer}
+                value={userSecondAnswer || ''}
                 onChange={e => setUserSecondAnswer(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') { setUserSecondAnswers([userSecondAnswer.trim()]); setUserSecondAnswer(''); /* setStep(5) or finish */ } }}
                 onBlur={() => { if (userSecondAnswer.trim()) { setUserSecondAnswers([userSecondAnswer.trim()]); setUserSecondAnswer(''); /* setStep(5) or finish */ } }}
@@ -541,7 +603,7 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
       </ContainerScroll>
     );
   }
-  // Step 5: Form
+  // Step 5: Form intro + inline form
   if (step === 5) {
     return (
       <ContainerScroll titleComponent={
@@ -553,96 +615,214 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
         </>
       }>
         <div className="flex flex-col items-center justify-center w-full h-full" style={{ minHeight: 0 }}>
-          <form className="bg-white rounded-2xl shadow-lg px-4 py-4 md:px-6 md:py-6 max-w-xl mx-auto w-full flex flex-col gap-4" style={{ minWidth: 320, maxWidth: 520 }}>
-            <h2 className="text-2xl font-bold text-center text-[#db5439] mb-2">Get Your FREE Report</h2>
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <label className="block text-base font-semibold mb-1">Name</label>
-                <input type="text" className="w-full rounded-lg border-2 border-[#bfc8d5] focus:border-[#db5439] px-3 py-2 text-base" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
+          {showFormIntro && (
+            <div className="flex items-center gap-4 max-w-2xl mx-auto mt-4 w-full mb-6">
+              <div className="flex-shrink-0 flex items-center justify-center">
+                <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center">
+                  <img src="/assets/bot-table-robot.svg" alt="Bot & Table Robot" className="w-10 h-10 md:w-16 md:h-16" style={{ objectFit: 'contain' }} />
+                </div>
               </div>
-              <div className="flex-1">
-                <label className="block text-base font-semibold mb-1">Email</label>
-                <input type="email" className="w-full rounded-lg border-2 border-[#bfc8d5] focus:border-[#db5439] px-3 py-2 text-base" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} required />
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <label className="block text-base font-semibold mb-1">How much revenue do you do a month?</label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg border-2 border-[#bfc8d5] focus:border-[#db5439] px-3 py-2 text-base"
-                  value={formatCurrency(formData.revenue)}
-                  onChange={e => {
-                    const raw = e.target.value.replace(/[^\d]/g, '');
-                    setFormData({ ...formData, revenue: raw });
-                  }}
-                  required
-                />
-              </div>
-              <div className="flex-1 flex flex-col justify-end">
-                <label className="block text-base font-semibold mb-1">Do you have a marketing list?</label>
-                <div className="flex gap-2 mt-1">
-                  <button type="button" className={`px-4 py-2 rounded-lg font-semibold text-base shadow transition ${formData.hasList === 'yes' ? 'bg-[#db5439] text-white' : 'bg-gray-200 text-gray-700'}`} onClick={() => { setFormData({ ...formData, hasList: 'yes' }); setShowListSizeField(true); }}>Yes</button>
-                  <button type="button" className={`px-4 py-2 rounded-lg font-semibold text-base shadow transition ${formData.hasList === 'no' ? 'bg-[#db5439] text-white' : 'bg-gray-200 text-gray-700'}`} onClick={() => { setFormData({ ...formData, hasList: 'no', listSize: '' }); setShowListSizeField(false); }}>No</button>
-                  {showListSizeField && (
-                    <input
-                      type="text"
-                      placeholder="List size"
-                      className="ml-2 w-24 rounded-lg border-2 border-[#bfc8d5] focus:border-[#db5439] px-2 py-2 text-base"
-                      value={formatNumber(formData.listSize)}
-                      onChange={e => {
-                        const raw = e.target.value.replace(/[^\d]/g, '');
-                        setFormData({ ...formData, listSize: raw });
-                      }}
+              <div className="flex-1 flex flex-col justify-center">
+                <div className="bg-zinc-900 rounded-xl px-6 py-4 shadow-lg w-full text-left">
+                  <span className="text-base md:text-lg font-mono text-[#C7C7C7]">
+                    <Typewriter
+                      words={["Thanks for the information, one last step before we build your free custom report."]}
+                      loop={1}
+                      cursor
+                      cursorStyle="|"
+                      typeSpeed={32}
+                      deleteSpeed={50}
+                      delaySpeed={1000}
+                      onLoopDone={() => setFormIntroDone(true)}
                     />
-                  )}
+                  </span>
                 </div>
               </div>
             </div>
-            <button type="submit" className="mt-4 px-8 py-3 rounded-lg bg-[#db5439] text-white font-bold text-xl shadow hover:bg-[#b53e28] transition w-full">Get My Report</button>
-          </form>
+          )}
+          
+          {/* Inline form that appears after the typewriter message */}
+          {formIntroDone && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="w-full max-w-lg mx-auto"
+            >
+              <InlineLeadForm onSubmit={(data) => {
+                console.log('Lead form submitted:', data);
+                // TODO: Handle form submission and show custom report
+              }} />
+            </motion.div>
+          )}
         </div>
       </ContainerScroll>
     );
   }
   // Step 1: Initial selection
   return (
-    <ContainerScroll
-      titleComponent={<MainHeading onMount={onHeadingMount} />}
-    >
-      <div className="flex flex-col items-center justify-center w-full h-full">
-        {/* Only show the initial typewriter message in the first step */}
-        <div className="flex items-center gap-4 md:gap-6 p-0 md:p-0 max-w-2xl mx-auto mt-4" style={{ minHeight: 120 }}>
-          {/* Robot SVG as profile image */}
-          <div className="flex-shrink-0 flex items-center justify-center">
-            <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center">
-              <img
-                src="/assets/bot-table-robot.svg"
-                alt="Bot & Table Robot"
-                className="w-10 h-10 md:w-16 md:h-16"
-                style={{ objectFit: 'contain' }}
-              />
+      <ContainerScroll
+        titleComponent={<MainHeading onMount={onHeadingMount} />}
+      >
+        <div className="flex flex-col items-center justify-center w-full h-full">
+          {/* Only show the initial typewriter message in the first step */}
+          <div className="flex items-center gap-4 md:gap-6 p-0 md:p-0 max-w-2xl mx-auto mt-4" style={{ minHeight: 120 }}>
+            {/* Robot SVG as profile image */}
+            <div className="flex-shrink-0 flex items-center justify-center">
+              <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center">
+                <img
+                  src="/assets/bot-table-robot.svg"
+                  alt="Bot & Table Robot"
+                  className="w-10 h-10 md:w-16 md:h-16"
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+            </div>
+            {/* Typewriter animated text */}
+            <div className="flex-1 flex flex-col justify-center">
+              <div className="bg-[#232526] rounded-xl px-5 py-4 shadow-inner border border-[#333]">
+                <InitialTypewriterMessage />
+              </div>
             </div>
           </div>
-          {/* Typewriter animated text */}
-          <div className="flex-1 flex flex-col justify-center">
-            <div className="bg-[#232526] rounded-xl px-5 py-4 shadow-inner border border-[#333]">
-              <InitialTypewriterMessage />
-            </div>
+          <div className="mt-8 w-full max-w-lg mx-auto fade-in">
+            <h2 className="text-3xl font-bold text-center mb-4" style={{ color: '#db5439' }}>
+              Get Your Free Report
+            </h2>
+            <GooglePlacesAutocomplete onPlaceSelected={(place: google.maps.places.PlaceResult) => {
+              setSelectedPlace(place);
+              setStep(3); // Go directly to the review/question step after selection
+            }} />
+           
+           {/* Debug button to test the form directly */}
+           <div className="text-center mt-4">
+             <button 
+               onClick={() => {
+                 console.log('Debug: Skipping to step 5');
+                 setStep(5);
+                 setShowFormIntro(true);
+                 setFormIntroDone(true); // Skip the typewriter and show form immediately
+               }}
+               className="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm"
+             >
+               Debug: Test Form (Skip to Step 5)
+             </button>
+           </div>
           </div>
         </div>
-        <div className="mt-8 w-full max-w-lg mx-auto fade-in">
-          <h2 className="text-3xl font-bold text-center mb-4" style={{ color: '#db5439' }}>
-            Get Your Free Report
-          </h2>
-          <GooglePlacesAutocomplete onPlaceSelected={(place: google.maps.places.PlaceResult) => {
-            setSelectedPlace(place);
-            setStep(3); // Go directly to the review/question step after selection
-          }} />
-          {/* Only GooglePlacesAutocomplete remains; PromptBox removed */}
+      </ContainerScroll>
+  );
+}
+
+// Inline Lead Form Component
+function InlineLeadForm({ onSubmit }: { onSubmit: (data: { name: string; email: string; revenue: string; hasList: string; listSize: string }) => void }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [revenue, setRevenue] = useState('');
+  const [hasList, setHasList] = useState('');
+  const [listSize, setListSize] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !email || !revenue || !hasList || (hasList === 'yes' && !listSize)) {
+      setError('Please fill out all required fields.');
+      return;
+    }
+    setError('');
+    onSubmit({ name, email, revenue, hasList, listSize });
+  };
+
+  return (
+    <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+      <h3 className="text-xl font-bold text-center mb-4 text-gray-800">Get Your FREE Custom Report</h3>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            className="w-2/5 rounded-lg border-2 border-[#bfc8d5] focus:border-[#db5439] px-3 py-2 text-base"
+            placeholder="Name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            className="w-3/5 rounded-lg border-2 border-[#bfc8d5] focus:border-[#db5439] px-3 py-2 text-base"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
         </div>
-      </div>
-    </ContainerScroll>
+        <input
+          type="text"
+          className="rounded-lg border-2 border-[#bfc8d5] focus:border-[#db5439] px-3 py-2 text-base"
+          placeholder="Monthly Revenue (e.g. $10,000)"
+          value={revenue}
+          onChange={e => {
+            const value = e.target.value;
+            // Remove all non-digits
+            const digits = value.replace(/[^\d]/g, '');
+            // Format with commas and dollar sign
+            if (digits) {
+              const formatted = '$' + digits.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              setRevenue(formatted);
+            } else {
+              setRevenue('');
+            }
+          }}
+          required
+        />
+        <div>
+          <label className="block font-semibold mb-1 text-gray-700">Do you have a marketing list?</label>
+          <div className="flex gap-2">
+            <button 
+              type="button" 
+              className={`px-4 py-2 rounded-lg font-semibold text-base shadow transition ${hasList === 'yes' ? 'bg-[#db5439] text-white' : 'bg-gray-200 text-gray-700'}`} 
+              onClick={() => { setHasList('yes'); }}
+            >
+              Yes
+            </button>
+            <button 
+              type="button" 
+              className={`px-4 py-2 rounded-lg font-semibold text-base shadow transition ${hasList === 'no' ? 'bg-[#db5439] text-white' : 'bg-gray-200 text-gray-700'}`} 
+              onClick={() => { setHasList('no'); setListSize(''); }}
+            >
+              No
+            </button>
+          </div>
+          {hasList === 'yes' && (
+            <input
+              type="text"
+              className="mt-2 rounded-lg border-2 border-[#bfc8d5] focus:border-[#db5439] px-3 py-2 text-base w-full"
+              placeholder="How big is your list? (e.g. 1,500)"
+              value={listSize}
+              onChange={e => {
+                const value = e.target.value;
+                // Remove all non-digits
+                const digits = value.replace(/[^\d]/g, '');
+                // Format with commas
+                if (digits) {
+                  const formatted = digits.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                  setListSize(formatted);
+                } else {
+                  setListSize('');
+                }
+              }}
+              required
+            />
+          )}
+        </div>
+        {error && <div className="text-red-600 text-sm text-center">{error}</div>}
+        <button 
+          type="submit" 
+          className="mt-2 px-8 py-3 rounded-lg bg-[#db5439] text-white font-bold text-xl shadow hover:bg-[#b53e28] transition w-full"
+        >
+          Get My Report
+        </button>
+      </form>
+    </div>
   );
 }
 

@@ -1,9 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useLoadScript, Autocomplete } from "@react-google-maps/api";
+import TypewriterText from "./TypewriterText";
 
 const libraries = ["places"];
 
-// Custom styles for Google Autocomplete dropdown
+// Custom styles for Google Autocomplete dropdown and pulsing effect
 const googleAutocompleteStyles = `
   .pac-container {
     background: #fff !important;
@@ -30,9 +31,31 @@ const googleAutocompleteStyles = `
     color: #db5439 !important;
     font-weight: 600;
   }
+  .pulse-orange {
+    box-shadow: 0 0 0 0 #ff6b47, 0 0 0 4px #ff6b4740;
+    animation: pulseOrange 2.7s infinite;
+    border-color: #ff6b47 !important;
+  }
+  @keyframes pulseOrange {
+    0% {
+      box-shadow: 0 0 0 0 #ff6b47, 0 0 0 4px #ff6b4740;
+    }
+    70% {
+      box-shadow: 0 0 0 8px #ff6b4700, 0 0 0 16px #ff6b4700;
+    }
+    100% {
+      box-shadow: 0 0 0 0 #ff6b47, 0 0 0 4px #ff6b4740;
+    }
+  }
 `;
 
-export function GooglePlacesAutocomplete({ onPlaceSelected }: { onPlaceSelected: (place: google.maps.places.PlaceResult) => void }) {
+interface GooglePlacesAutocompleteProps {
+  onPlaceSelected: (place: google.maps.places.PlaceResult) => void;
+  prompt?: string;
+  animatedPlaceholders?: string[];
+}
+
+export function GooglePlacesAutocomplete({ onPlaceSelected, prompt }: GooglePlacesAutocompleteProps) {
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
   const { isLoaded, loadError } = useLoadScript({
@@ -46,13 +69,14 @@ export function GooglePlacesAutocomplete({ onPlaceSelected }: { onPlaceSelected:
   return (
     <>
       <style>{googleAutocompleteStyles}</style>
+      {prompt && (
+        <div style={{ color: '#db5439', fontWeight: 600, fontSize: 17, marginBottom: 8, textAlign: 'center' }}>{prompt}</div>
+      )}
       <Autocomplete
         onLoad={ref => (autocompleteRef.current = ref)}
         onPlaceChanged={() => {
           if (autocompleteRef.current) {
             const place = autocompleteRef.current.getPlace();
-            console.log('GooglePlacesAutocomplete onPlaceChanged:', place);
-            // Some Google Places API responses may have displayName (for new API), fallback to name
             const hasDisplayName = typeof (place as any)?.displayName?.text === 'string';
             if (place && (place.name || hasDisplayName)) {
               onPlaceSelected(place);
@@ -62,12 +86,14 @@ export function GooglePlacesAutocomplete({ onPlaceSelected }: { onPlaceSelected:
           }
         }}
       >
-        <input
-          type="text"
-          placeholder="Type your restaurant name..."
-          className="w-full rounded-xl border-2 border-[#bfc8d5] focus:border-[#db5439] shadow-md px-4 py-2 text-lg text-gray-900 placeholder-gray-400 bg-white transition-all duration-200"
-          style={{ outline: "none", boxShadow: '0 2px 12px 0 rgba(0,0,0,0.06)' }}
-        />
+        <div style={{ position: 'relative' }}>
+          <input
+            type="text"
+            placeholder="Type your restaurant name..."
+            className="w-full rounded-xl border-2 border-[#bfc8d5] focus:border-[#db5439] shadow-md px-4 py-2 text-lg text-gray-900 placeholder-gray-400 bg-white transition-all duration-200 pulse-orange"
+            style={{ outline: "none", boxShadow: '0 2px 12px 0 rgba(0,0,0,0.06)' }}
+          />
+        </div>
       </Autocomplete>
     </>
   );

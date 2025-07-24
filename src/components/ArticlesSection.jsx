@@ -75,9 +75,9 @@ const ArticlesSection = () => {
   };
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="pt-0 pb-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-0">
           <h2 className="text-4xl font-bold text-gray-900">Related articles</h2>
           <div className="flex items-center gap-2">
             <button onClick={handleLeft} disabled={!canGoLeft} className={`text-3xl px-2 py-1 rounded transition-colors ${canGoLeft ? 'hover:bg-gray-200' : 'text-gray-300 cursor-not-allowed'}`}>{'<'}</button>

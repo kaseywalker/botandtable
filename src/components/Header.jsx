@@ -47,42 +47,6 @@ const Header = () => {
             >
               Home
             </Link>
-            <Link 
-              to="/homepage2"
-              className="text-foreground hover:text-primary transition-colors font-medium"
-            >
-              Homepage 2
-            </Link>
-            <button 
-              onClick={() => window.location.href = '/solutions'}
-              className="text-foreground hover:text-primary transition-colors font-medium"
-            >
-              Solutions
-            </button>
-            <Link 
-              to="/about"
-              className="text-foreground hover:text-primary transition-colors font-medium"
-            >
-              About
-            </Link>
-            <Link 
-              to="/resources"
-              className="text-foreground hover:text-primary transition-colors font-medium"
-            >
-              Resources
-            </Link>
-            <Link 
-              to="/report"
-              className="text-foreground hover:text-primary transition-colors font-medium"
-            >
-              Report
-            </Link>
-            <Link 
-              to="/test"
-              className="text-foreground hover:text-primary transition-colors font-medium"
-            >
-              Test
-            </Link>
           </nav>
 
           {/* Desktop CTA */}
@@ -121,47 +85,6 @@ const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Home
-              </Link>
-              <Link 
-                to="/homepage2"
-                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Homepage 2
-              </Link>
-              <button 
-                onClick={() => window.location.href = '/solutions'}
-                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
-              >
-                Solutions
-              </button>
-              <Link 
-                to="/about"
-                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                About
-              </Link>
-              <Link 
-                to="/resources"
-                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Resources
-              </Link>
-              <Link 
-                to="/report"
-                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Report
-              </Link>
-              <Link 
-                to="/test"
-                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Test
               </Link>
               <div className="pt-4 border-t border-border">
                 <a 

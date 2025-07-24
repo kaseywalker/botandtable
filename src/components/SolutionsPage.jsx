@@ -2,8 +2,10 @@ import React from 'react';
 import Header from './Header';
 import ArticlesSection from './ArticlesSection';
 import { Calendar } from './ui/calendar';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SolutionsPage = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
@@ -184,7 +186,20 @@ const SolutionsPage = () => {
               <h3 className="text-xl font-bold text-gray-800 mb-2">AI Phone Assistant & Call Handling</h3>
               <p className="text-base text-gray-600 mb-2">24/7 call handling</p>
               <p className="text-lg font-bold text-navy-900 mb-4">$7,200 monthly from captured calls</p>
-              <button className="mt-auto bg-coral-500/10 text-coral-500 font-semibold px-6 py-2 rounded-lg hover:bg-coral-500 hover:text-white transition-colors">Learn More</button>
+              <div className="flex gap-2 w-full mt-auto">
+                <Link
+                  to="/ai-phone-answering"
+                  className="bg-coral-500/10 text-coral-500 font-semibold px-6 py-2 rounded-lg hover:bg-coral-500 hover:text-white transition-colors flex-1 text-center"
+                >
+                  Learn More
+                </Link>
+                <Link
+                  to="/ai-phone-answering"
+                  className="bg-blue-100 text-blue-700 font-semibold px-6 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition-colors flex-1 text-center"
+                >
+                  Home
+                </Link>
+              </div>
             </div>
             {/* Service 3: Personalized Customer Retention Campaigns */}
             <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center border hover:shadow-2xl transition-shadow duration-300">

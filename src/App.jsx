@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -12,30 +12,31 @@ import FinalCTASection from './components/FinalCTASection';
 import Footer from './components/Footer';
 import ReportPage from './components/ReportPage';
 import IpadFormApp from './components/ui/IpadFormApp';
-import TestPage from './components/TestPage';
+import HomePage from './components/TestPage';
+import SmsMarketingPage from './components/SmsMarketingPage';
+import EmailMarketingPage from './components/EmailMarketingPage';
+import AiPhoneAnsweringPage from './components/AiPhoneAnsweringPage';
+import PersonalizedMarketingPage from './components/PersonalizedMarketingPage';
 
 function App() {
+  const location = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
   return (
-    <Router>
+    <>
       <Header />
       <Routes>
-        <Route path="/" element={
-          <>
-            <Hero />
-            <ServicesSection />
-            <ProblemSection />
-            <SolutionSection />
-            <AICommunicationSectionWithRobot />
-            <SocialProofSection />
-            <FinalCTASection />
-          </>
-        } />
+        <Route path="/" element={<HomePage />} />
         <Route path="/funnel" element={<IpadFormApp />} />
         <Route path="/report" element={<ReportPageWrapper />} />
-        <Route path="/test" element={<TestPage />} />
+        <Route path="/sms-marketing" element={<SmsMarketingPage />} />
+        <Route path="/email-marketing" element={<EmailMarketingPage />} />
+        <Route path="/ai-phone-answering" element={<AiPhoneAnsweringPage />} />
+        <Route path="/personalized-marketing" element={<PersonalizedMarketingPage />} />
       </Routes>
       <Footer />
-    </Router>
+    </>
   );
 }
 

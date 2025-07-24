@@ -16,9 +16,15 @@ const Hero = () => {
         <div className="flex-1 flex items-center justify-center w-full max-w-md mb-8 md:mb-0">
           <MacbookProMockup>
             <div style={{ width: '100%', height: '100%', background: '#181A1B', borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}>
-              <IpadFormApp />
+              {/* Remove IpadFormApp from inside the mockup */}
             </div>
           </MacbookProMockup>
+        </div>
+      </div>
+      {/* Render IpadFormApp directly below the hero section for full visibility */}
+      <div className="w-full flex justify-center mt-8">
+        <div style={{ maxWidth: 700, width: '100%' }}>
+          <IpadFormApp />
         </div>
       </div>
     </section>
