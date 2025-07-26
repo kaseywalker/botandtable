@@ -1,7 +1,9 @@
 import React from 'react';
 import { Button } from './ui/button';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from './ui/accordion';
+import { Mail, Users, Zap, BarChart2, Layers, Star, Calendar, MessageSquare, TrendingUp, Phone } from 'lucide-react';
 import ArticlesSection from './ArticlesSection';
+import DemoBookingForm from './ui/DemoBookingForm';
 
 const coral = '#FF6B47';
 const blue = '#1e293b';
@@ -268,15 +270,15 @@ export default function EmailMarketingPage() {
         <div className="max-w-5xl mx-auto text-center">
           <h3 className="text-3xl font-bold mb-8" style={{ color: blue }}>Proof That Email Marketing Works</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-[#FF6B47] rounded-2xl shadow-lg p-8 border border-[#FF6B47]">
+            <div className="rounded-2xl shadow-lg p-8 border" style={{ backgroundColor: blue, borderColor: blue }}>
               <div className="text-4xl font-bold text-white mb-2">$36</div>
               <div className="text-white">Average ROI per $1 spent</div>
             </div>
-            <div className="bg-[#FF6B47] rounded-2xl shadow-lg p-8 border border-[#FF6B47]">
+            <div className="rounded-2xl shadow-lg p-8 border" style={{ backgroundColor: blue, borderColor: blue }}>
               <div className="text-4xl font-bold text-white mb-2">4B+</div>
               <div className="text-white">Global email users</div>
             </div>
-            <div className="bg-[#FF6B47] rounded-2xl shadow-lg p-8 border border-[#FF6B47]">
+            <div className="rounded-2xl shadow-lg p-8 border" style={{ backgroundColor: blue, borderColor: blue }}>
               <div className="text-4xl font-bold text-white mb-2">21%</div>
               <div className="text-white">Average Open Rate</div>
               <div className="text-xs text-white mt-1">Industry-leading engagement</div>
@@ -286,112 +288,521 @@ export default function EmailMarketingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="w-full py-16 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-3xl font-bold mb-8 text-center" style={{ color: blue }}>Why Top Restaurants Choose Bot & Table</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-3 border hover:shadow-2xl transition-shadow duration-300">
-              <h4 className="text-lg font-bold mb-1" style={{ color: blue }}>Smart Segmentation</h4>
-              <p className="text-gray-700 mb-2">Automatically group guests by visit frequency, spend, and preferences for hyper-targeted campaigns.</p>
+      <section className="w-full py-20 px-4 bg-gradient-to-br from-blue-50 via-slate-50 to-gray-50 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-orange-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-40 h-40 bg-red-500 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-orange-300 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center bg-white/70 backdrop-blur-sm px-6 py-3 rounded-full text-sm font-semibold border border-orange-200 shadow-sm text-orange-700 mb-6">
+              <Mail className="w-4 h-4 mr-2" />
+              Professional Email Platform
             </div>
-            <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-3 border hover:shadow-2xl transition-shadow duration-300">
-              <h4 className="text-lg font-bold mb-1" style={{ color: blue }}>Automated Campaign Triggers</h4>
-              <p className="text-gray-700 mb-2">Send welcome series, win-back, birthdays, and more—hands-free.</p>
-            </div>
-            <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-3 border hover:shadow-2xl transition-shadow duration-300">
-              <h4 className="text-lg font-bold mb-1" style={{ color: blue }}>Real-Time Analytics Dashboard</h4>
-              <p className="text-gray-700 mb-2">Track open rates, revenue, guest frequency, and more in one place.</p>
-            </div>
-            <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-3 border hover:shadow-2xl transition-shadow duration-300">
-              <h4 className="text-lg font-bold mb-1" style={{ color: blue }}>Seamless Integrations</h4>
-              <p className="text-gray-700 mb-2">Connect with POS, reservations, review, and loyalty systems for a unified marketing engine.</p>
-            </div>
+            <h3 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: blue }}>
+              Why Top Restaurants Choose{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600">
+                Bot & Table
+              </span>
+            </h3>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              Our restaurant-specific email platform delivers features that generic email services simply can't match.
+            </p>
+          </div>
+
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {[
+              {
+                title: 'Smart Segmentation',
+                subtitle: 'Automatically Target the Right Customers',
+                description: 'Group guests by visit frequency, spending patterns, and dining preferences for laser-focused campaigns that convert.',
+                features: [
+                  'VIP customers get exclusive previews',
+                  'New guests receive welcome sequences',
+                  'Lapsed diners get win-back offers',
+                  'Birthday/anniversary auto-targeting'
+                ],
+                                 mockup: {
+                   type: 'segments',
+                   data: [
+                     { label: 'VIP Diners', count: '342', color: 'from-orange-500 to-red-500' },
+                     { label: 'New Customers', count: '128', color: 'from-red-500 to-orange-600' },
+                     { label: 'Win-Back', count: '89', color: 'from-orange-600 to-red-600' },
+                     { label: 'Birthday Club', count: '67', color: 'from-red-400 to-orange-500' }
+                   ]
+                 }
+              },
+              {
+                title: 'Automated Campaign Triggers',
+                subtitle: 'Set It Once, Revenue Forever',
+                description: 'Hands-free email sequences that nurture relationships and drive repeat business while you focus on service.',
+                features: [
+                  'Welcome series for new subscribers',
+                  'Birthday & anniversary campaigns',
+                  'Post-visit feedback requests',
+                  'Win-back sequences for inactive guests'
+                ],
+                mockup: {
+                  type: 'automation',
+                  flow: [
+                    { trigger: 'Guest Visits', action: 'Send Thank You', delay: '2 hours' },
+                    { trigger: 'No Visit 30 Days', action: 'Win-Back Email', delay: '30 days' },
+                    { trigger: 'Birthday Detected', action: 'Special Offer', delay: '1 week before' }
+                  ]
+                }
+              },
+              {
+                title: 'Real-Time Analytics Dashboard',
+                subtitle: 'See Your Revenue Growth in Real-Time',
+                description: 'Track every dollar generated, every email opened, and every customer converted through our intuitive dashboard.',
+                features: [
+                  'Revenue attribution per campaign',
+                  'Open rates and engagement metrics',
+                  'Customer lifetime value tracking',
+                  'ROI calculations and reporting'
+                ],
+                mockup: {
+                  type: 'dashboard',
+                  metrics: [
+                    { label: 'Revenue Generated', value: '$12,840', trend: '+24%' },
+                    { label: 'Open Rate', value: '68%', trend: '+12%' },
+                    { label: 'Click Rate', value: '24%', trend: '+8%' },
+                    { label: 'Reservations', value: '156', trend: '+32%' }
+                  ]
+                }
+              },
+              {
+                title: 'Seamless Integrations',
+                subtitle: 'Connect Everything, Automate Everything',
+                description: 'Your POS, reservations, reviews, and loyalty programs work together to create the ultimate marketing engine.',
+                features: [
+                  'POS system data synchronization',
+                  'Reservation platform integration',
+                  'Review system automation',
+                  'Loyalty program connectivity'
+                ],
+                mockup: {
+                  type: 'integrations',
+                  systems: [
+                    { name: 'Square POS', status: 'connected', icon: '💳' },
+                    { name: 'OpenTable', status: 'connected', icon: '📅' },
+                    { name: 'Google Reviews', status: 'connected', icon: '⭐' },
+                    { name: 'Loyalty Program', status: 'connected', icon: '🎁' }
+                  ]
+                }
+              }
+            ].map((feature, i) => {
+              const isEven = i % 2 === 0;
+              return (
+                <div key={i} className={`lg:col-span-2 ${i < 3 ? 'mb-16' : ''}`}>
+                  <div className={`grid lg:grid-cols-2 gap-12 items-center ${!isEven ? 'lg:grid-flow-col-dense' : ''}`}>
+                    {/* Content */}
+                    <div className={`space-y-6 ${!isEven ? 'lg:col-start-2' : ''}`}>
+                      <div className="space-y-4">
+                        <h4 className="text-3xl font-bold" style={{ color: blue }}>{feature.title}</h4>
+                        <p className="text-orange-600 font-semibold text-lg">{feature.subtitle}</p>
+                        <p className="text-lg text-gray-700 leading-relaxed">
+                          {feature.description}
+                        </p>
+                      </div>
+
+                      <div className="space-y-3">
+                        {feature.features.map((item, idx) => (
+                          <div key={idx} className="flex items-start space-x-3">
+                            <div className="w-2 h-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-gray-700">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Visual Mockup */}
+                    <div className={`${!isEven ? 'lg:col-start-1' : ''}`}>
+                      <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-white/50 shadow-xl relative">
+                        {feature.mockup.type === 'segments' && (
+                          <div className="space-y-4">
+                            <div className="flex items-center space-x-2 text-sm font-semibold text-gray-600 mb-6">
+                              <Users className="w-4 h-4" />
+                              <span>Customer Segments</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                              {feature.mockup.data.map((segment, idx) => (
+                                <div key={idx} className={`bg-gradient-to-r ${segment.color} p-4 rounded-xl text-white`}>
+                                  <div className="text-2xl font-bold">{segment.count}</div>
+                                  <div className="text-sm opacity-90">{segment.label}</div>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="text-center text-sm text-gray-600 mt-4">
+                              Auto-segmented from dining data
+                            </div>
+                          </div>
+                        )}
+
+                        {feature.mockup.type === 'automation' && (
+                          <div className="space-y-4">
+                            <div className="flex items-center space-x-2 text-sm font-semibold text-gray-600 mb-6">
+                              <Zap className="w-4 h-4" />
+                              <span>Automation Flow</span>
+                            </div>
+                            {feature.mockup.flow.map((step, idx) => (
+                              <div key={idx} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                                <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                  {idx + 1}
+                                </div>
+                                <div className="flex-1">
+                                  <div className="font-medium text-gray-800">{step.trigger}</div>
+                                  <div className="text-sm text-gray-600">{step.action} • {step.delay}</div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {feature.mockup.type === 'dashboard' && (
+                          <div className="space-y-4">
+                            <div className="flex items-center space-x-2 text-sm font-semibold text-gray-600 mb-6">
+                              <BarChart2 className="w-4 h-4" />
+                              <span>Performance Dashboard</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                              {feature.mockup.metrics.map((metric, idx) => (
+                                <div key={idx} className="bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-xl border">
+                                  <div className="text-2xl font-bold text-gray-900">{metric.value}</div>
+                                  <div className="text-sm text-gray-600">{metric.label}</div>
+                                  <div className="text-xs text-green-600 font-medium">{metric.trend}</div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {feature.mockup.type === 'integrations' && (
+                          <div className="space-y-4">
+                            <div className="flex items-center space-x-2 text-sm font-semibold text-gray-600 mb-6">
+                              <Layers className="w-4 h-4" />
+                              <span>Connected Systems</span>
+                            </div>
+                            {feature.mockup.systems.map((system, idx) => (
+                              <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div className="flex items-center space-x-3">
+                                  <span className="text-2xl">{system.icon}</span>
+                                  <span className="font-medium text-gray-800">{system.name}</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                  <span className="text-sm text-green-600 capitalize">{system.status}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                                                 {/* Floating elements */}
+                         <div className="absolute -top-3 -right-3 w-6 h-6 bg-orange-500 rounded-full opacity-20"></div>
+                         <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-red-500 rounded-full opacity-30"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                                     {/* Feature Connector */}
+                   {i < 3 && (
+                     <div className="flex justify-center">
+                       <div className="w-px h-12 bg-gradient-to-b from-orange-300 to-red-300 opacity-50"></div>
+                     </div>
+                   )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* Campaign Types Section */}
-      <section className="w-full py-16 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-3xl font-bold mb-8 text-center" style={{ color: blue }}>Types of Email Campaigns</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="w-full py-20 px-4 bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-orange-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-40 h-40 bg-red-500 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-300 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center bg-white/70 backdrop-blur-sm px-6 py-3 rounded-full text-sm font-semibold border border-orange-200 shadow-sm text-orange-700 mb-6">
+              <MessageSquare className="w-4 h-4 mr-2" />
+              Proven Email Campaigns
+            </div>
+            <h3 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: blue }}>
+              Revenue-Generating{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600">
+                Email Campaigns
+              </span>
+            </h3>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              See exactly how each campaign type works and drives measurable results for your restaurant.
+            </p>
+          </div>
+
+          {/* Campaign Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
             {[
-              {
-                title: 'Welcome Series',
-                desc: 'Make a great first impression and set expectations for new guests.'
+                             {
+                 title: 'Welcome Series',
+                 subtitle: 'First Impression That Converts',
+                 description: 'Turn new subscribers into loyal customers with a strategic welcome sequence that builds excitement and drives their first visit.',
+                 icon: <Star className="w-8 h-8" />,
+                 color: 'from-orange-500 to-red-500',
+                stats: { opens: '89%', clicks: '34%', conversions: '28%' },
+                preview: {
+                  subject: '🎉 Welcome to Bella\'s Kitchen Family!',
+                  snippet: 'Your exclusive 20% welcome offer is waiting...',
+                  cta: 'Claim Your Welcome Offer'
+                },
+                sequence: [
+                  { day: 'Day 1', title: 'Welcome + 20% Off', description: 'Warm greeting with first-visit incentive' },
+                  { day: 'Day 3', title: 'Menu Highlights', description: 'Showcase signature dishes and chef specialties' },
+                  { day: 'Day 7', title: 'Customer Stories', description: 'Social proof and community feeling' }
+                ]
               },
-              {
-                title: 'Birthday & Anniversary',
-                desc: 'Celebrate special occasions with personalized offers and messages.'
+                             {
+                 title: 'Birthday & Anniversary',
+                 subtitle: 'Celebrate to Generate Revenue',
+                 description: 'Automated campaigns that celebrate your customers\' special moments while driving high-value visits during emotional peak times.',
+                 icon: <Calendar className="w-8 h-8" />,
+                 color: 'from-red-500 to-orange-600',
+                stats: { opens: '94%', clicks: '52%', conversions: '41%' },
+                preview: {
+                  subject: '🎂 Happy Birthday Sarah! Your special treat awaits',
+                  snippet: 'Celebrate with us - complimentary dessert & 25% off...',
+                  cta: 'Book Birthday Celebration'
+                },
+                sequence: [
+                  { day: '1 Week Before', title: 'Birthday Preview', description: 'Build anticipation for upcoming celebration' },
+                  { day: 'Birthday', title: 'Special Day Offer', description: 'Complimentary dessert + discount offer' },
+                  { day: '3 Days After', title: 'Thank You Follow-up', description: 'Appreciation + next visit incentive' }
+                ]
               },
-              {
-                title: 'Win-Back & Reactivation',
-                desc: 'Bring back lapsed guests with irresistible offers and reminders.'
+                             {
+                 title: 'Win-Back & Reactivation',
+                 subtitle: 'Recover Lost Revenue',
+                 description: 'Strategically re-engage inactive customers with compelling offers that remind them why they loved dining with you.',
+                 icon: <TrendingUp className="w-8 h-8" />,
+                 color: 'from-orange-600 to-red-600',
+                stats: { opens: '76%', clicks: '31%', conversions: '23%' },
+                preview: {
+                  subject: 'We miss you at Mario\'s! Here\'s 30% off your return',
+                  snippet: 'It\'s been a while... Your favorite table is waiting...',
+                  cta: 'Welcome Me Back'
+                },
+                sequence: [
+                  { day: '30 Days Inactive', title: 'We Miss You', description: 'Gentle reminder with moderate offer' },
+                  { day: '60 Days Inactive', title: 'Stronger Incentive', description: 'Higher discount + limited time urgency' },
+                  { day: '90 Days Inactive', title: 'Final Attempt', description: 'Maximum offer before removing from list' }
+                ]
               }
-            ].map((item, i) => (
-              <div
-                key={item.title}
-                className="bg-white rounded-2xl shadow-lg p-8 border flex flex-col transition-all duration-300 hover:shadow-2xl hover:ring-2 hover:ring-[#FF6B47]/30 hover:z-10"
-                style={{ boxShadow: '0 2px 16px 0 rgba(255,107,71,0)', transition: 'box-shadow 0.3s' }}
-                onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 32px 0 rgba(255,107,71,0.25)'}
-                onMouseLeave={e => e.currentTarget.style.boxShadow = '0 2px 16px 0 rgba(255,107,71,0)'}
-              >
-                <h4 className="text-lg font-bold mb-2" style={{ color: blue }}>{item.title}</h4>
-                <p className="text-gray-700">{item.desc}</p>
+            ].map((campaign, i) => (
+              <div key={i} className="bg-white/70 backdrop-blur-sm rounded-3xl border border-white/50 shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:scale-105">
+                {/* Card Header */}
+                <div className={`bg-gradient-to-r ${campaign.color} p-6 text-white`}>
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                      {campaign.icon}
+                    </div>
+                    <div>
+                      <h4 className="text-2xl font-bold">{campaign.title}</h4>
+                      <p className="text-white/90">{campaign.subtitle}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Performance Stats */}
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold">{campaign.stats.opens}</div>
+                      <div className="text-xs opacity-80">Open Rate</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold">{campaign.stats.clicks}</div>
+                      <div className="text-xs opacity-80">Click Rate</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold">{campaign.stats.conversions}</div>
+                      <div className="text-xs opacity-80">Conversion</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card Content */}
+                <div className="p-6 space-y-6">
+                  <p className="text-gray-700 leading-relaxed">{campaign.description}</p>
+
+                  {/* Email Preview */}
+                  <div className="bg-gray-50 rounded-xl p-4 border">
+                    <div className="text-xs text-gray-500 mb-2">Email Preview</div>
+                    <div className="space-y-2">
+                      <div className="font-semibold text-gray-900 text-sm">{campaign.preview.subject}</div>
+                      <div className="text-gray-600 text-sm">{campaign.preview.snippet}</div>
+                      <div className="inline-block bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-lg text-xs font-semibold">
+                        {campaign.preview.cta}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Campaign Sequence */}
+                  <div>
+                    <div className="text-sm font-semibold text-gray-600 mb-3">Campaign Sequence</div>
+                    <div className="space-y-3">
+                      {campaign.sequence.map((step, idx) => (
+                        <div key={idx} className="flex space-x-3">
+                          <div className="w-6 h-6 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5">
+                            {idx + 1}
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-800 text-sm">{step.day}: {step.title}</div>
+                            <div className="text-gray-600 text-xs">{step.description}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
+          </div>
+
+          {/* Bottom Value Proposition */}
+          <div className="text-center bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-white/50 shadow-xl">
+            <h4 className="text-2xl font-bold mb-4" style={{ color: blue }}>
+              Every Campaign is Designed for Restaurant Success
+            </h4>
+            <p className="text-gray-700 mb-6 max-w-3xl mx-auto leading-relaxed">
+              Unlike generic email tools, our campaigns are specifically crafted for the restaurant industry with proven templates, timing, and messaging that drives real results.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              {[
+                { metric: '$36', label: 'ROI per $1 spent' },
+                { metric: '68%', label: 'Average open rate' },
+                { metric: '24%', label: 'Average click rate' },
+                { metric: '3.2X', label: 'Revenue increase' }
+              ].map((stat, idx) => (
+                <div key={idx} className="text-center">
+                  <div className="text-3xl font-bold text-orange-600">{stat.metric}</div>
+                  <div className="text-gray-600">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Implementation Process Section */}
-      <section className="w-full py-16 px-4 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <h3 className="text-3xl font-bold mb-8 text-center" style={{ color: blue }}>How Implementation Works</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {[{
-              step: 1,
-              title: 'Strategy Call',
-              desc: 'Book a call to discuss your goals and current marketing efforts.'
-            }, {
-              step: 2,
-              title: 'Onboarding & Setup',
-              desc: 'We import your list, set up automations, and integrate with your systems.'
-            }, {
-              step: 3,
-              title: 'Launch Campaigns',
-              desc: 'Start sending high-converting emails and watch your revenue grow.'
-            }, {
-              step: 4,
-              title: 'Ongoing Optimization',
-              desc: 'We monitor results, optimize, and provide ongoing support.'
-            }].map((item, i) => (
-              <div
-                key={item.step}
-                className="bg-white rounded-2xl shadow-lg p-8 border flex flex-col items-center transition-all duration-300 hover:shadow-2xl hover:ring-2 hover:ring-[#FF6B47]/30 hover:z-10"
-                style={{ boxShadow: '0 2px 16px 0 rgba(255,107,71,0)', transition: 'box-shadow 0.3s' }}
-                onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 32px 0 rgba(255,107,71,0.25)'}
-                onMouseLeave={e => e.currentTarget.style.boxShadow = '0 2px 16px 0 rgba(255,107,71,0)'}
-              >
-                <div className="text-2xl font-bold mb-2" style={{ color: coral }}>{item.step}</div>
-                <div className="font-bold mb-2">{item.title}</div>
-                <div className="text-gray-700 text-center">{item.desc}</div>
-              </div>
-            ))}
+      <section className="w-full py-20 px-4 bg-gradient-to-br from-gray-50 to-slate-50">
+        <div className="max-w-6xl mx-auto">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full text-sm font-semibold border border-gray-200 shadow-sm text-gray-700 mb-6">
+              <Calendar className="w-4 h-4 mr-2" />
+              Simple Implementation Process
+            </div>
+            <h3 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: blue }}>
+              From Setup to Success in{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600">
+                30 Days
+              </span>
+            </h3>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              Our proven implementation process gets your restaurant email marketing from zero to revenue-generating in just weeks.
+            </p>
           </div>
+
+                     {/* Implementation Timeline */}
+           <div className="relative">
+             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+               {[{
+                step: '01',
+                title: 'Strategy Call',
+                duration: 'Day 1',
+                desc: 'Comprehensive consultation to understand your goals, current systems, and customer base.',
+                icon: <Phone className="w-6 h-6" />,
+                highlights: ['Goal assessment', 'System audit', 'Strategy planning']
+              }, {
+                step: '02',
+                title: 'Onboarding & Setup',
+                duration: 'Days 2-7',
+                desc: 'Complete platform setup with list import, automation configuration, and system integrations.',
+                icon: <Zap className="w-6 h-6" />,
+                highlights: ['Data migration', 'Automation setup', 'Integration testing']
+              }, {
+                step: '03',
+                title: 'Launch Campaigns',
+                duration: 'Days 8-14',
+                desc: 'Deploy your first campaigns with proven templates and start generating immediate results.',
+                icon: <Mail className="w-6 h-6" />,
+                highlights: ['Campaign deployment', 'Performance monitoring', 'Initial optimization']
+              }, {
+                step: '04',
+                title: 'Ongoing Success',
+                duration: 'Days 15+',
+                desc: 'Continuous optimization, performance analysis, and strategic guidance for sustained growth.',
+                icon: <TrendingUp className="w-6 h-6" />,
+                highlights: ['Performance analysis', 'Strategy refinement', 'Ongoing support']
+                             }].map((item, i) => (
+                 <div key={item.step} className="h-full">
+                   {/* Card */}
+                   <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-all duration-300 hover:scale-105 h-full flex flex-col">
+                    {/* Step Badge */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center text-white shadow-lg">
+                          {item.icon}
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Step {item.step}</div>
+                          <div className="text-xs text-orange-600 font-medium">{item.duration}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                                         {/* Content */}
+                     <div className="space-y-4 flex-1">
+                       <h4 className="text-xl font-bold" style={{ color: blue }}>{item.title}</h4>
+                       <p className="text-gray-700 leading-relaxed">{item.desc}</p>
+                       
+                       {/* Highlights */}
+                       <div className="space-y-2">
+                         {item.highlights.map((highlight, idx) => (
+                           <div key={idx} className="flex items-center space-x-2">
+                             <div className="w-1.5 h-1.5 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></div>
+                             <span className="text-sm text-gray-600">{highlight}</span>
+                           </div>
+                         ))}
+                       </div>
+                     </div>
+
+                    {/* Step Connector for Mobile */}
+                    {i < 3 && (
+                      <div className="md:hidden flex justify-center mt-6">
+                        <div className="w-0.5 h-8 bg-gradient-to-b from-orange-300 to-red-300"></div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="w-full py-16 px-4 text-center">
-        <h3 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: blue }}>Ready to Grow Your Restaurant with Email Marketing?</h3>
-        <p className="max-w-2xl mx-auto text-lg md:text-xl mb-8 text-gray-700">
-          Book a free strategy call and see how much more revenue your restaurant can generate with Bot & Table's email marketing platform.
-        </p>
-        <Button className="text-lg font-bold px-8 py-4 rounded-xl shadow-lg" style={{ background: coral, color: '#fff' }}>
-          Book Your Revenue Growth Strategy Call
-        </Button>
-      </section>
+      {/* Demo Booking Form */}
+      <DemoBookingForm />
 
       {/* FAQ Section */}
       <section className="w-full py-16 px-4 bg-gray-50">

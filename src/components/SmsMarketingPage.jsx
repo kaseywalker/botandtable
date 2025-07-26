@@ -5,6 +5,7 @@ import { CheckCircle, Zap, Users, MessageCircle, TrendingUp, Star, BarChart2, La
 import { Hero as GroupHero } from "./ui/hero-with-group-of-images-text-and-two-buttons";
 import { IphoneMessageMockup } from "./ui/hero-with-group-of-images-text-and-two-buttons";
 import ArticlesSection from './ArticlesSection';
+import DemoBookingForm from './ui/DemoBookingForm';
 
 const coral = '#FF6B47';
 const blue = '#1e293b';
@@ -335,81 +336,247 @@ export default function SmsMarketingPage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="w-full py-16 px-4 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <h3 className="text-3xl font-bold mb-8 text-center" style={{ color: blue }}>How It Works</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <section className="w-full py-20 px-4 bg-gradient-to-br from-orange-50 via-red-50 to-orange-50 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-orange-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-40 h-40 bg-red-500 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-orange-300 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center bg-white/70 backdrop-blur-sm px-6 py-3 rounded-full text-sm font-semibold border border-orange-200 shadow-sm text-orange-700 mb-6">
+              <Smartphone className="w-4 h-4 mr-2" />
+              Simple 4-Step Process
+            </div>
+            <h3 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: blue }}>
+              From Setup to Success in{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600">
+                4 Simple Steps
+              </span>
+            </h3>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              Our proven SMS marketing system gets your restaurant from zero to thriving customer engagement in just days, not months.
+            </p>
+          </div>
+
+          {/* Steps Flow */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
             {[
               {
                 step: 1,
+                icon: <Users className="w-8 h-8" />,
                 title: 'Build Your Subscriber List',
-                points: [
-                  'Add opt-in forms to your website and social media',
-                  'Collect numbers during reservation process',
-                  'Offer incentives like "Text HUNGRY to 12345 for 20% off your first order"',
-                  'Train staff to promote SMS sign-ups during service',
+                subtitle: 'Turn Customers Into Loyal Subscribers',
+                description: 'Start building your SMS goldmine with proven strategies that convert casual diners into engaged subscribers who eagerly await your messages.',
+                features: [
+                  'Website opt-in forms with irresistible offers',
+                  'Reservation-based number collection',
+                  'Staff-trained in-person sign-up techniques',
+                  'Social media SMS campaigns that convert'
                 ],
+                mockup: {
+                  type: 'signup',
+                  content: 'Text HUNGRY to 12345 for 20% off your first order!'
+                }
               },
               {
                 step: 2,
+                icon: <BarChart2 className="w-8 h-8" />,
                 title: 'Segment Your Audience',
-                points: [
-                  'Import customer data from your POS system',
-                  'Categorize based on dining patterns and preferences',
-                  'Create targeted groups for personalized messaging',
-                  'Set up automated triggers based on customer behavior',
+                subtitle: 'Smart Targeting for Maximum Impact',
+                description: 'Transform your customer data into powerful audience segments that receive exactly the right message at the perfect time.',
+                features: [
+                  'Automatic POS system integration',
+                  'Behavioral pattern recognition',
+                  'Preference-based grouping',
+                  'Triggered messaging based on dining history'
                 ],
+                mockup: {
+                  type: 'segments',
+                  content: 'VIP Diners • New Customers • Weekend Warriors'
+                }
               },
               {
                 step: 3,
+                icon: <MessageCircle className="w-8 h-8" />,
                 title: 'Create Compelling Campaigns',
-                points: [
-                  'Craft messages that create urgency and excitement',
-                  'Include clear calls-to-action with easy redemption',
-                  'Personalize content based on customer data',
-                  'Test different message formats and timing',
+                subtitle: 'Messages That Drive Immediate Action',
+                description: 'Craft irresistible SMS campaigns that create urgency, excitement, and immediate reservations using psychology-proven techniques.',
+                features: [
+                  'Urgency-driven message templates',
+                  'Personalized content automation',
+                  'A/B tested call-to-actions',
+                  'Time-sensitive offer optimization'
                 ],
+                mockup: {
+                  type: 'message',
+                  content: 'Hey Sarah! 🍕 Flash Sale: 50% off pizzas tonight only. Reserve now: link.com/book'
+                }
               },
               {
                 step: 4,
+                icon: <TrendingUp className="w-8 h-8" />,
                 title: 'Launch and Optimize',
-                points: [
-                  'Send campaigns at optimal times for your audience',
-                  'Monitor real-time performance metrics',
-                  'A/B test subject lines and content',
-                  'Continuously refine based on results',
+                subtitle: 'Continuous Improvement for Growing Results',
+                description: 'Launch your campaigns with confidence and watch real-time analytics guide you to even better performance.',
+                features: [
+                  'Optimal timing automation',
+                  'Real-time performance tracking',
+                  'Advanced A/B testing',
+                  'ROI-focused optimization'
                 ],
-              },
-            ].map((step, i) => (
-              <div key={i} className="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-3 border hover:shadow-2xl transition-shadow duration-300">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-lg" style={{ color: coral, minWidth: '2rem', minHeight: '2rem', width: '2rem', height: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{step.step}</span>
-                  <span className="font-bold text-lg" style={{ color: blue }}>{step.title}</span>
+                mockup: {
+                  type: 'analytics',
+                  content: '98% Open Rate • 45% Click Rate • $2,840 Revenue Generated'
+                }
+              }
+            ].map((step, i) => {
+              const isEven = i % 2 === 0;
+              return (
+                <div key={i} className={`lg:col-span-2 ${i < 3 ? 'mb-8' : ''}`}>
+                  <div className={`grid lg:grid-cols-2 gap-8 items-center ${!isEven ? 'lg:grid-flow-col-dense' : ''}`}>
+                    {/* Content */}
+                    <div className={`space-y-6 ${!isEven ? 'lg:col-start-2' : ''}`}>
+                      <div className="flex items-center space-x-4">
+                        <div className="relative">
+                          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white shadow-lg">
+                            {step.icon}
+                          </div>
+                          <div className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center text-orange-600 font-bold text-sm shadow-md border-2 border-orange-100">
+                            {step.step}
+                          </div>
+                        </div>
+                        <div>
+                          <h4 className="text-2xl font-bold" style={{ color: blue }}>{step.title}</h4>
+                          <p className="text-orange-600 font-semibold">{step.subtitle}</p>
+                        </div>
+                      </div>
+
+                      <p className="text-lg text-gray-700 leading-relaxed">
+                        {step.description}
+                      </p>
+
+                      <div className="space-y-3">
+                        {step.features.map((feature, idx) => (
+                          <div key={idx} className="flex items-start space-x-3">
+                            <div className="w-2 h-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-gray-700">{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Visual Mockup */}
+                    <div className={`${!isEven ? 'lg:col-start-1' : ''}`}>
+                      <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-white/50 shadow-xl relative">
+                        {step.mockup.type === 'signup' && (
+                          <div className="text-center space-y-4">
+                            <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto">
+                              <Smartphone className="w-8 h-8 text-white" />
+                            </div>
+                            <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 rounded-xl font-semibold">
+                              {step.mockup.content}
+                            </div>
+                            <div className="text-sm text-gray-600">Instant 20% savings for new subscribers</div>
+                          </div>
+                        )}
+
+                        {step.mockup.type === 'segments' && (
+                          <div className="space-y-3">
+                            <div className="flex items-center space-x-2 text-sm font-semibold text-gray-600 mb-4">
+                              <BarChart2 className="w-4 h-4" />
+                              <span>Customer Segments</span>
+                            </div>
+                            {step.mockup.content.split(' • ').map((segment, idx) => (
+                              <div key={idx} className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 rounded-lg border border-blue-100">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-medium text-gray-800">{segment}</span>
+                                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                                    {idx === 0 ? '342' : idx === 1 ? '128' : '256'} customers
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {step.mockup.type === 'message' && (
+                          <div className="space-y-4">
+                            <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-2xl rounded-bl-sm max-w-xs">
+                              <div className="text-sm opacity-90 mb-1">Bot & Table SMS</div>
+                              <div>{step.mockup.content}</div>
+                            </div>
+                            <div className="text-xs text-gray-500 flex items-center space-x-2">
+                              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                              <span>Delivered • Read • Clicked</span>
+                            </div>
+                          </div>
+                        )}
+
+                        {step.mockup.type === 'analytics' && (
+                          <div className="space-y-4">
+                            <div className="flex items-center space-x-2 text-sm font-semibold text-gray-600 mb-4">
+                              <TrendingUp className="w-4 h-4" />
+                              <span>Campaign Performance</span>
+                            </div>
+                            <div className="grid grid-cols-3 gap-3">
+                              {step.mockup.content.split(' • ').map((metric, idx) => (
+                                <div key={idx} className="bg-gradient-to-br from-green-50 to-emerald-50 p-3 rounded-lg border border-green-100 text-center">
+                                  <div className="text-lg font-bold text-green-700">
+                                    {metric.split(' ')[0]}
+                                  </div>
+                                  <div className="text-xs text-gray-600">
+                                    {metric.split(' ').slice(1).join(' ')}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Floating elements */}
+                        <div className="absolute -top-3 -right-3 w-6 h-6 bg-orange-500 rounded-full opacity-20"></div>
+                        <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-red-500 rounded-full opacity-30"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step Connector */}
+                  {i < 3 && (
+                    <div className="flex justify-center my-8">
+                      <div className="w-px h-12 bg-gradient-to-b from-orange-300 to-red-300 opacity-50"></div>
+                    </div>
+                  )}
                 </div>
-                <ul className="list-disc ml-6 text-gray-600 text-sm">
-                  {step.points.map((pt, idx) => <li key={idx}>{pt}</li>)}
-                </ul>
-              </div>
-            ))}
+              );
+            })}
+          </div>
+
+          {/* Bottom CTA */}
+          <div className="text-center bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-white/50 shadow-xl">
+            <h4 className="text-2xl font-bold mb-4" style={{ color: blue }}>
+              Ready to Transform Your Restaurant with SMS Marketing?
+            </h4>
+            <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
+              Join hundreds of restaurants already using our proven 4-step system to drive immediate results and build lasting customer relationships.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button className="text-lg font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105" style={{ background: coral, color: '#fff' }}>
+                Start Your SMS Success Story
+              </Button>
+              <Button className="text-lg font-bold px-8 py-4 rounded-xl shadow-lg border-2 bg-white hover:bg-gray-50 transition-all" style={{ color: coral, borderColor: coral }}>
+                See Live Demo
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Call-to-Action Section */}
-      <section className="w-full py-16 px-4 text-center">
-        <h3 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: blue }}>Ready to Fill Your Restaurant with SMS Marketing?</h3>
-        <p className="max-w-2xl mx-auto text-lg md:text-xl mb-8 text-gray-700">
-          Transform your empty tables into a thriving dining destination. Join hundreds of restaurants already using SMS marketing to drive immediate results and build lasting customer relationships.
-        </p>
-        <div className="flex flex-col md:flex-row gap-4 justify-center">
-          <Button className="text-lg font-bold px-8 py-4 rounded-xl shadow-lg" style={{ background: coral, color: '#fff' }}>
-            Book Strategy Call Now
-          </Button>
-          <Button className="text-lg font-bold px-8 py-4 rounded-xl shadow-lg border-2 border-primary bg-white text-primary" style={{ color: coral, borderColor: coral }}>
-            Start Free Trial
-          </Button>
-        </div>
-      </section>
+      {/* Demo Booking Form */}
+      <DemoBookingForm />
 
       {/* FAQ Section */}
       <section className="w-full py-16 px-4 bg-gray-50">

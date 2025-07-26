@@ -17,6 +17,7 @@ import SmsMarketingPage from './components/SmsMarketingPage';
 import EmailMarketingPage from './components/EmailMarketingPage';
 import AiPhoneAnsweringPage from './components/AiPhoneAnsweringPage';
 import PersonalizedMarketingPage from './components/PersonalizedMarketingPage';
+import GoogleReviewsPage from './components/GoogleReviewsPage';
 
 function App() {
   const location = useLocation();
@@ -34,6 +35,7 @@ function App() {
         <Route path="/email-marketing" element={<EmailMarketingPage />} />
         <Route path="/ai-phone-answering" element={<AiPhoneAnsweringPage />} />
         <Route path="/personalized-marketing" element={<PersonalizedMarketingPage />} />
+        <Route path="/google-reviews" element={<GoogleReviewsPage />} />
       </Routes>
       <Footer />
     </>

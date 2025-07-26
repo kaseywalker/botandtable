@@ -10,6 +10,8 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { useEffect } from 'react';
 import { Confetti } from './confetti';
 import TypewriterText from './TypewriterText';
+// @ts-ignore
+import CustomReport from './CustomReport';
 
 export const ContainerScroll = ({
   titleComponent,
@@ -160,16 +162,17 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
   const [showPostAnswerMessage, setShowPostAnswerMessage] = useState(false);
   // Add state for the post-answer message in step 4:
   const [showPostMarketingMessage, setShowPostMarketingMessage] = useState(false);
+  // Add state for step 4 timing:
+  const [showSecondQuestion, setShowSecondQuestion] = useState(false);
+  const [showSecondInput, setShowSecondInput] = useState(false);
   // In state:
   const [showListSizeField, setShowListSizeField] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', revenue: '', hasList: '', listSize: '' });
 
-  // Remove the modal-related state and effects
+  // Form and report state
   const [showFormIntro, setShowFormIntro] = useState(false);
   const [formIntroDone, setFormIntroDone] = useState(false);
-  // Remove these lines:
-  // const [showLeadModal, setShowLeadModal] = useState(false);
-  // const modalTriggeredRef = useRef(false);
+  const [submittedFormData, setSubmittedFormData] = useState<{name: string; email: string; revenue: string; hasList: string; listSize: string} | null>(null);
 
   // Debug component lifecycle
   useEffect(() => {
@@ -265,6 +268,20 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
       setShowFirstInput(false);
       const qTimer = setTimeout(() => setShowFirstQuestion(true), 3500);
       const inputTimer = setTimeout(() => setShowFirstInput(true), 4500);
+      return () => {
+        clearTimeout(qTimer);
+        clearTimeout(inputTimer);
+      };
+    }
+  }, [step]);
+
+  // When entering step 4, control timing
+  React.useEffect(() => {
+    if (step === 4) {
+      setShowSecondQuestion(false);
+      setShowSecondInput(false);
+      const qTimer = setTimeout(() => setShowSecondQuestion(true), 500);
+      const inputTimer = setTimeout(() => setShowSecondInput(true), 1500);
       return () => {
         clearTimeout(qTimer);
         clearTimeout(inputTimer);
@@ -455,7 +472,7 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
             </div>
           )}
           {/* Q1 input and answer bubble */}
-          {showFirstInput && userAnswers.length === 0 ? (
+          {showFirstInput && showFirstQuestion && userAnswers.length === 0 ? (
             <div className="w-full max-w-2xl mx-auto sticky bottom-0 bg-transparent pt-2 pb-2 z-10">
               <input
                 type="text"
@@ -468,20 +485,7 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
                 style={{ outline: "none", boxShadow: '0 2px 12px 0 rgba(0,0,0,0.06)' }}
               />
             </div>
-          ) : (
-            <div className="flex items-start gap-4 max-w-2xl mx-auto mt-4 w-full">
-              <div className="flex-shrink-0 flex items-center justify-center">
-                <div className="w-14 h-14 md:w-14 md:h-14 rounded-full bg-gray-200 flex items-center justify-center">
-                  <svg width="32" height="32" fill="#bfc8d5" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                </div>
-              </div>
-              <div className="flex-1 flex flex-col justify-center">
-                <div className="bg-white rounded-xl px-5 py-4 shadow border border-[#e5e7eb] text-left w-full">
-                  <span className="text-base md:text-lg text-gray-900">{userAnswers[0]}</span>
-                </div>
-              </div>
-            </div>
-          )}
+          ) : null}
           {userAnswers.length > 0 && showPostAnswerMessage && (
             <div className="flex items-center gap-4 max-w-2xl mx-auto mt-4 w-full">
               <div className="flex-shrink-0 flex items-center justify-center">
@@ -525,6 +529,7 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
       }>
         <div className="flex flex-col items-center justify-center w-full h-full">
           {/* Q2 robot message */}
+          {showSecondQuestion && (
           <div className="flex items-center gap-4 max-w-2xl mx-auto mt-8 w-full">
             <div className="flex-shrink-0 flex items-center justify-center">
               <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center">
@@ -547,8 +552,9 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
               </div>
             </div>
           </div>
+          )}
           {/* Q2 input and answer bubble */}
-          {userSecondAnswers.length === 0 ? (
+          {showSecondInput && showSecondQuestion && userSecondAnswers.length === 0 ? (
             <div className="w-full max-w-2xl mx-auto sticky bottom-0 bg-transparent pt-2 pb-2 z-10">
               <input
                 type="text"
@@ -561,20 +567,7 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
                 style={{ outline: "none", boxShadow: '0 2px 12px 0 rgba(0,0,0,0.06)' }}
               />
             </div>
-          ) : (
-            <div className="flex items-start gap-4 max-w-2xl mx-auto mt-4 w-full">
-              <div className="flex-shrink-0 flex items-center justify-center">
-                <div className="w-14 h-14 md:w-14 md:h-14 rounded-full bg-gray-200 flex items-center justify-center">
-                  <svg width="32" height="32" fill="#bfc8d5" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                </div>
-              </div>
-              <div className="flex-1 flex flex-col justify-center">
-                <div className="bg-white rounded-xl px-5 py-4 shadow border border-[#e5e7eb] text-left w-full">
-                  <span className="text-base md:text-lg text-gray-900">{userSecondAnswers[0]}</span>
-                </div>
-              </div>
-            </div>
-          )}
+          ) : null}
           {userSecondAnswers.length > 0 && showPostMarketingMessage && (
             <div className="flex items-center gap-4 max-w-2xl mx-auto mt-4 w-full">
               <div className="flex-shrink-0 flex items-center justify-center">
@@ -651,7 +644,8 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
             >
               <InlineLeadForm onSubmit={(data) => {
                 console.log('Lead form submitted:', data);
-                // TODO: Handle form submission and show custom report
+                setSubmittedFormData(data);
+                setStep(6); // Move to report step
               }} />
             </motion.div>
           )}
@@ -659,8 +653,49 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
       </ContainerScroll>
     );
   }
+
+  // Step 6: Custom Report Display
+  if (step === 6 && submittedFormData) {
+    return (
+      <ContainerScroll titleComponent={
+        <>
+          <div className="text-center">
+                            <div className="text-2xl font-bold mb-2">Your Personalized</div>
+            <div className="text-4xl md:text-[6rem] font-bold leading-none">Revenue Report</div>
+            </div>
+        </>
+      }>
+        <div className="flex flex-col items-center justify-start w-full h-full p-4 overflow-y-auto">
+          <div className="w-full max-w-4xl">
+                      <CustomReport 
+            formData={submittedFormData}
+            restaurantData={{
+              name: selectedPlace?.name,
+              rating: selectedPlace?.rating || 4.2,
+              reviewCount: selectedPlace?.user_ratings_total || 127,
+              address: selectedPlace?.formatted_address || selectedPlace?.vicinity,
+              phone: selectedPlace?.formatted_phone_number,
+              website: selectedPlace?.website,
+              photosCount: selectedPlace?.photos?.length ? Math.max(selectedPlace.photos.length * 3, 25) : 23, // Estimate total photos (API only returns subset)
+              hasLimitedPhotoData: true, // Flag to indicate we're estimating
+              photos: selectedPlace?.photos || [], // Pass actual photos for gallery
+              responseRate: 0.15, // This would come from Google My Business API
+              // Remove hardcoded lastReviewDays and monthlyReviews - let CustomReport calculate them
+              hasDescription: selectedPlace?.name ? true : false, // Simplified check
+              hasHours: selectedPlace?.opening_hours ? true : false,
+              hasPhone: selectedPlace?.formatted_phone_number ? true : false,
+              hasWebsite: selectedPlace?.website ? true : false
+            }}
+          />
+          </div>
+        </div>
+      </ContainerScroll>
+    );
+  }
+
   // Step 1: Initial selection
   return (
+    <div className="relative">
       <ContainerScroll
         titleComponent={<MainHeading onMount={onHeadingMount} />}
       >
@@ -691,26 +726,49 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
             </h2>
             <GooglePlacesAutocomplete onPlaceSelected={(place: google.maps.places.PlaceResult) => {
               setSelectedPlace(place);
-              setStep(3); // Go directly to the review/question step after selection
+              setStep(3); // Go to step 3 as originally designed
             }} />
-           
-           {/* Debug button to test the form directly */}
-           <div className="text-center mt-4">
-             <button 
-               onClick={() => {
-                 console.log('Debug: Skipping to step 5');
-                 setStep(5);
-                 setShowFormIntro(true);
-                 setFormIntroDone(true); // Skip the typewriter and show form immediately
-               }}
-               className="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm"
-             >
-               Debug: Test Form (Skip to Step 5)
-             </button>
-           </div>
+
           </div>
         </div>
       </ContainerScroll>
+      
+      {/* Scroll Down Button */}
+      <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 z-20">
+        <button
+          onClick={() => {
+            const testimonialsSection = document.querySelector('[data-section="testimonials"]');
+            if (testimonialsSection) {
+              const rect = testimonialsSection.getBoundingClientRect();
+              const offsetTop = window.pageYOffset + rect.top - 120; // 120px offset to show the full heading
+              window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+              });
+            }
+          }}
+          className="group bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-300 rounded-full p-3 shadow-lg hover:shadow-xl border border-gray-200/50"
+          aria-label="Scroll to see more content"
+        >
+          <div className="relative">
+            <svg 
+              className="w-6 h-6 text-primary animate-bounce" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M19 14l-7 7m0 0l-7-7m7 7V3" 
+              />
+            </svg>
+            <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping"></div>
+          </div>
+        </button>
+      </div>
+    </div>
   );
 }
 

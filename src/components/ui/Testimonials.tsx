@@ -1,6 +1,9 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from 'react-router-dom';
+import { Button } from './button';
+import { ArrowRight } from 'lucide-react';
 
 const testimonials = [
   {
@@ -118,42 +121,111 @@ const thirdColumn = testimonials.slice(6, 9);
 
 const Testimonials = () => {
   return (
-    <section
-      className="my-10 relative overflow-hidden"
-      style={{ background: '#fdf3d9' }}
-    >
-      {/* Gradient overlay */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          background: 'linear-gradient(to bottom, #fff 0%, #fdf3d9 60%, #fdf3d9 100%)',
-          opacity: 0.7,
-        }}
-      />
-      <div className="container z-10 mx-auto relative">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          viewport={{ once: true }}
-          className="flex flex-col items-center justify-center w-full max-w-full px-0 sm:max-w-[540px] sm:px-4 mx-auto pt-4 mt-2"
-        >
-          <h2 className="w-full text-center text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">
-            <span className="inline-block">
-              <span className="whitespace-nowrap">3-5X More Google Reviews</span><br />
-              <span className="text-primary">in 90 Days</span>
-            </span>
-          </h2>
-        </motion.div>
-        <p className="text-center opacity-75 mt-2 max-w-[calc(3*16rem+2*1rem)] mx-auto px-2 text-sm">
-          Restaurants using Bot & Table average 47 new Google reviews in their first 90 days, compared to 8-12 reviews for restaurants doing it manually. More reviews mean higher Google rankings, more customer trust, and significantly more new customers finding your restaurant online
-        </p>
+    <section className="w-full py-20 px-4" data-section="testimonials">
+      <div className="max-w-7xl mx-auto">
+        {/* Google Reviews Section - Text Left, Animation Right */}
+        <div className="bg-gradient-to-br from-yellow-50 via-amber-50 to-orange-50 rounded-3xl p-8 lg:p-16">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column - Content */}
+            <div className="space-y-8">
+              <div className="inline-flex items-center bg-yellow-100 px-4 py-2 rounded-full text-sm font-semibold border border-yellow-200 shadow-sm text-yellow-700">
+                <svg className="w-4 h-4 mr-2 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/>
+                </svg>
+                Google Reviews
+              </div>
 
-        <div className="flex justify-center gap-3 mt-4 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[400px] overflow-hidden">
-          <TestimonialsColumn testimonials={firstColumn} duration={15} />
-          <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
-          <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
+              <div className="space-y-4">
+                <h2 className="text-4xl md:text-5xl font-bold leading-tight text-gray-900">
+                  <span className="block">3-5X More Google Reviews</span>
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600">
+                    in 90 Days
+                  </span>
+                </h2>
+
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg">
+                  <p className="text-xl leading-relaxed text-gray-700">
+                    Restaurants using Bot & Table average <span className="font-semibold text-yellow-600">47 new Google reviews</span> in their first 90 days, compared to 8-12 reviews for restaurants doing it manually. More reviews mean higher Google rankings, more customer trust, and significantly more new customers finding your restaurant online.
+                  </p>
+                </div>
+              </div>
+
+              {/* Key Benefits Grid */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/50 text-center">
+                  <div className="text-2xl font-bold text-yellow-600">47</div>
+                  <div className="text-sm text-gray-600">New Reviews</div>
+                </div>
+                <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/50 text-center">
+                  <div className="text-2xl font-bold text-yellow-600">90</div>
+                  <div className="text-sm text-gray-600">Days</div>
+                </div>
+                <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/50 text-center">
+                  <div className="text-2xl font-bold text-orange-600">3-5x</div>
+                  <div className="text-sm text-gray-600">More Reviews</div>
+                </div>
+                <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/50 text-center">
+                  <div className="text-2xl font-bold text-yellow-600">100%</div>
+                  <div className="text-sm text-gray-600">Automated</div>
+                </div>
+              </div>
+
+              <Link to="/google-reviews">
+                <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-yellow-600 hover:bg-yellow-700 text-white">
+                  <ArrowRight className="w-5 h-5" />
+                  Learn More About Our Review System
+                </Button>
+              </Link>
+            </div>
+
+            {/* Right Column - Testimonials Animation */}
+            <div className="relative">
+              <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-white/50 relative z-10">
+                <div className="flex items-center mb-6">
+                  <div className="bg-gradient-to-br from-yellow-100 to-orange-100 p-4 rounded-full mr-4">
+                    <svg className="w-8 h-8 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-gray-900">Real Customer Reviews</h4>
+                    <p className="text-gray-600">Automated review collection in action</p>
+                  </div>
+                </div>
+
+                <div className="flex justify-center gap-3 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[300px] overflow-hidden">
+                  <TestimonialsColumn testimonials={firstColumn} duration={15} />
+                  <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
+                  <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
+                </div>
+
+                <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-4 rounded-xl border border-yellow-100 mt-4">
+                  <p className="text-sm font-medium text-gray-800">
+                    "These are real reviews from restaurants using our automated review system. Notice the consistent 5-star ratings and detailed, genuine feedback from happy customers."
+                  </p>
+                </div>
+              </div>
+
+              {/* Floating Elements */}
+              <div className="absolute -top-6 -right-6 text-white p-4 rounded-2xl shadow-lg z-20 animate-bounce bg-yellow-600">
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/>
+                  </svg>
+                  <span className="font-bold">5-Star Reviews</span>
+                </div>
+              </div>
+
+              <div className="absolute -bottom-4 -left-4 bg-white p-3 rounded-xl shadow-lg z-20 border border-gray-100 animate-pulse">
+                <div className="flex items-center text-sm">
+                  <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                  </svg>
+                  <span className="font-semibold text-gray-700">90 Day Growth</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
