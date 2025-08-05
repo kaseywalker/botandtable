@@ -39,12 +39,19 @@ const IpadFormApp = () => {
   });
   const [currentStep, setCurrentStep] = useState(0);
   const [showError, setShowError] = useState(false);
-  const [typewriterDone, setTypewriterDone] = useState(false);
-  const [showSecondTypewriter, setShowSecondTypewriter] = useState(false);
-  const [secondTypewriterDone, setSecondTypewriterDone] = useState(false);
+  const [showSecondMessage, setShowSecondMessage] = useState(false);
   const [showFormIntro, setShowFormIntro] = useState(false);
   const [formIntroDone, setFormIntroDone] = useState(false);
   const navigate = useNavigate();
+
+  // Show second message after delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSecondMessage(true);
+    }, 5000); // 5 seconds after component mounts
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const steps = [
     'Restaurant',
@@ -157,13 +164,7 @@ const IpadFormApp = () => {
     setTimeout(() => setCurrentStep(s => Math.min(steps.length - 1, s + 1)), 300); // slight delay for UX
   };
 
-  // Add effect to trigger second typewriter after a delay
-  useEffect(() => {
-    if (typewriterDone && !showSecondTypewriter) {
-      const timer = setTimeout(() => setShowSecondTypewriter(true), 2000); // 2s delay
-      return () => clearTimeout(timer);
-    }
-  }, [typewriterDone, showSecondTypewriter]);
+
 
   // Show the form intro typewriter when on NameEmail step
   useEffect(() => {
@@ -279,17 +280,40 @@ const IpadFormApp = () => {
           {/* Typewriter Text and Generating Animation */}
           {currentStep === 0 && (
             <div style={{ width: '100%', margin: '32px 0 0 0', textAlign: 'left', padding: '0 24px' }}>
-              {/* First paragraph typewriter */}
-              {!typewriterDone && (
+              {!showSecondMessage ? (
                 <>
+                  {/* First message only */}
                   <TypewriterText
-                    text="Our AI found restaurants like yours are missing $3,200+ monthly in hidden revenue. Discover your exact number in 60 seconds."
+                    text="Welcome to Bot & Table—where our 'bots' help fill your tables. Our AI found restaurants are missing $3,200+ monthly in hidden revenue."
                     speed={36}
                     className="block text-base md:text-lg font-mono"
                     style={{ color: GRAY_TEXT, fontFamily: 'monospace', textAlign: 'left' }}
-                    onAnimationEnd={() => setTypewriterDone(true)}
                   />
-                  {/* Generating animation while typewriter is running */}
+                  {/* Generating animation */}
+                  <div style={{ color: LIGHT_GREEN, fontFamily: 'monospace', marginTop: 8, fontSize: 16 }}>
+                    Generating
+                    <span className="inline-block align-baseline ml-1">
+                      <span className="dot dot1">.</span>
+                      <span className="dot dot2">.</span>
+                      <span className="dot dot3">.</span>
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Both messages - first static, second typewriter */}
+                  <div className="block text-base md:text-lg font-mono" style={{ color: GRAY_TEXT, fontFamily: 'monospace', textAlign: 'left', marginBottom: 16 }}>
+                    Welcome to Bot & Table—where our 'bots' help fill your tables. Our AI found restaurants are missing $3,200+ monthly in hidden revenue.
+                  </div>
+                  
+                  <TypewriterText
+                    text="Receive your exclusive Restaurant Profit Optimization Report—a detailed, personalized analysis worth $500 that reveals your hidden revenue streams and the exact roadmap to capture them."
+                    speed={36}
+                    className="block text-base md:text-lg font-mono"
+                    style={{ color: GRAY_TEXT, fontFamily: 'monospace', textAlign: 'left' }}
+                  />
+                  
+                  {/* Generating animation for second message */}
                   <div style={{ color: LIGHT_GREEN, fontFamily: 'monospace', marginTop: 8, fontSize: 16 }}>
                     Generating
                     <span className="inline-block align-baseline ml-1">
@@ -300,41 +324,7 @@ const IpadFormApp = () => {
                   </div>
                 </>
               )}
-              {/* After first finishes, show static text */}
-              {typewriterDone && (
-                <>
-                  <div className="block text-base md:text-lg font-mono" style={{ color: GRAY_TEXT, fontFamily: 'monospace', textAlign: 'left' }}>
-                    Our AI found restaurants like yours are missing $3,200+ monthly in hidden revenue. Discover your exact number in 60 seconds.
-                  </div>
-                </>
-              )}
-              {/* Second paragraph typewriter, only after delay */}
-              {showSecondTypewriter && !secondTypewriterDone && (
-                <>
-                  <TypewriterText
-                    text="Enter your restaurant to get your free report."
-                    speed={36}
-                    className="block text-base md:text-lg font-mono"
-                    style={{ color: GRAY_TEXT, fontFamily: 'monospace', textAlign: 'left', marginTop: 16 }}
-                    onAnimationEnd={() => setSecondTypewriterDone(true)}
-                  />
-                  {/* Generating animation while second typewriter is running */}
-                  <div style={{ color: LIGHT_GREEN, fontFamily: 'monospace', marginTop: 20, fontSize: 16 }}>
-                    Generating
-                    <span className="inline-block align-baseline ml-1">
-                      <span className="dot dot1">.</span>
-                      <span className="dot dot2">.</span>
-                      <span className="dot dot3">.</span>
-                    </span>
-                  </div>
-                </>
-              )}
-              {/* After second finishes, show static text */}
-              {showSecondTypewriter && secondTypewriterDone && (
-                <div className="block text-base md:text-lg font-mono" style={{ color: '#db5439', fontFamily: 'monospace', textAlign: 'left', marginTop: 16 }}>
-                  Enter your restaurant to get your free report.
-                </div>
-              )}
+
               {/* Restaurant input field always visible under intro text */}
               <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 24, position: 'relative' }}>
                 <GooglePlacesAutocomplete

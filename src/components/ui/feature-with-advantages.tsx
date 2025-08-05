@@ -80,10 +80,12 @@ function Feature() {
                 </div>
               </div>
 
-              <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-slate-600 hover:bg-slate-700 text-white">
-                <ArrowRight className="w-5 h-5" />
-                Learn More
-              </Button>
+              <Link to="/ai-phone-answering">
+                <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-slate-600 hover:bg-slate-700 text-white">
+                  <ArrowRight className="w-5 h-5" />
+                  Learn More
+                </Button>
+              </Link>
             </div>
 
             {/* Right Column - Animation */}

@@ -4,61 +4,84 @@ import { Link } from 'react-router-dom';
 const ArticlesSection = () => {
   const articles = [
     {
-      id: 6,
-      category: "REPUTATION MANAGEMENT",
-      title: "Stop Bad Reviews Before They Go Public: AI Private Feedback Channels",
-      readTime: "6 min read",
-      date: "June 29, 2025",
-      image: "/happy-restaurant-owner.jpg",
-      slug: "ai-private-feedback-channels",
+      id: 0,
+      category: "ARTIFICIAL INTELLIGENCE",
+      title: "AI in Restaurants: The Complete Guide to Transforming Your Business with Artificial Intelligence",
+      readTime: "35 min read",
+      date: "January 29, 2024",
+      image: "/AI-Automations.png",
+      slug: "ai-in-restaurants-complete-guide",
+      author: "Bot and Table"
+    },
+    {
+      id: 1,
+      category: "ARTIFICIAL INTELLIGENCE",
+      title: "From Chaos to Cash: How Smart Restaurants Use AI to Turn Every Phone Call Into Revenue",
+      readTime: "12 min read",
+      date: "January 28, 2024",
+      image: "/ai-restaurant.jpg",
+      slug: "from-chaos-to-cash",
       author: "Bot & Table"
     },
     {
-      id: 5,
-      category: "GOOGLE REVIEWS AI",
-      title: "Boosting Google Reviews: Let AI Do the Work with Automated Requests",
-      readTime: "12 min read",
-      date: "June 28, 2025",
-      image: "/confident-business-person.jpg",
-      slug: "ai-google-reviews-automation",
+      id: 2,
+      category: "AI PHONE ANSWERING",
+      title: "The $27,000 Phone Problem: Why 43% of Restaurant Calls Go Unanswered (And How AI Fixes It)",
+      readTime: "15 min read",
+      date: "January 27, 2024",
+      image: "/restaurant-phone.jpg",
+      slug: "the-27000-phone-problem",
+      author: "Bot & Table"
+    },
+    {
+      id: 3,
+      category: "GOOGLE REVIEWS",
+      title: "The Restaurant Owner's Guide to Turning Angry Customers Into Loyal Advocates (Without Anyone Knowing)",
+      readTime: "18 min read",
+      date: "January 26, 2024",
+      image: "/restaurant-owner.jpg",
+      slug: "turning-angry-customers-into-advocates",
       author: "Bot & Table"
     },
     {
       id: 4,
-      category: "AI LISTINGS SYNC",
-      title: "Sync Your Listings: How AI Keeps Your Restaurant Info Accurate Everywhere",
-      readTime: "8 min read",
-      date: "June 27, 2025",
-      image: "/restaurant-atmosphere.jpg",
-      slug: "ai-listings-sync",
+      category: "GOOGLE REVIEWS",
+      title: "Why Your Best Customers Never Leave Reviews (And the Simple System That Changed Everything)",
+      readTime: "15 min read",
+      date: "January 25, 2024",
+      image: "/google-review.jpg",
+      slug: "why-best-customers-never-leave-reviews",
       author: "Bot & Table"
     },
     {
-      id: 1,
-      category: "MARKETING STRATEGY",
-      title: "Why Every Restaurant Needs a Marketing List and How to Grow It",
-      readTime: "8 min read",
-      date: "June 26, 2025",
-      image: "/marketing-list.jpg",
-      slug: "marketing-list-growth"
+      id: 5,
+      category: "GOOGLE REVIEWS",
+      title: "10 Proven Strategies to Get More Google Reviews for Your Restaurant",
+      readTime: "5 min read",
+      date: "January 15, 2024",
+      image: "/google-maps-phone.jpg.jpg",
+      slug: "google-reviews-strategies",
+      author: "Bot & Table"
     },
     {
-      id: 2,
-      category: "AI AUTOMATION",
-      title: "How Inbound AI Marketing Phone Calls Transform Restaurants",
-      readTime: "12 min read", 
-      date: "June 25, 2025",
-      image: "/ai-phone-calls.jpg",
-      slug: "ai-phone-calls-transform"
+      id: 6,
+      category: "SMS MARKETING",
+      title: "The Ultimate Guide to Restaurant SMS Marketing",
+      readTime: "45 min read",
+      date: "January 10, 2024",
+      image: "/sms_marketing_guide.webp",
+      slug: "restaurant-sms-marketing",
+      author: "Bot & Table"
     },
     {
-      id: 3,
-      category: "ONLINE REPUTATION",
-      title: "Top 10 Reasons Restaurants Need More Google Reviews",
-      readTime: "10 min read",
-      date: "June 24, 2025", 
-      image: "/google-reviews.png",
-      slug: "google-reviews-importance"
+      id: 7,
+      category: "PERSONALIZED MARKETING",
+      title: "Personalized Marketing: How to Turn One-Time Diners into Regulars",
+      readTime: "45 min read",
+      date: "January 8, 2024",
+      image: "/personalized_marketing.webp",
+      slug: "personalized-marketing-guide",
+      author: "Bot & Table"
     }
   ];
 
@@ -75,9 +98,9 @@ const ArticlesSection = () => {
   };
 
   return (
-    <section className="pt-0 pb-20 bg-gray-50">
+    <section className="pt-16 pb-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-0">
+        <div className="flex items-center justify-between mb-12">
           <h2 className="text-4xl font-bold text-gray-900">Related articles</h2>
           <div className="flex items-center gap-2">
             <button onClick={handleLeft} disabled={!canGoLeft} className={`text-3xl px-2 py-1 rounded transition-colors ${canGoLeft ? 'hover:bg-gray-200' : 'text-gray-300 cursor-not-allowed'}`}>{'<'}</button>
@@ -91,11 +114,11 @@ const ArticlesSection = () => {
               to={`/articles/${article.slug}`}
               className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
-              <div className="aspect-w-16 aspect-h-10 overflow-hidden">
+              <div className="aspect-[16/9] overflow-hidden">
                 <img
                   src={article.image}
                   alt={article.title}
-                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
               <div className="p-6">
@@ -108,8 +131,6 @@ const ArticlesSection = () => {
                   {article.title}
                 </h3>
                 <div className="flex items-center text-sm text-gray-500 space-x-4">
-                  <span>{article.readTime}</span>
-                  <span>|</span>
                   <span>{article.date}</span>
                 </div>
               </div>

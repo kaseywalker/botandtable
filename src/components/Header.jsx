@@ -18,17 +18,59 @@ const Header = () => {
     setIsSolutionsOpen(!isSolutionsOpen);
   };
 
-  const scrollToSection = (sectionId) => {
-    if (location.pathname !== '/') {
-      // If not on homepage, navigate to homepage first
+    const scrollToSection = (sectionId) => {
+    // First check if the element exists on the current page
+    const element = document.getElementById(sectionId);
+    
+    if (element) {
+      // Element exists on current page, scroll to it
+      // Enhanced smooth scrolling with custom timing
+      const headerHeight = 80; // Account for fixed header
+      const targetPosition = element.offsetTop - headerHeight;
+      const startPosition = window.pageYOffset;
+      const distance = targetPosition - startPosition;
+      const duration = 900; // Sweet spot duration in milliseconds
+      let start = null;
+      
+      // Custom easing function for smooth deceleration
+      const easeInOutCubic = (t) => {
+        return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+      };
+      
+      const animateScroll = (timestamp) => {
+        if (!start) start = timestamp;
+        const progress = timestamp - start;
+        const progressPercent = Math.min(progress / duration, 1);
+        const easedProgress = easeInOutCubic(progressPercent);
+        
+        window.scrollTo(0, startPosition + distance * easedProgress);
+        
+        if (progress < duration) {
+          requestAnimationFrame(animateScroll);
+        } else {
+          // Add a subtle bounce animation to the target element after scroll completes
+          element.style.transform = 'scale(1.015)';
+          element.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+          
+          setTimeout(() => {
+            element.style.transform = 'scale(1)';
+            element.style.transition = 'transform 0.4s ease-out';
+          }, 600);
+          
+          // Reset styles after animation
+          setTimeout(() => {
+            element.style.transform = '';
+            element.style.transition = '';
+          }, 1000);
+        }
+      };
+      
+      requestAnimationFrame(animateScroll);
+    } else {
+      // Element doesn't exist on current page, navigate to homepage
       window.location.href = `/#${sectionId}`;
-      return;
     }
     
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
     setIsMenuOpen(false);
   };
 
@@ -53,7 +95,7 @@ const Header = () => {
   }, [location.pathname]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
@@ -160,6 +202,20 @@ const Header = () => {
                 </div>
               )}
             </div>
+            
+            <Link 
+              to="/resources"
+              className="text-foreground hover:text-primary transition-colors font-medium"
+            >
+              Resources
+            </Link>
+            
+            <button
+              onClick={() => scrollToSection('book-call')}
+              className="text-foreground hover:text-primary transition-colors font-medium cursor-pointer"
+            >
+              Contact Us
+            </button>
           </nav>
 
           {/* Desktop CTA */}
@@ -244,6 +300,21 @@ const Header = () => {
                   <span>Email Marketing</span>
                 </Link>
               </div>
+              
+              <Link 
+                to="/resources"
+                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Resources
+              </Link>
+              
+              <button
+                onClick={() => scrollToSection('book-call')}
+                className="text-left text-foreground hover:text-primary transition-colors font-medium py-2"
+              >
+                Contact Us
+              </button>
               
               <div className="pt-4 border-t border-border">
                 <a 

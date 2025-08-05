@@ -82,7 +82,7 @@ const DemoBookingForm = () => {
   };
 
   return (
-    <section className="w-full py-20 px-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <section id="book-call" className="w-full py-20 px-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="max-w-7xl mx-auto">
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-2 gap-16 items-center">

@@ -1,12 +1,537 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Users, DollarSign, Target, CheckCircle, AlertTriangle, Star, Camera, MessageCircle, Calendar, ChevronDown, ChevronUp, BarChart3, Percent, Clock, StarHalf, Phone } from 'lucide-react';
+import { TrendingUp, Users, DollarSign, Target, CheckCircle, AlertTriangle, Star, Camera, MessageCircle, Calendar, ChevronDown, ChevronUp, BarChart3, Percent, Clock, StarHalf, Phone, Download, Share2 } from 'lucide-react';
 
 const CustomReport = ({ formData, restaurantData }) => {
   // Dropdown state management
   const [expandedCard, setExpandedCard] = useState(null);
   
   // Component loaded successfully
+
+  // Save and Share functionality
+  const handleSaveReport = () => {
+    // Create a comprehensive print-friendly version with ALL report sections
+    const printWindow = window.open('', '_blank');
+    const restaurantName = restaurantData?.name || formData.name + "'s Restaurant";
+    const currentRevenue = parseInt(formData.revenue.replace(/[^\d]/g, '')) || 0;
+    
+    // Calculate all potentials with same logic as main component
+    const emailMarketingPotential = hasMarketingList ? Math.round(listSize * 2.3) : Math.round(currentRevenue * 0.12);
+    const smsMarketingPotential = hasMarketingList ? Math.round(listSize * 3.2) : Math.round(currentRevenue * 0.15);
+    const aiPhonePotential = Math.round(currentRevenue * 0.18);
+    const googleReviewsPotential = Math.round((25 - averageReviewsPerMonth) * 4 * Math.max(35, Math.round(currentRevenue / 1000 * 12 / 52)));
+    const totalPotential = emailMarketingPotential + smsMarketingPotential + aiPhonePotential + googleReviewsPotential;
+
+    // Calculate Google Profile completeness
+    const completenessFactors = [
+      { name: 'Business Description', completed: restaurantData?.hasDescription !== false, score: 20 },
+      { name: 'Business Hours', completed: restaurantData?.opening_hours ? true : false, score: 15 },
+      { name: 'Phone Number', completed: restaurantData?.phone ? true : false, score: 10 },
+      { name: 'Website URL', completed: restaurantData?.website ? true : false, score: 10 },
+      { name: 'Photo Portfolio', completed: photosCount > 10, score: 20 },
+      { name: 'Review Volume', completed: totalReviews > 50, score: 15 },
+      { name: 'Response Rate', completed: responseRate > 0.5, score: 10 }
+    ];
+    const completenessScore = completenessFactors.reduce((sum, factor) => sum + (factor.completed ? factor.score : 0), 0);
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Revenue Analysis Report - ${restaurantName}</title>
+          <meta charset="utf-8">
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              line-height: 1.5;
+              color: #333;
+              max-width: 800px;
+              margin: 0 auto;
+              padding: 20px;
+              font-size: 14px;
+            }
+            .header {
+              background: linear-gradient(135deg, #db5439, #b53e28);
+              color: white;
+              padding: 25px;
+              border-radius: 12px;
+              margin-bottom: 25px;
+              text-align: center;
+            }
+            .header h1 {
+              margin: 0;
+              font-size: 24px;
+              font-weight: bold;
+            }
+            .header p {
+              margin: 8px 0 0 0;
+              opacity: 0.9;
+            }
+            .restaurant-info {
+              background: rgba(255,255,255,0.2);
+              padding: 15px;
+              border-radius: 8px;
+              margin-top: 15px;
+            }
+            .section {
+              margin: 25px 0;
+              page-break-inside: avoid;
+            }
+            .section-title {
+              background: #f8fafc;
+              border-left: 4px solid #db5439;
+              padding: 12px 16px;
+              margin-bottom: 15px;
+              font-size: 18px;
+              font-weight: bold;
+              color: #1a202c;
+            }
+            .summary-box {
+              background: #f0f9ff;
+              border: 2px solid #0ea5e9;
+              border-radius: 12px;
+              padding: 20px;
+              margin: 15px 0;
+              text-align: center;
+            }
+            .revenue-highlight {
+              font-size: 32px;
+              font-weight: bold;
+              color: #059669;
+              margin: 8px 0;
+            }
+            .metrics-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+              gap: 15px;
+              margin: 15px 0;
+            }
+            .metric-card {
+              background: #f8fafc;
+              border: 1px solid #e2e8f0;
+              border-radius: 8px;
+              padding: 15px;
+              text-align: center;
+            }
+            .metric-value {
+              font-size: 20px;
+              font-weight: bold;
+              color: #1e40af;
+              margin-bottom: 4px;
+            }
+            .metric-label {
+              color: #64748b;
+              font-size: 12px;
+            }
+            .opportunity-item {
+              background: white;
+              border: 1px solid #e5e7eb;
+              border-radius: 8px;
+              padding: 15px;
+              margin: 12px 0;
+              page-break-inside: avoid;
+            }
+            .opportunity-header {
+              display: flex;
+              justify-content: between;
+              align-items: center;
+              margin-bottom: 10px;
+            }
+            .opportunity-title {
+              font-size: 16px;
+              font-weight: bold;
+              color: #374151;
+              margin-bottom: 8px;
+            }
+            .opportunity-value {
+              font-size: 18px;
+              font-weight: bold;
+              color: #059669;
+              margin-bottom: 8px;
+            }
+            .detail-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 10px;
+              margin: 10px 0;
+            }
+            .detail-card {
+              background: #f8fafc;
+              border: 1px solid #e2e8f0;
+              border-radius: 6px;
+              padding: 10px;
+              text-align: center;
+            }
+            .detail-value {
+              font-size: 16px;
+              font-weight: bold;
+              color: #1e40af;
+            }
+            .detail-label {
+              font-size: 11px;
+              color: #64748b;
+              margin-top: 2px;
+            }
+            .how-it-works {
+              background: #f0f9ff;
+              border: 1px solid #bfdbfe;
+              border-radius: 6px;
+              padding: 10px;
+              margin: 10px 0;
+            }
+            .how-it-works h4 {
+              margin: 0 0 8px 0;
+              color: #1e40af;
+              font-size: 14px;
+            }
+            .how-it-works ul {
+              margin: 0;
+              padding-left: 16px;
+            }
+            .how-it-works li {
+              margin: 4px 0;
+              font-size: 12px;
+              color: #3730a3;
+            }
+            .completeness-item {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 8px;
+              border-bottom: 1px solid #e5e7eb;
+            }
+            .status-good { color: #059669; font-weight: bold; }
+            .status-missing { color: #dc2626; font-weight: bold; }
+            .recommendations {
+              background: #fef3c7;
+              border: 1px solid #f59e0b;
+              border-radius: 8px;
+              padding: 15px;
+              margin: 15px 0;
+            }
+            .recommendation-item {
+              margin: 8px 0;
+              padding: 8px;
+              background: white;
+              border-radius: 4px;
+              border-left: 3px solid #f59e0b;
+            }
+            .footer {
+              text-align: center;
+              margin-top: 30px;
+              padding: 15px;
+              background: #f8fafc;
+              border-radius: 8px;
+              color: #64748b;
+              font-size: 12px;
+            }
+            @media print {
+              body { margin: 0; padding: 10px; font-size: 12px; }
+              .header { break-inside: avoid; }
+              .section { break-inside: avoid; }
+              .opportunity-item { break-inside: avoid; }
+              .page-break { page-break-before: always; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>Revenue Analysis Report</h1>
+            <p>Generated ${new Date().toLocaleDateString()}</p>
+            <div class="restaurant-info">
+              <h2 style="margin: 0; font-size: 20px;">${restaurantName}</h2>
+              ${restaurantData?.address ? `<p style="margin: 4px 0;">📍 ${restaurantData.address}</p>` : ''}
+              <p style="margin: 4px 0;">⭐ ${currentRating} (${totalReviews} reviews)</p>
+            </div>
+            <p style="margin-top: 15px; font-size: 13px;">
+              📊 <strong>Custom Analysis for ${formData.name}</strong> - This report analyzes your specific business data from Google Business Profile, 
+              current revenue of <strong>$${currentRevenue.toLocaleString()}/month</strong>, 
+              and ${hasMarketingList ? `your existing marketing list of ${formData.listSize} contacts` : 'your growth potential'} 
+              to identify exact revenue opportunities.
+            </p>
+          </div>
+
+          <!-- Executive Summary Section -->
+          <div class="section">
+            <div class="section-title">📈 Executive Summary</div>
+            <div class="summary-box">
+              <h3 style="margin-top: 0; color: #0ea5e9;">Monthly Revenue Opportunity</h3>
+              <div class="revenue-highlight">$${Math.round(totalPotential).toLocaleString()}</div>
+              <p style="margin-bottom: 0; color: #059669; font-weight: 600;">Potential additional monthly revenue with Bot & Table's marketing automation</p>
+            </div>
+
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-value">$${currentRevenue.toLocaleString()}</div>
+                <div class="metric-label">Current Monthly Revenue</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value">${Math.round((totalPotential / currentRevenue) * 100)}%</div>
+                <div class="metric-label">Potential Revenue Increase</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value">${currentRating}</div>
+                <div class="metric-label">Current Rating</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value">${totalReviews}</div>
+                <div class="metric-label">Total Reviews</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-break"></div>
+
+          <!-- Revenue Opportunities Section -->
+          <div class="section">
+            <div class="section-title">💰 Revenue Opportunities</div>
+            
+            <div class="opportunity-item">
+              <div class="opportunity-title">📧 Email Marketing Automation</div>
+              <div class="opportunity-value">+$${emailMarketingPotential.toLocaleString()}/month</div>
+              <p style="margin: 8px 0;">
+                ${hasMarketingList ? `Leverage your ${formData.listSize} contacts` : 'Build and monetize customer database'}
+              </p>
+              
+              <div class="detail-grid">
+                <div class="detail-card">
+                  <div class="detail-value">${hasMarketingList ? ((emailMarketingPotential / currentRevenue) * 100).toFixed(0) : '12'}%</div>
+                  <div class="detail-label">Revenue Impact</div>
+                </div>
+                <div class="detail-card">
+                  <div class="detail-value">${hasMarketingList ? '4.2' : '3.8'}%</div>
+                  <div class="detail-label">Conversion Rate</div>
+                </div>
+              </div>
+              
+              <div class="how-it-works">
+                <h4>How This Works:</h4>
+                <ul>
+                  <li><strong>Automated Campaigns:</strong> Welcome series, birthday offers, win-back campaigns</li>
+                  <li><strong>Segmentation:</strong> Target customers based on order history and preferences</li>
+                  <li><strong>Timing:</strong> Send offers when customers are most likely to order</li>
+                  <li><strong>Personalization:</strong> Custom messages mentioning favorite dishes and visit history</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="opportunity-item">
+              <div class="opportunity-title">📱 SMS Marketing Campaigns</div>
+              <div class="opportunity-value">+$${smsMarketingPotential.toLocaleString()}/month</div>
+              <p style="margin: 8px 0;">Direct SMS marketing with 98% open rates for immediate customer action</p>
+              
+              <div class="detail-grid">
+                <div class="detail-card">
+                  <div class="detail-value">98%</div>
+                  <div class="detail-label">Open Rate</div>
+                </div>
+                <div class="detail-card">
+                  <div class="detail-value">45%</div>
+                  <div class="detail-label">Response Rate</div>
+                </div>
+              </div>
+              
+              <div class="how-it-works">
+                <h4>High-Converting SMS Campaigns:</h4>
+                <ul>
+                  <li><strong>Last-Minute Deals:</strong> "Table for 2 available at 7pm tonight - 20% off if you book in next hour!"</li>
+                  <li><strong>Birthday Campaigns:</strong> "Happy Birthday! Celebrate with us - free dessert with dinner this week"</li>
+                  <li><strong>Weather-Based:</strong> "Rainy day special: Hot soup & sandwich combo $12 today only!"</li>
+                  <li><strong>Event Reminders:</strong> "Your reservation for tonight at 7pm is confirmed. Can't wait to see you!"</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="opportunity-item">
+              <div class="opportunity-title">📞 AI Phone Call Management</div>
+              <div class="opportunity-value">+$${aiPhonePotential.toLocaleString()}/month</div>
+              <p style="margin: 8px 0;">Never miss a call again with AI that handles reservations, answers questions, and captures leads 24/7</p>
+              
+              <div class="detail-grid">
+                <div class="detail-card">
+                  <div class="detail-value">24/7</div>
+                  <div class="detail-label">Availability</div>
+                </div>
+                <div class="detail-card">
+                  <div class="detail-value">95%</div>
+                  <div class="detail-label">Call Answer Rate</div>
+                </div>
+              </div>
+              
+              <div class="how-it-works">
+                <h4>AI Phone System Capabilities:</h4>
+                <ul>
+                  <li><strong>Reservation Management:</strong> Books tables, manages cancellations, sends confirmations</li>
+                  <li><strong>Menu Information:</strong> Answers questions about dishes, ingredients, and pricing</li>
+                  <li><strong>Order Taking:</strong> Processes takeout and delivery orders with payment</li>
+                  <li><strong>Lead Capture:</strong> Collects contact info for future marketing</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="opportunity-item">
+              <div class="opportunity-title">⭐ Google Reviews Optimization</div>
+              <div class="opportunity-value">+$${googleReviewsPotential.toLocaleString()}/month</div>
+              <p style="margin: 8px 0;">Systematic review generation and reputation management to improve online visibility</p>
+              
+              <div class="detail-grid">
+                <div class="detail-card">
+                  <div class="detail-value">${Math.max(3, Math.round((25 - averageReviewsPerMonth) * 0.6))}</div>
+                  <div class="detail-label">New Reviews/Month</div>
+                </div>
+                <div class="detail-card">
+                  <div class="detail-value">3-5</div>
+                  <div class="detail-label">Customers per Review</div>
+                </div>
+              </div>
+              
+              <div class="how-it-works">
+                <h4>Review Generation Process:</h4>
+                <ul>
+                  <li><strong>Satisfaction Detection:</strong> AI identifies happy customers in real-time</li>
+                  <li><strong>Optimal Timing:</strong> Requests sent 2-8 hours after positive dining experience</li>
+                  <li><strong>Personalized Messages:</strong> References specific details from their visit</li>
+                  <li><strong>Multi-Platform:</strong> Manages Google, Yelp, Facebook, and TripAdvisor</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-break"></div>
+
+          <!-- Google Business Profile Analysis -->
+          <div class="section">
+            <div class="section-title">🏢 Google Business Profile Analysis</div>
+            
+            <div class="summary-box">
+              <h3 style="margin-top: 0; color: #0ea5e9;">Profile Completeness Score</h3>
+              <div class="revenue-highlight">${completenessScore}/100</div>
+              <p style="margin-bottom: 0; color: ${completenessScore >= 80 ? '#059669' : completenessScore >= 60 ? '#f59e0b' : '#dc2626'}; font-weight: 600;">
+                ${completenessScore >= 80 ? 'Excellent' : completenessScore >= 60 ? 'Good' : 'Needs Improvement'}
+              </p>
+            </div>
+
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin: 15px 0;">
+              <h4 style="margin-top: 0; color: #374151;">Completeness Factors:</h4>
+              ${completenessFactors.map(factor => `
+                <div class="completeness-item">
+                  <span>${factor.name}</span>
+                  <span class="${factor.completed ? 'status-good' : 'status-missing'}">
+                    ${factor.completed ? '✓ Complete' : '✗ Missing'} (${factor.score} pts)
+                  </span>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-value">${totalReviews}</div>
+                <div class="metric-label">Total Reviews</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value">${averageReviewsPerMonth}</div>
+                <div class="metric-label">Monthly Reviews</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value">${lastReviewDays}</div>
+                <div class="metric-label">Days Since Last Review</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value">${photosCount}</div>
+                <div class="metric-label">Photos</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommended Actions -->
+          <div class="section">
+            <div class="section-title">🎯 Recommended Actions</div>
+            
+            <div class="recommendations">
+              <h4 style="margin-top: 0; color: #92400e;">Priority Action Items:</h4>
+              
+              <div class="recommendation-item">
+                <strong>1. Implement AI Phone System</strong> - Capture the $${aiPhonePotential.toLocaleString()}/month you're losing to missed calls
+              </div>
+              
+              <div class="recommendation-item">
+                <strong>2. Launch Email Marketing</strong> - ${hasMarketingList ? `Activate your ${formData.listSize} contacts` : 'Start building your customer database'} for $${emailMarketingPotential.toLocaleString()}/month potential
+              </div>
+              
+              <div class="recommendation-item">
+                <strong>3. Deploy SMS Campaigns</strong> - Immediate revenue impact with 98% open rates worth $${smsMarketingPotential.toLocaleString()}/month
+              </div>
+              
+              <div class="recommendation-item">
+                <strong>4. Optimize Google Reviews</strong> - Systematic review generation for $${googleReviewsPotential.toLocaleString()}/month revenue increase
+              </div>
+              
+              ${completenessScore < 80 ? `
+                <div class="recommendation-item">
+                  <strong>5. Complete Google Business Profile</strong> - ${completenessFactors.filter(f => !f.completed).map(f => f.name).join(', ')} to improve local search visibility
+                </div>
+              ` : ''}
+            </div>
+
+            <div style="background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: center;">
+              <h4 style="margin-top: 0; color: #047857;">📞 Ready to Implement?</h4>
+              <p style="margin-bottom: 0; color: #065f46;">
+                Bot & Table can implement all these systems in 24-48 hours. Contact us to start capturing your $${Math.round(totalPotential).toLocaleString()}/month revenue opportunity.
+              </p>
+            </div>
+          </div>
+
+          <div class="footer">
+            <p><strong>Report generated by Bot & Table</strong></p>
+            <p>This comprehensive analysis is based on your specific business data and industry benchmarks.</p>
+            <p>Generated on ${new Date().toLocaleString()}</p>
+            <p>For questions about this report, contact support@botandtable.com</p>
+          </div>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+    
+    // Wait for content to load, then trigger print
+    printWindow.onload = function() {
+      setTimeout(() => {
+        printWindow.print();
+        // Close the print window after printing
+        printWindow.onafterprint = function() {
+          printWindow.close();
+        };
+      }, 500);
+    };
+  };
+
+  const handleShareReport = async () => {
+    const shareData = {
+      title: `Revenue Analysis Report - ${restaurantData?.name || formData.name + "'s Restaurant"}`,
+      text: `Check out my restaurant's revenue analysis report generated by Bot & Table`,
+      url: window.location.href
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        // Fallback: copy to clipboard
+        await navigator.clipboard.writeText(`${shareData.title}\n${shareData.text}\n${shareData.url}`);
+        alert('Report link copied to clipboard!');
+      }
+    } catch (err) {
+      console.log('Error sharing:', err);
+      // Fallback: copy to clipboard
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Report link copied to clipboard!');
+      } catch (clipboardErr) {
+        console.log('Clipboard error:', clipboardErr);
+      }
+    }
+  };
 
   // Helper function to render star rating
   const renderStarRating = (rating) => {
@@ -2017,8 +2542,8 @@ const CustomReport = ({ formData, restaurantData }) => {
     >
       {/* Report Header */}
       <div className="bg-gradient-to-r from-[#db5439] to-[#b53e28] text-white p-4">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
+        <div className="flex items-start justify-between mb-4 flex-wrap gap-4">
+          <div className="flex items-center space-x-3 flex-1 min-w-0">
             <img src="/assets/bot-table-robot.svg" alt="Bot & Table" className="w-12 h-12 bg-white rounded-full p-2" />
             <div>
               <h1 className="text-2xl font-bold">Revenue Analysis Report</h1>
@@ -2028,8 +2553,29 @@ const CustomReport = ({ formData, restaurantData }) => {
             </div>
           </div>
           
+          {/* Save and Share Buttons */}
+          <div className="flex items-center space-x-3 order-2 lg:order-1">
+            <button
+              onClick={handleSaveReport}
+              className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg px-4 py-2 transition-colors duration-200"
+              title="Save Report"
+            >
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline text-sm font-medium">Save</span>
+            </button>
+            
+            <button
+              onClick={handleShareReport}
+              className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg px-4 py-2 transition-colors duration-200"
+              title="Share Report"
+            >
+              <Share2 className="w-4 h-4" />
+              <span className="hidden sm:inline text-sm font-medium">Share</span>
+            </button>
+          </div>
+          
           {/* Restaurant Info */}
-          <div className="text-right">
+          <div className="text-right order-1 lg:order-2">
             <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
               <h2 className="text-lg font-bold text-white">
                 {restaurantData?.name || formData.name + "'s Restaurant"}

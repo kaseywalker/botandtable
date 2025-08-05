@@ -68,8 +68,6 @@ const SocialProofSection = () => {
                 </h3>
                 
                 <div className="flex items-center text-sm text-gray-500 space-x-4">
-                  <span>{article.readTime}</span>
-                  <span>|</span>
                   <span>{article.date}</span>
                 </div>
               </div>

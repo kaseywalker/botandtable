@@ -113,19 +113,54 @@ export const Card = ({
   );
 };
 
-const InitialTypewriterMessage = React.memo(() => (
-  <span className="text-base md:text-lg font-mono text-[#C7C7C7]">
-    <Typewriter
-      words={["Our AI found restaurants like yours are missing $3,200+ monthly in hidden revenue. Discover your exact number in 60 seconds."]}
-      loop={1}
-      cursor
-      cursorStyle="|"
-      typeSpeed={32}
-      deleteSpeed={50}
-      delaySpeed={1000}
-    />
-  </span>
-));
+const InitialTypewriterMessage = React.memo(() => {
+  const [showSecondMessage, setShowSecondMessage] = React.useState(false);
+
+  // Simple timer to show second message after 5 seconds
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSecondMessage(true);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="space-y-4">
+      {/* First message bubble */}
+      <div className="bg-gray-800 rounded-lg p-4 text-base md:text-lg font-mono text-[#C7C7C7]">
+        {!showSecondMessage ? (
+          <Typewriter
+            words={["Welcome to Bot & Table—where our 'bots' help fill your tables. Our AI found restaurants are missing $3,200+ monthly in hidden revenue."]}
+            loop={1}
+            cursor
+            cursorStyle="|"
+            typeSpeed={32}
+            deleteSpeed={50}
+            delaySpeed={0}
+          />
+        ) : (
+          <div>Welcome to Bot & Table—where our 'bots' help fill your tables. Our AI found restaurants are missing $3,200+ monthly in hidden revenue.</div>
+        )}
+      </div>
+
+      {/* Second message bubble */}
+      {showSecondMessage && (
+        <div className="bg-gray-800 rounded-lg p-4 text-base md:text-lg font-mono text-[#C7C7C7]">
+          <Typewriter
+            words={["Receive your exclusive Restaurant Profit Optimization Report—a detailed, personalized analysis worth $500 that reveals your hidden revenue streams and the exact roadmap to capture them."]}
+            loop={1}
+            cursor
+            cursorStyle="|"
+            typeSpeed={32}
+            deleteSpeed={50}
+            delaySpeed={0}
+          />
+        </div>
+      )}
+    </div>
+  );
+});
 
 // Add utility functions at the top:
 function formatCurrency(value: string): string {
@@ -701,9 +736,9 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
       >
         <div className="flex flex-col items-center justify-center w-full h-full">
           {/* Only show the initial typewriter message in the first step */}
-          <div className="flex items-center gap-4 md:gap-6 p-0 md:p-0 max-w-2xl mx-auto mt-4" style={{ minHeight: 120 }}>
+          <div className="flex items-start gap-4 md:gap-6 p-0 md:p-0 max-w-2xl mx-auto mt-4" style={{ minHeight: 120 }}>
             {/* Robot SVG as profile image */}
-            <div className="flex-shrink-0 flex items-center justify-center">
+            <div className="flex-shrink-0 flex items-center justify-center mt-2">
               <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center">
                 <img
                   src="/assets/bot-table-robot.svg"
@@ -747,25 +782,22 @@ export default function HeroScrollDemo({ onHeadingMount }: { onHeadingMount?: ()
               });
             }
           }}
-          className="group bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-300 rounded-full p-3 shadow-lg hover:shadow-xl border border-gray-200/50"
+          className="group transition-all duration-300 p-3"
           aria-label="Scroll to see more content"
         >
-          <div className="relative">
-            <svg 
-              className="w-6 h-6 text-primary animate-bounce" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M19 14l-7 7m0 0l-7-7m7 7V3" 
-              />
-            </svg>
-            <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping"></div>
-          </div>
+          <svg 
+            className="w-6 h-6 text-orange-600 animate-bounce" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M19 14l-7 7m0 0l-7-7m7 7V3" 
+            />
+          </svg>
         </button>
       </div>
     </div>

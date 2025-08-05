@@ -1,127 +1,544 @@
 "use client";
 
-import React, { forwardRef, useRef } from "react";
-import { AnimatedBeam } from "@/components/ui/animated-beam";
-import { FileText, FileStack, Bot, Zap, MessageCircle, MessageSquare, FilePlus, Phone } from "lucide-react";
-import { cn } from "@/lib/utils";
+import React, { useRef, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Phone, PhoneCall } from "lucide-react";
 import BotTableRobot from '@/assets/bot-table-robot.svg?react';
 
-const Circle = forwardRef<
-  HTMLDivElement,
-  { className?: string; children?: React.ReactNode }
->(({ className, children }, ref) => {
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "z-10 flex size-12 items-center justify-center rounded-full border-2 bg-white p-3 shadow-[0_0_20px_-12px_rgba(0,0,0,0.8)]",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  );
-});
-
-Circle.displayName = "Circle";
-
-// Add the correct brand robot SVG as a React component
-const BrandRobotIcon = () => (
-  <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 402 517" className="w-10 h-10">
-    <path d="M0,0h402v516.558c-.19.109-.35.215-.556.285-1.558.527-17.888.157-20.668.157l-62.847.004-312.369-.004c-1.604,0-4.178.347-5.56-.442V0Z" fill="#fefefe"/>
-    <path d="M117.763,230.991c3.517-11.095,8.874-21.523,19.735-27.088l.215-.108-.149-.126.445-.118c-.35-.307-.652-.446-1.069-.631-1.15-.512-1.888-1.337-2.325-2.517-1.168-3.158-.527-23.975-.631-29.232-.188-9.415-1.255-18.949-1.991-28.339-.861-10.984-1.456-21.999-2.222-32.991l-1.202-15.568c-.277-3.567-.778-7.392-.424-10.961.093-.934.405-1.864.819-2.704,1.211-2.46,3.058-3.797,5.636-4.62,4.107-1.311,8.919-1.462,13.206-1.808,7.597-.613,15.133-1.032,22.748-1.248,6.098-.173,12.183-.671,18.281-.778,19.473-.369,38.953.143,58.38,1.533,5.709.384,16.627.357,21.522,2.988,2.149,1.155,3.557,3.087,4.222,5.417,1.052,3.687-.349,19.607-.652,24.489-.657,11.855-1.434,23.703-2.33,35.542-.724,9.683-1.658,19.408-1.994,29.112-.193,5.547,1.021,25.494-1.065,29.085-.73,1.256-1.835,2.254-2.897,3.227,9.949,5.442,16.849,15.094,19.983,25.852l.176.616c5.143-.094,10.244.014,14.196,3.809,3.832,3.68,4.487,8.502,4.536,13.552l.018,15.043c.014,4.511.547,9.638-.54,14.031-.6,2.427-1.78,4.667-3.533,6.461-3.749,3.838-8.377,4.136-13.438,4.145h-.321c-.02,3.374.639,11.246-.205,14.165-.437,1.51-1.476,2.822-2.582,3.906-7.715,7.557-19.345,11.014-29.364,14.174,2.882,3.927,6.828,3.788,11.151,5.334,5.049,1.805,10.305,4.116,14.887,6.92,1.665,1.019,3.14,2.425,4.841,3.358,3.286,1.802,7.094,2.1,10.315,4.228,11.631,7.682,16.609,24.959,19.191,37.855,1.772,8.853,2.484,17.718,2.745,26.723.064,2.209.329,4.702.039,6.884-.043.322-.121.577-.223.884-.092,3.64,3.492,6.047,2.652,10.718-.912,5.07-4.928,9.118-8.995,11.938-8.978,6.225-20.213,9.746-30.689,12.446-25.969,6.692-52.536,8.473-79.253,8.446-5.596-.006-11.224.086-16.816-.113-14.484-.513-30.327-2.11-44.606-4.681-15.686-2.824-44.076-8.55-53.72-22.653-4.222-6.173-2.157-12.295,2.263-17.664.613-.745,2.305-2.315,2.42-3.227.014-.114.019-.23.028-.344-1.238-.637-2.596-2.201-3.065-3.504-.453-4.683.52-9.77,1.43-14.354,3.101-15.627,8.791-32.129,19.07-44.56,7.89-9.541,18.718-17.445,31.377-18.669,2.291-.222,4.579-.192,6.876-.131.66-2.457,1.128-4.862,1.277-7.407-8.328-2.234-23.939-7.557-28.802-15.048-.741-4.969-.234-10.574-.203-15.615-5.033-.04-10.224-.048-14.028-3.872-1.843-1.853-3.077-4.266-3.638-6.808-.874-3.959-.378-8.761-.345-12.82l.115-17.801c.052-4.115.78-8.367,3.83-11.379,3.405-3.363,7.45-3.518,11.971-3.448l2.721.053Z" fill="#232629"/>
-  </svg>
-);
+interface ActiveCall {
+  id: number;
+  name: string;
+  photo: string;
+  position: { x: number; y: number };
+  phase: 'ringing' | 'connected' | 'ending';
+  outcome: string;
+  startTime: number;
+}
 
 export function AnimatedBeamDemo() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const div1Ref = useRef<HTMLDivElement>(null);
-  const div2Ref = useRef<HTMLDivElement>(null);
-  const div3Ref = useRef<HTMLDivElement>(null);
-  const div4Ref = useRef<HTMLDivElement>(null);
-  const div5Ref = useRef<HTMLDivElement>(null);
-  const div6Ref = useRef<HTMLDivElement>(null);
-  const div7Ref = useRef<HTMLDivElement>(null);
+  const robotRef = useRef<HTMLDivElement>(null);
+  const [activeCalls, setActiveCalls] = useState<ActiveCall[]>([]);
+  const [callCounter, setCallCounter] = useState(0);
+
+  // Real customer photos from Unsplash - Expanded list to prevent duplicates
+  const customers = [
+    { name: "Sarah", photo: "https://images.unsplash.com/photo-1494790108755-2616b612b8c5?w=150&h=150&fit=crop&crop=face", outcome: "Table Booked! 🍽️" },
+    { name: "Mike", photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face", outcome: "Order Placed! 🛍️" },
+    { name: "Lisa", photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face", outcome: "Info Provided! ℹ️" },
+    { name: "David", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face", outcome: "Issue Resolved! ✅" },
+    { name: "Emma", photo: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face", outcome: "Event Scheduled! 🎉" },
+    { name: "Alex", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face", outcome: "Catering Booked! 🎊" },
+    { name: "Jessica", photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop&crop=face", outcome: "Reservation Made! 📅" },
+    { name: "Robert", photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face", outcome: "Takeout Ordered! 🥡" },
+    { name: "Maria", photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face", outcome: "Party Planned! 🎈" },
+    { name: "James", photo: "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=150&h=150&fit=crop&crop=face", outcome: "Menu Inquiry! 📋" },
+    { name: "Rachel", photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face", outcome: "Special Request! ⭐" },
+    { name: "Kevin", photo: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=150&h=150&fit=crop&crop=face", outcome: "Delivery Scheduled! 🚚" },
+    { name: "Amanda", photo: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face", outcome: "Group Booking! 👥" },
+    { name: "Chris", photo: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=150&h=150&fit=crop&crop=face", outcome: "Wine Pairing! 🍷" },
+    { name: "Nicole", photo: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&h=150&fit=crop&crop=face", outcome: "Birthday Dinner! 🎂" },
+    { name: "Tyler", photo: "https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=150&h=150&fit=crop&crop=face", outcome: "Business Lunch! 💼" }
+  ];
+
+  // Generate position that doesn't overlap with existing calls or the larger robot
+  const generatePosition = () => {
+    const radius = 220; // Increased radius to accommodate larger robot
+    const minDistance = 140; // Increased minimum distance between calls
+    const robotRadius = 60; // Larger robot radius (48px robot + 12px padding)
+    let attempts = 0;
+    const maxAttempts = 50;
+
+    while (attempts < maxAttempts) {
+      const angle = Math.random() * 2 * Math.PI;
+      const newPosition = {
+        x: Math.cos(angle) * radius,
+        y: Math.sin(angle) * radius
+      };
+
+      // Check distance from center (robot) - must be far enough from larger robot
+      const distanceFromCenter = Math.sqrt(newPosition.x * newPosition.x + newPosition.y * newPosition.y);
+      if (distanceFromCenter < robotRadius + 80) { // 80px buffer around larger robot
+        attempts++;
+        continue;
+      }
+
+      // Check if this position is far enough from existing calls
+      const tooClose = activeCalls.some(call => {
+        const distance = Math.sqrt(
+          Math.pow(newPosition.x - call.position.x, 2) + 
+          Math.pow(newPosition.y - call.position.y, 2)
+        );
+        return distance < minDistance;
+      });
+
+      if (!tooClose) {
+        return newPosition;
+      }
+
+      attempts++;
+    }
+
+    // If we can't find a good position, use predefined positions at safe distances
+    const predefinedAngles = [0, Math.PI/2, Math.PI, (3*Math.PI)/2, Math.PI/4, (3*Math.PI)/4, (5*Math.PI)/4, (7*Math.PI)/4];
+    const availableAngles = predefinedAngles.filter(angle => {
+      const position = {
+        x: Math.cos(angle) * radius,
+        y: Math.sin(angle) * radius
+      };
+      
+      // Check distance from robot
+      const distanceFromCenter = Math.sqrt(position.x * position.x + position.y * position.y);
+      if (distanceFromCenter < robotRadius + 80) {
+        return false;
+      }
+      
+      return !activeCalls.some(call => {
+        const distance = Math.sqrt(
+          Math.pow(position.x - call.position.x, 2) + 
+          Math.pow(position.y - call.position.y, 2)
+        );
+        return distance < minDistance;
+      });
+    });
+
+    if (availableAngles.length > 0) {
+      const angle = availableAngles[Math.floor(Math.random() * availableAngles.length)];
+      return {
+        x: Math.cos(angle) * radius,
+        y: Math.sin(angle) * radius
+      };
+    }
+
+    // Final fallback to safe distance
+    const angle = Math.random() * 2 * Math.PI;
+    return {
+      x: Math.cos(angle) * (robotRadius + 100),
+      y: Math.sin(angle) * (robotRadius + 100)
+    };
+  };
+
+  // Simulate realistic call flow
+  useEffect(() => {
+    const createCall = () => {
+      // Don't create too many simultaneous calls
+      if (activeCalls.length >= 4) return;
+      
+      // Get customers who are NOT currently on active calls
+      const activeCustomerNames = activeCalls.map(call => call.name);
+      const availableCustomers = customers.filter(customer => 
+        !activeCustomerNames.includes(customer.name)
+      );
+      
+      // If no customers available, wait for some calls to end
+      if (availableCustomers.length === 0) return;
+      
+      const customer = availableCustomers[Math.floor(Math.random() * availableCustomers.length)];
+      const position = generatePosition();
+      
+      const newCall: ActiveCall = {
+        id: callCounter,
+        name: customer.name,
+        photo: customer.photo,
+        position,
+        phase: 'ringing',
+        outcome: customer.outcome,
+        startTime: Date.now()
+      };
+
+      setCallCounter(prev => prev + 1);
+      setActiveCalls(prev => [...prev, newCall]);
+
+      // Answer call after 1-3 seconds
+      setTimeout(() => {
+        setActiveCalls(prev => 
+          prev.map(call => 
+            call.id === newCall.id ? { ...call, phase: 'connected' } : call
+          )
+        );
+      }, 1000 + Math.random() * 2000);
+
+      // Show outcome after 4-7 seconds total
+      setTimeout(() => {
+        setActiveCalls(prev => 
+          prev.map(call => 
+            call.id === newCall.id ? { ...call, phase: 'ending' } : call
+          )
+        );
+      }, 4000 + Math.random() * 3000);
+
+      // Remove call after showing outcome
+      setTimeout(() => {
+        setActiveCalls(prev => prev.filter(call => call.id !== newCall.id));
+      }, 7000 + Math.random() * 2000);
+    };
+
+    // Create first call after a short delay
+    const firstCallTimeout = setTimeout(() => {
+      createCall();
+    }, 1000 + Math.random() * 2000);
+
+    // Continue creating calls with natural, varied timing
+    const interval = setInterval(() => {
+      // More realistic restaurant call patterns
+      // Sometimes busier, sometimes quieter
+      const currentCalls = activeCalls.length;
+      
+      // If we have 3+ calls, be much more selective about new calls
+      if (currentCalls >= 3 && Math.random() < 0.7) {
+        return; // Skip this opportunity 70% of the time when busy
+      }
+      
+      // If we have 2 calls, be somewhat selective
+      if (currentCalls >= 2 && Math.random() < 0.4) {
+        return; // Skip this opportunity 40% of the time
+      }
+      
+      createCall();
+    }, 3000 + Math.random() * 6000); // 3-9 seconds between attempts
+
+    return () => {
+      clearTimeout(firstCallTimeout);
+      clearInterval(interval);
+    };
+  }, [callCounter, activeCalls.length]);
+
+    // Audio wave component for ringing calls
+  const RingingWave = () => (
+    <div className="absolute inset-0 pointer-events-none">
+      {[...Array(3)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute inset-0 rounded-full border-2 border-orange-400/60"
+          animate={{
+            scale: [1, 1.8, 2.5],
+            opacity: [0.8, 0.4, 0]
+          }}
+          transition={{
+            duration: 1.2,
+            repeat: Infinity,
+            delay: i * 0.3,
+            ease: "easeOut"
+          }}
+        />
+      ))}
+    </div>
+  );
+
+  // Natural audio wave for connected calls
+  const AudioWave = () => {
+    const bars = Array.from({ length: 8 }, (_, i) => i);
+    
+    return (
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="flex items-center space-x-0.5">
+          {bars.map((bar) => (
+            <motion.div
+              key={bar}
+              className="w-1 bg-blue-400 rounded-full"
+              animate={{
+                height: [4, 12, 8, 16, 6, 14, 10, 4],
+              }}
+              transition={{
+                duration: 0.8,
+                repeat: Infinity,
+                delay: bar * 0.1,
+                ease: "easeInOut"
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div
-      className="relative flex h-[500px] w-full items-center justify-center overflow-visible"
+      className="relative flex h-[600px] w-full items-center justify-center overflow-visible"
       ref={containerRef}
+      style={{ minWidth: '800px' }}
     >
-      <div className="flex size-full flex-col max-w-lg max-h-[200px] items-stretch justify-between gap-10">
-        <div className="flex flex-row items-center justify-between">
-          <Circle ref={div1Ref}>
-            <Phone className="w-8 h-8 text-primary" />
-          </Circle>
-          <Circle ref={div5Ref}>
-            <Phone className="w-8 h-8 text-primary" />
-          </Circle>
-        </div>
-        <div className="flex flex-row items-center justify-between">
-          <Circle ref={div2Ref}>
-            <Phone className="w-8 h-8 text-primary" />
-          </Circle>
-          <Circle ref={div6Ref}>
-            <Phone className="w-8 h-8 text-primary" />
-          </Circle>
-        </div>
-        <div className="flex flex-row items-center justify-between">
-          <Circle ref={div3Ref}>
-            <Phone className="w-8 h-8 text-primary" />
-          </Circle>
-          <Circle ref={div7Ref}>
-            <Phone className="w-8 h-8 text-primary" />
-          </Circle>
-        </div>
-      </div>
-      {/* Absolutely center the main circle over the lines */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center">
-        <Circle ref={div4Ref} className="size-[147px]">
-          <BotTableRobot className="w-28 h-28" />
-        </Circle>
+      {/* Animated Talking Waves around Robot */}
+      <div className="absolute inset-0 flex items-center justify-center z-10">
+        {/* Inner pulsing waves */}
+        {[...Array(3)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            initial={{ scale: 0.8, opacity: 0.8 }}
+            animate={{ 
+              scale: [0.8, 2.2, 0.8], 
+              opacity: [0.6, 0.1, 0.6],
+            }}
+            transition={{
+              duration: 4.5,
+              repeat: Infinity,
+              delay: i * 0.8,
+              ease: "easeInOut"
+            }}
+            style={{
+              width: '192px',
+              height: '192px',
+              background: `radial-gradient(circle, rgba(251, 146, 60, ${0.3 - i * 0.1}) 0%, rgba(249, 115, 22, ${0.2 - i * 0.05}) 50%, transparent 70%)`,
+              filter: 'blur(2px)'
+            }}
+          />
+        ))}
+        
+        {/* Outer energy rings with rotation */}
+        {[...Array(2)].map((_, i) => (
+          <motion.div
+            key={`outer-${i}`}
+            className="absolute rounded-full"
+            initial={{ scale: 1.2, opacity: 0.4, rotate: 0 }}
+            animate={{ 
+              scale: [1.2, 2.8, 1.2], 
+              opacity: [0.4, 0.05, 0.4],
+              rotate: [0, 360]
+            }}
+            transition={{
+              duration: 8 + i * 2,
+              repeat: Infinity,
+              delay: i * 1.5,
+              ease: "easeInOut"
+            }}
+            style={{
+              width: '280px',
+              height: '280px',
+              background: `conic-gradient(from ${i * 180}deg, transparent 60%, rgba(249, 115, 22, 0.2) 70%, rgba(251, 146, 60, 0.3) 80%, rgba(255, 159, 67, 0.2) 90%, transparent 100%)`,
+              filter: 'blur(3px)'
+            }}
+          />
+        ))}
+
+        {/* Subtle particle effect */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className="absolute w-1 h-1 bg-orange-400/60 rounded-full"
+            initial={{ 
+              x: Math.cos(i * 60 * Math.PI / 180) * 120,
+              y: Math.sin(i * 60 * Math.PI / 180) * 120,
+              opacity: 0.8,
+              scale: 1
+            }}
+            animate={{ 
+              x: Math.cos(i * 60 * Math.PI / 180) * 240,
+              y: Math.sin(i * 60 * Math.PI / 180) * 240,
+              opacity: [0.8, 0.3, 0],
+              scale: [1, 0.5, 0]
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              delay: i * 0.4,
+              ease: "easeOut"
+            }}
+          />
+        ))}
       </div>
 
-      <AnimatedBeam
-        containerRef={containerRef as React.RefObject<HTMLElement>}
-        fromRef={div1Ref as React.RefObject<HTMLElement>}
-        toRef={div4Ref as React.RefObject<HTMLElement>}
-        curvature={-75}
-        endYOffset={-10}
-      />
-      <AnimatedBeam
-        containerRef={containerRef as React.RefObject<HTMLElement>}
-        fromRef={div2Ref as React.RefObject<HTMLElement>}
-        toRef={div4Ref as React.RefObject<HTMLElement>}
-      />
-      <AnimatedBeam
-        containerRef={containerRef as React.RefObject<HTMLElement>}
-        fromRef={div3Ref as React.RefObject<HTMLElement>}
-        toRef={div4Ref as React.RefObject<HTMLElement>}
-        curvature={75}
-        endYOffset={10}
-      />
-      <AnimatedBeam
-        containerRef={containerRef as React.RefObject<HTMLElement>}
-        fromRef={div5Ref as React.RefObject<HTMLElement>}
-        toRef={div4Ref as React.RefObject<HTMLElement>}
-        curvature={-75}
-        endYOffset={-10}
-        reverse
-      />
-      <AnimatedBeam
-        containerRef={containerRef as React.RefObject<HTMLElement>}
-        fromRef={div6Ref as React.RefObject<HTMLElement>}
-        toRef={div4Ref as React.RefObject<HTMLElement>}
-        reverse
-      />
-      <AnimatedBeam
-        containerRef={containerRef as React.RefObject<HTMLElement>}
-        fromRef={div7Ref as React.RefObject<HTMLElement>}
-        toRef={div4Ref as React.RefObject<HTMLElement>}
-        curvature={75}
-        endYOffset={10}
-        reverse
-      />
+      {/* Central Robot */}
+      <motion.div
+        ref={robotRef}
+        animate={{
+          scale: activeCalls.length > 0 ? [1, 1.03, 1] : 1,
+        }}
+        transition={{
+          duration: 2,
+          repeat: activeCalls.length > 0 ? Infinity : 0,
+          ease: "easeInOut"
+        }}
+        className="relative z-20"
+      >
+        <div className="w-48 h-48 bg-white rounded-full border-8 border-orange-200 shadow-xl flex items-center justify-center relative overflow-hidden">
+          <BotTableRobot className="w-32 h-32" />
+          
+          {/* Inner glow effect */}
+          <motion.div
+            className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-300/10 to-amber-300/20"
+            animate={{ 
+              scale: [1, 1.05, 1],
+              opacity: [0.3, 0.6, 0.3]
+            }}
+            transition={{
+              duration: 3.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        </div>
+      </motion.div>
+
+      {/* Dynamic Calls */}
+      <AnimatePresence>
+        {activeCalls.map((call) => (
+          <motion.div
+            key={call.id}
+            initial={{ 
+              scale: 0,
+              x: 0,
+              y: 0,
+              opacity: 0
+            }}
+            animate={{ 
+              scale: 1,
+              x: call.position.x,
+              y: call.position.y,
+              opacity: 1
+            }}
+            exit={{ 
+              scale: 0,
+              opacity: 0
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 200,
+              damping: 20
+            }}
+            className="absolute z-10"
+            style={{
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)'
+            }}
+          >
+            <div className="relative">
+              {/* Customer Photo - Hidden during success */}
+              <motion.div
+                animate={{
+                  scale: call.phase === 'connected' ? [1, 1.05, 1] : 1,
+                  opacity: call.phase === 'ending' ? 0 : 1,
+                }}
+                transition={{
+                  duration: call.phase === 'ending' ? 0.3 : 1.5,
+                  repeat: call.phase === 'connected' ? Infinity : 0,
+                  ease: "easeInOut"
+                }}
+                className="w-16 h-16 rounded-full border-4 border-white shadow-xl overflow-hidden relative bg-gray-200"
+              >
+                <img 
+                  src={call.photo} 
+                  alt={call.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                  }}
+                />
+                
+                {/* Audio Effects */}
+                {call.phase === 'ringing' && <RingingWave />}
+                {call.phase === 'connected' && <AudioWave />}
+              </motion.div>
+
+              {/* Celebration Effect - Only during success */}
+              {call.phase === 'ending' && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {/* Celebration particles */}
+                  {[...Array(8)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute w-2 h-2 rounded-full"
+                      style={{
+                        background: ['#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'][i % 5]
+                      }}
+                      initial={{ 
+                        scale: 0,
+                        x: 0,
+                        y: 0,
+                        opacity: 1
+                      }}
+                      animate={{ 
+                        scale: [0, 1, 0],
+                        x: Math.cos(i * 45 * Math.PI / 180) * 40,
+                        y: Math.sin(i * 45 * Math.PI / 180) * 40,
+                        opacity: [1, 1, 0]
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        ease: "easeOut",
+                        delay: i * 0.1
+                      }}
+                    />
+                  ))}
+                  
+                  {/* Central celebration burst */}
+                  <motion.div
+                    className="absolute inset-0 rounded-full border-4 border-green-400"
+                    initial={{ scale: 0, opacity: 1 }}
+                    animate={{ 
+                      scale: [0, 2, 3],
+                      opacity: [1, 0.6, 0]
+                    }}
+                    transition={{
+                      duration: 1,
+                      ease: "easeOut"
+                    }}
+                  />
+                  
+                  {/* Success glow */}
+                  <motion.div
+                    className="absolute inset-0 rounded-full bg-green-400/30"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ 
+                      scale: [0.8, 1.5, 0.8],
+                      opacity: [0, 0.8, 0]
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      ease: "easeInOut"
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Customer Name */}
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: -25 }}
+                className="absolute left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap shadow-lg"
+              >
+                {call.name}
+              </motion.div>
+
+              {/* Call Status */}
+              {call.phase === 'ringing' && (
+                <motion.div
+                  animate={{ opacity: [1, 0.5, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                  className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-bold flex items-center"
+                >
+                  <Phone className="w-3 h-3 mr-1" />
+                  Ringing...
+                </motion.div>
+              )}
+
+              {call.phase === 'connected' && (
+                <motion.div
+                  className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-2 py-1 rounded text-xs font-bold flex items-center"
+                >
+                  <PhoneCall className="w-3 h-3 mr-1" />
+                  Connected
+                </motion.div>
+              )}
+
+              {/* Success Outcome */}
+              {call.phase === 'ending' && (
+                <motion.div
+                  initial={{ scale: 0, y: 0 }}
+                  animate={{ scale: 1, y: -40 }}
+                  className="absolute left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-3 py-2 rounded-lg text-sm font-bold shadow-lg whitespace-nowrap"
+                >
+                  {call.outcome}
+                </motion.div>
+              )}
+
+
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 } 

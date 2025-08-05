@@ -198,10 +198,12 @@ const HomePage = () => {
                   </div>
                 </div>
 
-                <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-orange-600 hover:bg-orange-700 text-white">
-                  <ArrowRight className="w-5 h-5" />
-                  Learn More
-                </Button>
+                <Link to="/personalized-marketing">
+                  <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-orange-600 hover:bg-orange-700 text-white">
+                    <ArrowRight className="w-5 h-5" />
+                    Learn More
+                  </Button>
+                </Link>
               </div>
 
               {/* Right Column - Visual */}
@@ -363,10 +365,12 @@ const HomePage = () => {
                   </div>
                 </div>
 
-                <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-green-600 hover:bg-green-700 text-white">
-                  <ArrowRight className="w-5 h-5" />
-                  Learn More
-                </Button>
+                <Link to="/sms-marketing">
+                  <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-green-600 hover:bg-green-700 text-white">
+                    <ArrowRight className="w-5 h-5" />
+                    Learn More
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -413,10 +417,12 @@ const HomePage = () => {
                   </div>
                 </div>
 
-                <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-blue-600 hover:bg-blue-700 text-white">
-                  <ArrowRight className="w-5 h-5" />
-                  Learn More
-                </Button>
+                <Link to="/personalized-marketing">
+                  <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-blue-600 hover:bg-blue-700 text-white">
+                    <ArrowRight className="w-5 h-5" />
+                    Learn More
+                  </Button>
+                </Link>
               </div>
 
               {/* Right Column - Email Examples */}
@@ -477,6 +483,97 @@ const HomePage = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Related Articles Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto max-w-7xl px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Expert Insights & Restaurant Marketing Strategies
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Discover proven strategies and actionable insights from our library of restaurant marketing resources
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <Link to="/articles/the-27000-phone-problem" className="group">
+              <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <img src="/ai-phone-calls.jpg" alt="Phone Problem Article" className="w-full h-48 object-cover" />
+                <div className="p-6">
+                  <div className="mb-3">
+                    <span className="inline-block px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-semibold">
+                      Phone Systems
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 group-hover:text-orange-600 transition-colors mb-3">
+                    The $27,000 Phone Problem: Why 43% of Restaurant Calls Go Unanswered
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Discover the hidden cost of missed calls and how AI phone systems can recover thousands in lost revenue.
+                  </p>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <span>15 min read</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            <Link to="/articles/google-reviews-strategies" className="group">
+              <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <img src="/google-maps-phone.jpg.jpg" alt="Google Reviews Strategies" className="w-full h-48 object-cover" />
+                <div className="p-6">
+                  <div className="mb-3">
+                    <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
+                      Reviews
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 group-hover:text-orange-600 transition-colors mb-3">
+                    10 Proven Strategies to Get More Google Reviews for Your Restaurant
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Learn the most effective methods to encourage customers to leave positive reviews and boost your online reputation.
+                  </p>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <span>12 min read</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            <Link to="/articles/restaurant-sms-marketing" className="group">
+              <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <img src="/sms_marketing_guide.webp" alt="SMS Marketing Guide" className="w-full h-48 object-cover" />
+                <div className="p-6">
+                  <div className="mb-3">
+                    <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+                      SMS Marketing
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 group-hover:text-orange-600 transition-colors mb-3">
+                    The Ultimate Guide to Restaurant SMS Marketing
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Master SMS marketing strategies that deliver $36 for every $1 spent and drive immediate customer action.
+                  </p>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <span>45 min read</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          <div className="text-center mt-12">
+            <Link to="/resources">
+              <Button size="lg" className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-8 py-4 text-lg transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                <ArrowRight className="w-5 h-5 mr-2" />
+                View All Articles
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

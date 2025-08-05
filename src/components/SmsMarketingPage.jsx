@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Button } from './ui/button';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from './ui/accordion';
-import { CheckCircle, Zap, Users, MessageCircle, TrendingUp, Star, BarChart2, Layers, Mail, Smartphone, Calendar, DollarSign } from 'lucide-react';
+import { CheckCircle, Zap, Users, MessageCircle, TrendingUp, Star, BarChart2, Layers, Mail, Smartphone, Calendar, DollarSign, Clock, Target, ArrowRight } from 'lucide-react';
 import { Hero as GroupHero } from "./ui/hero-with-group-of-images-text-and-two-buttons";
 import { IphoneMessageMockup } from "./ui/hero-with-group-of-images-text-and-two-buttons";
 import ArticlesSection from './ArticlesSection';
@@ -23,53 +24,279 @@ const benefits = [
       'Last-minute event promotions',
       'Weather-related menu changes',
     ],
+    color: 'from-blue-500 to-cyan-500',
+    bgColor: 'from-blue-50 to-cyan-50',
+    accentColor: 'text-blue-600',
+    metric: '98%',
+    metricLabel: 'Open Rate'
   },
   {
     icon: <DollarSign className="w-8 h-8 text-primary" />,
-    headline: 'Unmatched ROI That Maximizes Your Marketing Budget',
-    sub: '36 Return for Every $1 Spent on SMS Campaigns',
-    desc: 'SMS marketing delivers the highest ROI of any marketing channel, with businesses reporting returns of 3,600% on their text message campaigns. For restaurants operating on tight margins, this cost-effective approach means you can compete with larger chains without breaking the bank.',
+    headline: 'Exceptional ROI That Pays for Itself',
+    sub: '$36 Return for Every $1 Spent. Lower Costs Than Any Other Channel.',
+    desc: 'SMS marketing delivers the highest return on investment of any digital marketing channel. With costs as low as $0.01 per message and conversion rates that dwarf email marketing, your SMS campaigns literally pay for themselves with the first few orders they generate.',
     table: [
-      { label: 'SMS Marketing', value: '$75–$250/month for thousands of messages' },
-      { label: 'Traditional Radio', value: '$1,000–$5,000/month for limited reach' },
-      { label: 'Print Advertising', value: '$500–$2,000/month with no engagement tracking' },
-      { label: 'Social Media Ads', value: '$300–$1,500/month with decreasing organic reach' },
+      { label: 'Cost per message', value: '$0.01-0.05' },
+      { label: 'Average ROI', value: '3600%' },
+      { label: 'Conversion rate', value: '12-25%' },
+      { label: 'Time to results', value: 'Minutes' },
     ],
-  },
-  {
-    icon: <Calendar className="w-8 h-8 text-primary" />,
-    headline: 'Reduce No-Shows and Maximize Table Turnover',
-    sub: 'Cut No-Shows by 60% with Automated Reminder Messages',
-    desc: 'No-shows cost restaurants an average of $40–$80 per missed reservation. SMS reminders sent 24 hours before reservations reduce no-shows by up to 60%, protecting your revenue and ensuring optimal table utilization during peak hours.',
-    system: [
-      'Instant confirmation messages upon booking',
-      '24-hour reminder texts with reservation details',
-      'Day-of confirmations with parking and arrival instructions',
-      'Follow-up messages for no-shows to maintain accountability',
-    ],
+    color: 'from-green-500 to-emerald-500',
+    bgColor: 'from-green-50 to-emerald-50',
+    accentColor: 'text-green-600',
+    metric: '$36',
+    metricLabel: 'ROI per $1'
   },
   {
     icon: <Users className="w-8 h-8 text-primary" />,
-    headline: 'Build Customer Loyalty Through Personalized Engagement',
-    sub: '75% of Customers Prefer SMS Over Email for Restaurant Promotions',
-    desc: 'Personalized SMS campaigns based on dining history, preferences, and special occasions create emotional connections that turn occasional diners into loyal regulars. Birthday messages, anniversary celebrations, and preference-based offers make customers feel valued and appreciated.',
-    examples: [
-      '"Happy Birthday, Sarah! Enjoy 50% off your favorite pasta dish this week."',
-      '"It\'s been a while! Your usual table is waiting with a complimentary appetizer."',
-      '"New vegan options just added to our menu—perfect for your dietary preferences!"',
-      '"Celebrate your anniversary with us and receive a complimentary dessert!"',
-      '"Thanks for your feedback! Enjoy 10% off your next visit as a thank you."',
-      '"Exclusive: Early access to our chef\'s tasting menu this weekend!"',
-      '"Refer a friend and both of you get a free appetizer on your next visit!"'
+    headline: 'Complete Customer Lifecycle Management',
+    sub: 'From First Visit to Loyal Regular. Automated Relationship Building.',
+    desc: 'SMS marketing isn\'t just about promotions—it\'s about building lasting relationships with your customers. Our system automatically manages the entire customer journey, from welcome messages to birthday celebrations to win-back campaigns for lapsed diners.',
+    system: [
+      'Welcome series for new customers',
+      'Birthday and anniversary celebrations',
+      'Loyalty program notifications',
+      'Win-back campaigns for inactive customers',
     ],
+    color: 'from-purple-500 to-pink-500',
+    bgColor: 'from-purple-50 to-pink-50',
+    accentColor: 'text-purple-600',
+    metric: '85%',
+    metricLabel: 'Retention Rate'
   },
   {
     icon: <MessageCircle className="w-8 h-8 text-primary" />,
-    headline: 'Streamline Feedback Collection and Reputation Management',
-    sub: '10x Higher Response Rate Than Email Surveys',
-    desc: 'SMS surveys capture customer feedback while the dining experience is still fresh in their minds. Quick, mobile-friendly surveys sent within hours of dining generate honest feedback that helps you improve service and address issues before they become negative online reviews.',
+    headline: 'Smart Segmentation and Personalization',
+    sub: 'Right Message, Right Person, Right Time. AI-Powered Targeting.',
+    desc: 'Generic mass messages are a thing of the past. Our AI analyzes customer behavior, order history, and preferences to send highly targeted messages that feel personal and relevant. Vegetarian customers get veggie specials, families get kid-friendly promotions, and date-night diners get romantic dinner offers.',
+    examples: [
+      'Behavioral targeting based on order history',
+      'Location-based offers for nearby customers',
+      'Time-sensitive promotions for optimal engagement',
+      'Personalized recommendations and favorites',
+    ],
+    color: 'from-orange-500 to-red-500',
+    bgColor: 'from-orange-50 to-red-50',
+    accentColor: 'text-orange-600',
+    metric: '67%',
+    metricLabel: 'Higher Engagement'
+  },
+  {
+    icon: <TrendingUp className="w-8 h-8 text-primary" />,
+    headline: 'Measurable Results You Can Track',
+    sub: 'Real-Time Analytics. Clear Attribution. Proven Performance.',
+    desc: 'Every SMS campaign comes with detailed analytics that show exactly how your messages perform. Track opens, clicks, conversions, and revenue in real-time, so you always know which messages work best and can optimize for even better results.',
+    color: 'from-indigo-500 to-blue-500',
+    bgColor: 'from-indigo-50 to-blue-50',
+    accentColor: 'text-indigo-600',
+    metric: '100%',
+    metricLabel: 'Trackable'
   },
 ];
+
+// Italian Restaurant Phone Mockup Component
+function ItalianRestaurantMockup() {
+  const [currentMessage, setCurrentMessage] = useState(0);
+
+  const italianMessages = [
+    {
+      text: "🍝 Buongiorno Maria! Flash Special: Fresh Lobster Ravioli just arrived from Italy. 30% off today only until 8pm. Reserve your table now!",
+      time: "Today 3:15 PM",
+      image: "/ravioli.jpg"
+    },
+    {
+      text: "🍷 Ciao! Our new Tuscan wine selection is here. Join us for wine tasting tonight 6-9pm. Complimentary appetizers included!",
+      time: "Today 4:20 PM", 
+      image: "https://images.unsplash.com/photo-1547595628-c61a29f496f0?w=400&h=300&fit=crop&crop=center"
+    },
+    {
+      text: "👨‍🍳 Pasta made fresh this morning! Our Chef's Special: Truffle Carbonara is available for dinner service. Limited portions - reserve now!",
+      time: "Today 5:45 PM",
+      image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=400&h=300&fit=crop&crop=center"
+    }
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentMessage((prev) => (prev + 1) % italianMessages.length);
+    }, 9000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 50, rotateY: -15 }}
+      animate={{ opacity: 1, y: 0, rotateY: 0 }}
+      transition={{ duration: 1, delay: 0.5 }}
+      className="relative w-[320px] h-[650px] rounded-[40px] bg-black shadow-2xl overflow-hidden border-4 border-black flex flex-col items-center justify-start"
+      style={{
+        background: 'linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%)',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)'
+      }}
+    >
+      {/* Animated glow effect around phone */}
+      <motion.div
+        animate={{ 
+          scale: [1, 1.1, 1],
+          opacity: [0.3, 0.6, 0.3]
+        }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute inset-0 rounded-[40px] bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-orange-500/20 blur-xl -z-10"
+        style={{ transform: 'scale(1.1)' }}
+      />
+
+      {/* Status bar */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+        className="w-full h-[44px] flex items-center justify-between px-5 pt-2 text-xs text-black bg-white/95 backdrop-blur-sm"
+      >
+        <span className="font-semibold">2:15</span>
+        <div className="flex gap-1 items-center">
+          <motion.span 
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="w-2 h-2 bg-green-500 rounded-full inline-block" 
+          />
+          <motion.span 
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+            className="w-2 h-2 bg-green-500 rounded-full inline-block" 
+          />
+        </div>
+        <div className="flex gap-1 items-center">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M17 18a5 5 0 0 0-10 0" stroke="#222" strokeWidth="2" strokeLinecap="round" /></svg>
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4" stroke="#222" strokeWidth="2" /></svg>
+        </div>
+      </motion.div>
+
+      {/* Restaurant header */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1 }}
+        className="w-full flex flex-col items-center bg-white/95 backdrop-blur-sm border-b border-gray-200 pb-2 pt-2"
+      >
+        <motion.div 
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          className="w-12 h-12 rounded-full border-2 border-white shadow-lg bg-gradient-to-br from-red-500 to-green-500 flex items-center justify-center text-white font-bold text-lg"
+        >
+          V
+        </motion.div>
+        <div className="font-semibold text-base text-gray-900 mt-1">Villa Tuscana</div>
+        <motion.div
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="text-xs text-green-500 flex items-center gap-1"
+        >
+          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+          Online
+        </motion.div>
+      </motion.div>
+
+      {/* Messages area */}
+      <div className="flex-1 flex flex-col justify-start items-start w-full px-4 pt-8 bg-gradient-to-b from-[#f5f5f7] to-[#e8e8ea] relative overflow-hidden">
+        {/* Floating message bubbles in background */}
+        <motion.div
+          animate={{ y: [-20, -40, -20], opacity: [0.1, 0.2, 0.1] }}
+          transition={{ duration: 4, repeat: Infinity }}
+          className="absolute top-4 right-4 w-8 h-8 bg-red-200 rounded-full"
+        />
+        <motion.div
+          animate={{ y: [-30, -50, -30], opacity: [0.1, 0.2, 0.1] }}
+          transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+          className="absolute top-16 left-6 w-6 h-6 bg-green-200 rounded-full"
+        />
+
+        <div className="w-full flex justify-center">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+            className="text-xs text-gray-500 mb-2 flex items-center gap-1"
+          >
+            <MessageCircle className="w-3 h-3" />
+            iMessage
+          </motion.div>
+        </div>
+
+        {/* Animated message bubble */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentMessage}
+            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -30, scale: 0.9 }}
+            transition={{ duration: 0.5 }}
+            className="rounded-2xl shadow-lg p-2 max-w-[90%] flex flex-col items-start relative overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, #007aff 0%, #4f8cff 100%)' }}
+          >
+            {/* Animated shimmer effect */}
+            <motion.div
+              animate={{ x: [-100, 300] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
+              style={{ width: '50px' }}
+            />
+            
+            <motion.img 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              src={italianMessages[currentMessage].image} 
+              alt="Italian Food" 
+              className="w-48 h-36 object-cover rounded-xl mb-2 shadow-md" 
+            />
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="text-[15px] text-white leading-snug relative z-10"
+            >
+              {italianMessages[currentMessage].text}
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
+
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          className="w-full flex justify-center"
+        >
+          <div className="text-xs text-gray-400 mt-2">{italianMessages[currentMessage].time}</div>
+        </motion.div>
+
+        {/* Typing indicator */}
+        <motion.div
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ duration: 2, repeat: Infinity, delay: 2 }}
+          className="flex items-center gap-2 mt-4 bg-gray-200 rounded-full px-3 py-2"
+        >
+          <div className="flex gap-1">
+            <motion.div
+              animate={{ scale: [1, 1.5, 1] }}
+              transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+              className="w-1.5 h-1.5 bg-gray-500 rounded-full"
+            />
+            <motion.div
+              animate={{ scale: [1, 1.5, 1] }}
+              transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+              className="w-1.5 h-1.5 bg-gray-500 rounded-full"
+            />
+            <motion.div
+              animate={{ scale: [1, 1.5, 1] }}
+              transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
+              className="w-1.5 h-1.5 bg-gray-500 rounded-full"
+            />
+          </div>
+          <span className="text-xs text-gray-500">Villa Tuscana is typing...</span>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
 
 const features = [
   {
@@ -152,186 +379,376 @@ export default function SmsMarketingPage() {
       {/* Group Hero Section (images/text/buttons) */}
       <GroupHero />
 
-      {/* Key Benefits Section */}
-      <section className="w-full py-16 px-4 bg-gray-50">
-        <div className="max-w-5xl mx-auto mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8" style={{ color: blue }}>
-            Why SMS Marketing Works for Restaurants
-          </h2>
+      {/* Enhanced Key Benefits Section */}
+      <section className="relative w-full py-20 px-4 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 overflow-hidden">
+        {/* Dynamic Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Animated Gradient Orbs */}
+          <motion.div
+            animate={{ 
+              x: [0, 100, 0],
+              y: [0, -50, 0],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{ 
+              x: [0, -80, 0],
+              y: [0, 60, 0],
+              scale: [1.2, 1, 1.2]
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-br from-orange-400/20 to-red-400/20 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{ 
+              x: [0, 50, 0],
+              y: [0, -30, 0],
+              rotate: [0, 180, 360]
+            }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/2 left-1/2 w-48 h-48 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-2xl"
+          />
+
+          {/* Floating SMS Icons */}
+          <motion.div
+            animate={{ y: [-20, 20, -20], rotate: [0, 10, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-32 right-32 p-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+          >
+            <MessageCircle className="w-6 h-6 text-purple-500" />
+          </motion.div>
+          <motion.div
+            animate={{ y: [20, -20, 20], rotate: [0, -10, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute bottom-32 left-32 p-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+          >
+            <TrendingUp className="w-6 h-6 text-pink-500" />
+          </motion.div>
+          <motion.div
+            animate={{ y: [-15, 15, -15], x: [-10, 10, -10] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute top-1/2 right-16 p-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+          >
+            <DollarSign className="w-6 h-6 text-orange-500" />
+          </motion.div>
         </div>
-        <div className="hidden md:grid gap-8 max-w-6xl mx-auto"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gridTemplateRows: 'repeat(3, minmax(180px, auto))',
-            gridTemplateAreas: `
-              'main main side1'
-              'main main side2'
-              'wide wide side3'
-            `
-          }}
-        >
-          {/* Main Card: iPhone mockup */}
-          <div style={{ gridArea: 'main' }} className="bg-white rounded-2xl shadow-lg p-10 border hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full">
-            <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-2xl font-bold" style={{ color: blue }}>{benefits[0].headline}</h3>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Enhanced Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full text-sm font-semibold border border-blue-200 shadow-sm text-blue-700 mb-6">
+              <Smartphone className="w-4 h-4 mr-2" />
+              PROVEN RESULTS
             </div>
-            <div className="text-coral-600 font-semibold mb-2">{benefits[0].sub}</div>
-            <p className="text-gray-700 mb-4 text-lg">{benefits[0].desc}</p>
-            <ul className="flex flex-col gap-2 mt-2">
-              {benefits[0].perfectFor.map((pf, idx) => (
-                <li key={idx} className="flex items-center gap-2 text-base text-gray-700">
-                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#FF6B47]/20 text-[#FF6B47] shadow-sm"><svg width="18" height="18" fill="none" stroke="#FF6B47" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></span>
-                  {pf}
-                </li>
-              ))}
-            </ul>
-            <div className="w-full flex justify-center mt-6">
-              <div className="scale-90 md:scale-100" style={{ maxWidth: 320 }}>
-                <IphoneMessageMockup />
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+              Why SMS Marketing{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-yellow-500">
+                Works for Restaurants
+              </span>
+            </h2>
+            {/* Animated underline */}
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: "100%" }}
+              transition={{ duration: 1, delay: 0.5 }}
+              viewport={{ once: true }}
+              className="h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full max-w-2xl mx-auto mb-6"
+            />
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              Discover why thousands of restaurants choose SMS marketing to drive immediate results, build customer loyalty, and maximize revenue.
+            </p>
+          </motion.div>
+
+          {/* Enhanced Benefits Grid */}
+          <div className="space-y-8">
+            {/* Featured Benefit Card with Phone Mockup */}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="group bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-500 border border-white/50 overflow-hidden relative"
+            >
+              {/* Card Background Gradient */}
+              <div className={`absolute inset-0 bg-gradient-to-r ${benefits[0].bgColor} opacity-70`}></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-200 to-transparent rounded-full opacity-50 transform translate-x-8 -translate-y-8"></div>
+              
+              <div className="relative z-10 p-8 lg:p-12">
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  {/* Phone Mockup - Now on the left */}
+                  <div className="flex justify-center items-center lg:order-1">
+                    <div className="scale-90 lg:scale-100">
+                      <ItalianRestaurantMockup />
               </div>
             </div>
+                  
+                  {/* Content Section - Now on the right */}
+                  <div className="space-y-6 lg:order-2">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-16 h-16 bg-gradient-to-br ${benefits[0].color} rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                        <Zap className="w-8 h-8 text-white" />
           </div>
-          {/* Side Card 1 */}
-          <div style={{ gridArea: 'side1' }} className="bg-white rounded-2xl shadow-lg p-10 border hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full">
-            <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-2xl font-bold" style={{ color: blue }}>{benefits[1].headline}</h3>
+                      <div>
+                        <span className={`inline-block px-3 py-1 bg-blue-100 ${benefits[0].accentColor} rounded-full text-sm font-semibold mb-2`}>
+                          {benefits[0].sub}
+                        </span>
+                        <h3 className="text-3xl font-bold text-gray-900">{benefits[0].headline}</h3>
             </div>
-            <div className="text-coral-600 font-semibold mb-2">{benefits[1].sub}</div>
-            <p className="text-gray-700 mb-4 text-lg">{benefits[1].desc}</p>
-            <table className="w-full text-sm mt-4">
-              <tbody>
-                {benefits[1].table.map((row, idx) => (
-                  <tr key={idx}>
-                    <td className="py-1 pr-4 font-semibold text-gray-700">{row.label}</td>
-                    <td className="py-1 text-gray-500">{row.value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
-          {/* Side Card 2 */}
-          <div style={{ gridArea: 'side2' }} className="bg-white rounded-2xl shadow-lg p-10 border hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full">
-            <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-2xl font-bold" style={{ color: blue }}>{benefits[2].headline}</h3>
-            </div>
-            <div className="text-coral-600 font-semibold mb-2">{benefits[2].sub}</div>
-            <p className="text-gray-700 mb-4 text-lg">{benefits[2].desc}</p>
-            <ul className="flex flex-col gap-2 mt-2">
-              {benefits[2].system.map((s, idx) => (
-                <li key={idx} className="flex items-center gap-2 text-base text-gray-700">
-                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#FF6B47]/20 text-[#FF6B47] shadow-sm"><svg width="18" height="18" fill="none" stroke="#FF6B47" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></span>
-                  {s}
-                </li>
-              ))}
-            </ul>
+                    
+                    <p className="text-lg text-gray-700 leading-relaxed">
+                      {benefits[0].desc}
+                    </p>
+                    
+                    {/* Benefits List */}
+                    <div className="grid md:grid-cols-2 gap-3">
+                      {benefits[0].perfectFor.map((item, idx) => (
+                        <motion.div
+                          key={idx}
+                          initial={{ opacity: 0, x: 20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.5, delay: idx * 0.1 }}
+                          viewport={{ once: true }}
+                          className="flex items-center gap-3 bg-white/80 p-3 rounded-xl backdrop-blur-sm"
+                        >
+                          <CheckCircle className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                          <span className="text-gray-700 font-medium">{item}</span>
+                        </motion.div>
+                      ))}
           </div>
-          {/* Wide Card (bottom left) */}
-          <div style={{ gridArea: 'wide' }} className="bg-white rounded-2xl shadow-lg p-10 border hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full">
-            <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-2xl font-bold" style={{ color: blue }}>{benefits[3].headline}</h3>
+
+                    {/* Metric Display */}
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg">
+                      <div className="flex items-center gap-4">
+                        <div className="text-4xl font-bold text-blue-600">{benefits[0].metric}</div>
+                        <div>
+                          <div className="text-gray-600">{benefits[0].metricLabel}</div>
+                          <div className="text-sm text-gray-500">Industry leading performance</div>
             </div>
-            <div className="text-coral-600 font-semibold mb-2">{benefits[3].sub}</div>
-            <p className="text-gray-700 mb-4 text-lg">{benefits[3].desc}</p>
-            <ul className="flex flex-col gap-2 mt-2">
-              {benefits[3].examples.map((ex, idx) => (
-                <li key={idx} className="flex items-center gap-2 text-base text-gray-700">
-                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#FF6B47]/20 text-[#FF6B47] shadow-sm"><svg width="18" height="18" fill="none" stroke="#FF6B47" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></span>
-                  {ex}
-                </li>
-              ))}
-            </ul>
           </div>
-          {/* Side Card 3 (bottom right) */}
-          <div style={{ gridArea: 'side3' }} className="bg-white rounded-2xl shadow-lg p-10 border hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full">
-            <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-2xl font-bold" style={{ color: blue }}>{benefits[4].headline}</h3>
             </div>
-            <div className="text-coral-600 font-semibold mb-2">{benefits[4].sub}</div>
-            <p className="text-gray-700 mb-4 text-lg">{benefits[4].desc}</p>
           </div>
         </div>
-        {/* Mobile fallback: simple stack */}
-        <div className="md:hidden flex flex-col gap-8 max-w-2xl mx-auto">
-          {/* Main Card: iPhone mockup */}
-          <div className="bg-white rounded-2xl shadow-lg p-10 border hover:shadow-2xl transition-shadow duration-300 flex flex-col">
-            <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-2xl font-bold" style={{ color: blue }}>{benefits[0].headline}</h3>
             </div>
-            <div className="text-coral-600 font-semibold mb-2">{benefits[0].sub}</div>
-            <p className="text-gray-700 mb-4 text-lg">{benefits[0].desc}</p>
-            <ul className="flex flex-col gap-2 mt-2">
-              {benefits[0].perfectFor.map((pf, idx) => (
-                <li key={idx} className="flex items-center gap-2 text-base text-gray-700">
-                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#FF6B47]/20 text-[#FF6B47] shadow-sm"><svg width="18" height="18" fill="none" stroke="#FF6B47" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></span>
-                  {pf}
-                </li>
+            </motion.div>
+
+            {/* Other Benefits in Grid */}
+            <div className="grid md:grid-cols-2 gap-8">
+              {benefits.slice(1).map((benefit, index) => (
+                <EnhancedBenefitCard key={index + 1} benefit={benefit} index={index + 1} />
               ))}
-            </ul>
-            <div className="w-full flex justify-center mt-6">
-              <div className="scale-90 md:scale-100" style={{ maxWidth: 320 }}>
-                <IphoneMessageMockup />
-              </div>
             </div>
           </div>
-          {/* Other cards stacked */}
-          {[1,2,3,4].map(i => (
-            <div key={i} className="bg-white rounded-2xl shadow-lg p-10 border hover:shadow-2xl transition-shadow duration-300 flex flex-col">
-              <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-2xl font-bold" style={{ color: blue }}>{benefits[i].headline}</h3>
+
+          {/* Bottom Summary Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            viewport={{ once: true }}
+            className="mt-20 text-center bg-white/80 backdrop-blur-sm rounded-3xl p-12 border border-white/50 shadow-xl relative overflow-hidden"
+          >
+            {/* Background decoration */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-transparent to-orange-50 opacity-50"></div>
+            <div className="relative z-10">
+              <h3 className="text-3xl font-bold text-gray-900 mb-6">Ready to Transform Your Restaurant Marketing?</h3>
+              <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
+                Join thousands of restaurants already using SMS marketing to drive immediate results and build lasting customer relationships.
+              </p>
+              <div className="grid md:grid-cols-4 gap-6 mb-8">
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border border-purple-200">
+                  <div className="text-3xl font-bold text-purple-600 mb-2">98%</div>
+                  <div className="text-sm text-gray-700 font-medium">Open Rate</div>
+                </div>
+                <div className="bg-gradient-to-br from-pink-50 to-pink-100 p-6 rounded-2xl border border-pink-200">
+                  <div className="text-3xl font-bold text-pink-600 mb-2">$36</div>
+                  <div className="text-sm text-gray-700 font-medium">ROI per $1</div>
+                </div>
+                <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl border border-orange-200">
+                  <div className="text-3xl font-bold text-orange-600 mb-2">3min</div>
+                  <div className="text-sm text-gray-700 font-medium">Response Time</div>
+                </div>
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-200">
+                  <div className="text-3xl font-bold text-blue-600 mb-2">85%</div>
+                  <div className="text-sm text-gray-700 font-medium">Click Rate</div>
+                </div>
               </div>
-              <div className="text-coral-600 font-semibold mb-2">{benefits[i].sub}</div>
-              <p className="text-gray-700 mb-4 text-lg">{benefits[i].desc}</p>
-              {benefits[i].table && (
-                <table className="w-full text-sm mt-4">
-                  <tbody>
-                    {benefits[i].table.map((row, idx) => (
-                      <tr key={idx}>
-                        <td className="py-1 pr-4 font-semibold text-gray-700">{row.label}</td>
-                        <td className="py-1 text-gray-500">{row.value}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-              {benefits[i].system && (
-                <ul className="flex flex-col gap-2 mt-2">
-                  {benefits[i].system.map((s, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-base text-gray-700">
-                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#FF6B47]/20 text-[#FF6B47] shadow-sm"><svg width="18" height="18" fill="none" stroke="#FF6B47" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></span>
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {benefits[i].examples && (
-                <ul className="flex flex-col gap-2 mt-2">
-                  {benefits[i].examples.map((ex, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-base text-gray-700">
-                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#FF6B47]/20 text-[#FF6B47] shadow-sm"><svg width="18" height="18" fill="none" stroke="#FF6B47" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></span>
-                      {ex}
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-8 py-4 rounded-xl"
+                >
+                  <Smartphone className="w-5 h-5 mr-2" />
+                  Start SMS Marketing Today
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </motion.div>
             </div>
-          ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="w-full py-16 px-4">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
-          <h3 className="text-3xl md:text-4xl font-bold mb-8 col-span-full text-center" style={{ color: blue }}>
-            Why Top Restaurants Choose Bot & Table
-          </h3>
-          {features.map((f, i) => (
-            <div key={i} className="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-3 border hover:shadow-2xl transition-shadow duration-300">
-              <div>{f.icon}</div>
-              <h4 className="text-lg font-bold mb-1" style={{ color: blue }}>{f.title}</h4>
-              <p className="text-gray-700 mb-2">{f.desc}</p>
+      {/* Enhanced Features Section */}
+      <section className="relative w-full py-20 px-4 bg-gradient-to-br from-gray-50 via-white to-orange-50 overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 opacity-30">
+          <motion.div
+            animate={{ 
+              x: [0, 50, 0],
+              y: [0, -30, 0],
+              scale: [1, 1.1, 1]
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-br from-orange-200 to-red-200 rounded-full blur-2xl"
+          />
+          <motion.div
+            animate={{ 
+              x: [0, -40, 0],
+              y: [0, 40, 0],
+              rotate: [0, 180, 360]
+            }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-32 left-20 w-24 h-24 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full blur-xl"
+          />
+        </div>
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          {/* Enhanced Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full text-sm font-semibold border border-orange-200 shadow-sm text-orange-700 mb-6">
+              <Star className="w-4 h-4 mr-2" />
+              TRUSTED BY TOP RESTAURANTS
             </div>
-          ))}
+            <h3 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+              Why Top Restaurants Choose{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-orange-600">
+                Bot & Table
+              </span>
+          </h3>
+            {/* Animated underline */}
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: "100%" }}
+              transition={{ duration: 1, delay: 0.5 }}
+              viewport={{ once: true }}
+              className="h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full max-w-2xl mx-auto mb-6"
+            />
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              Discover the powerful features that make Bot & Table the preferred SMS marketing solution for successful restaurants.
+            </p>
+          </motion.div>
+
+          {/* Enhanced Features Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5, scale: 1.02 }}
+                className="group bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-white/50 overflow-hidden relative p-8"
+              >
+                {/* Card glow effect */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-red-500/5 rounded-3xl"
+                />
+                
+                {/* Icon with animated background */}
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  className="relative mb-6"
+                >
+                  <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl flex items-center justify-center group-hover:from-orange-200 group-hover:to-red-200 transition-all duration-300">
+                    <div className="text-orange-600 group-hover:text-red-600 transition-colors duration-300">
+                      {feature.icon}
+                    </div>
+                  </div>
+                  {/* Animated ring */}
+                  <motion.div
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="absolute inset-0 border-2 border-orange-300 rounded-2xl"
+                  />
+                </motion.div>
+
+                <h4 className="text-xl font-bold mb-4 text-gray-900 group-hover:text-orange-600 transition-colors duration-300">
+                  {feature.title}
+                </h4>
+                <p className="text-gray-700 leading-relaxed group-hover:text-gray-800 transition-colors duration-300">
+                  {feature.desc}
+                </p>
+
+                {/* Decorative corner element */}
+                <div className="absolute top-4 right-4 w-8 h-8 bg-gradient-to-br from-orange-200/50 to-red-200/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Bottom CTA Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            viewport={{ once: true }}
+            className="text-center mt-16"
+          >
+            <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl p-8 text-white shadow-2xl">
+              <h4 className="text-2xl font-bold mb-4">
+                Ready to Join Thousands of Successful Restaurants?
+              </h4>
+              <p className="text-orange-100 mb-6 max-w-2xl mx-auto">
+                Get started with Bot & Table's powerful SMS marketing platform and see immediate results.
+              </p>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button 
+                  size="lg" 
+                  className="bg-white text-orange-600 hover:bg-orange-50 font-bold shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-8 py-4 rounded-xl"
+                  onClick={() => {
+                    const element = document.getElementById('book-call');
+                    if (element) {
+                      // Add a cool bounce animation to the button first
+                      element.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                      });
+                      
+                      // Add a subtle highlight animation to the form when it comes into view
+                      setTimeout(() => {
+                        element.style.transform = 'scale(1.02)';
+                        element.style.transition = 'transform 0.3s ease-out';
+                        setTimeout(() => {
+                          element.style.transform = 'scale(1)';
+                        }, 300);
+                      }, 800);
+                    }
+                  }}
+                >
+                  <Smartphone className="w-5 h-5 mr-2" />
+                  Book SMS Strategy Call
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -555,28 +972,15 @@ export default function SmsMarketingPage() {
             })}
           </div>
 
-          {/* Bottom CTA */}
-          <div className="text-center bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-white/50 shadow-xl">
-            <h4 className="text-2xl font-bold mb-4" style={{ color: blue }}>
-              Ready to Transform Your Restaurant with SMS Marketing?
-            </h4>
-            <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
-              Join hundreds of restaurants already using our proven 4-step system to drive immediate results and build lasting customer relationships.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="text-lg font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105" style={{ background: coral, color: '#fff' }}>
-                Start Your SMS Success Story
-              </Button>
-              <Button className="text-lg font-bold px-8 py-4 rounded-xl shadow-lg border-2 bg-white hover:bg-gray-50 transition-all" style={{ color: coral, borderColor: coral }}>
-                See Live Demo
-              </Button>
-            </div>
-          </div>
+
         </div>
       </section>
 
       {/* Demo Booking Form */}
       <DemoBookingForm />
+
+      {/* Related Articles Section */}
+      <ArticlesSection />
 
       {/* FAQ Section */}
       <section className="w-full py-16 px-4 bg-gray-50">
@@ -592,8 +996,106 @@ export default function SmsMarketingPage() {
           </Accordion>
         </div>
       </section>
-      {/* Related Articles Section */}
-      <ArticlesSection />
     </div>
+  );
+} 
+
+// Enhanced Benefit Card Component
+function EnhancedBenefitCard({ benefit, index }) {
+  const ref = React.useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.8, delay: index * 0.1 }}
+      whileHover={{ y: -5, scale: 1.02 }}
+      className="group bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/50 overflow-hidden relative"
+    >
+      {/* Card Background Gradient */}
+      <div className={`absolute inset-0 bg-gradient-to-r ${benefit.bgColor} opacity-70`}></div>
+      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-white/20 to-transparent rounded-full opacity-50 transform translate-x-6 -translate-y-6"></div>
+      
+      <div className="relative z-10 p-8">
+        <div className="flex items-center gap-4 mb-6">
+          <div className={`w-14 h-14 bg-gradient-to-br ${benefit.color} rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+            {React.createElement(benefit.icon.type, { className: "w-7 h-7 text-white" })}
+          </div>
+          <div className="flex-1">
+            <span className={`inline-block px-3 py-1 bg-white/80 ${benefit.accentColor} rounded-full text-sm font-semibold mb-2`}>
+              {benefit.sub}
+            </span>
+            <h3 className="text-2xl font-bold text-gray-900">{benefit.headline}</h3>
+          </div>
+        </div>
+        
+        <p className="text-gray-700 leading-relaxed mb-6">
+          {benefit.desc}
+        </p>
+        
+        {/* Content based on benefit type */}
+        {benefit.table && (
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-white/50">
+            <table className="w-full text-sm">
+              <tbody>
+                {benefit.table.map((row, idx) => (
+                  <tr key={idx} className="border-b border-gray-100 last:border-b-0">
+                    <td className="py-2 pr-4 font-semibold text-gray-700">{row.label}</td>
+                    <td className="py-2 text-gray-600 font-medium">{row.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        
+        {benefit.system && (
+          <div className="space-y-3">
+            {benefit.system.map((item, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: -20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.5, delay: (index * 0.1) + (idx * 0.1) }}
+                className="flex items-center gap-3 bg-white/80 p-3 rounded-xl backdrop-blur-sm"
+              >
+                <CheckCircle className={`w-5 h-5 ${benefit.accentColor.replace('text-', 'text-')} flex-shrink-0`} />
+                <span className="text-gray-700 font-medium">{item}</span>
+              </motion.div>
+            ))}
+          </div>
+        )}
+        
+        {benefit.examples && (
+          <div className="space-y-3">
+            {benefit.examples.map((item, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: -20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.5, delay: (index * 0.1) + (idx * 0.1) }}
+                className="flex items-center gap-3 bg-white/80 p-3 rounded-xl backdrop-blur-sm"
+              >
+                <CheckCircle className={`w-5 h-5 ${benefit.accentColor.replace('text-', 'text-')} flex-shrink-0`} />
+                <span className="text-gray-700 font-medium">{item}</span>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {/* Metric Display */}
+        <div className="mt-6 bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-white/50 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className={`text-3xl font-bold ${benefit.accentColor}`}>{benefit.metric}</div>
+            <div>
+              <div className="text-gray-600 font-medium">{benefit.metricLabel}</div>
+              <div className="text-sm text-gray-500">Industry leading</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 } 

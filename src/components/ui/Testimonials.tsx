@@ -85,13 +85,13 @@ export const TestimonialsColumn = (props: {
           ...new Array(2).fill(0).map((_, index) => (
             <React.Fragment key={index}>
               {props.testimonials.map(({ text, image, name, role }, i) => (
-                <div className="p-5 rounded-2xl border shadow-lg shadow-primary/10 max-w-xs w-full text-sm" key={i}>
+                <div className="p-4 rounded-2xl border shadow-lg shadow-primary/10 max-w-[280px] w-full text-sm bg-white" key={i}>
                   <div className="flex items-center mb-3" aria-label="5 star Google review">
                     {[...Array(5)].map((_, idx) => (
                       <svg key={idx} className="w-5 h-5 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
                     ))}
                   </div>
-                  <div>{text}</div>
+                  <div className="text-gray-800 leading-relaxed">{text}</div>
                   <div className="flex items-center gap-2 mt-5">
                     <img
                       width={40}
@@ -101,8 +101,8 @@ export const TestimonialsColumn = (props: {
                       className="h-10 w-10 rounded-full"
                     />
                     <div className="flex flex-col">
-                      <div className="font-medium tracking-tight leading-5">{name}</div>
-                      <div className="leading-5 opacity-60 tracking-tight">{role}</div>
+                      <div className="font-medium tracking-tight leading-5 text-gray-900">{name}</div>
+                      <div className="leading-5 text-gray-600 tracking-tight">{role}</div>
                     </div>
                   </div>
                 </div>
@@ -193,17 +193,13 @@ const Testimonials = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-center gap-3 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[300px] overflow-hidden">
-                  <TestimonialsColumn testimonials={firstColumn} duration={15} />
-                  <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
-                  <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
+                <div className="flex justify-center gap-4 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[300px] overflow-hidden px-2">
+                  <TestimonialsColumn testimonials={firstColumn} duration={25} />
+                  <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={30} />
+                  <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={28} />
                 </div>
 
-                <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-4 rounded-xl border border-yellow-100 mt-4">
-                  <p className="text-sm font-medium text-gray-800">
-                    "These are real reviews from restaurants using our automated review system. Notice the consistent 5-star ratings and detailed, genuine feedback from happy customers."
-                  </p>
-                </div>
+
               </div>
 
               {/* Floating Elements */}
