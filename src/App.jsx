@@ -27,6 +27,7 @@ import PhoneProblemArticle from './components/PhoneProblemArticle';
 import FromChaosToCashArticle from './components/FromChaosToCashArticle';
 import GoogleReviewsStrategies from './components/GoogleReviewsStrategies';
 import SmsMarketingGuide from './components/SmsMarketingGuide';
+import EmailMarketingGuide from './components/EmailMarketingGuide';
 import AIInRestaurantsGuide from './components/AIInRestaurantsGuide';
 import BuildingFiveStarReputation from './components/BuildingFiveStarReputation';
 import TermsAndConditionsPage from './components/TermsAndConditionsPage';
@@ -58,7 +59,7 @@ function App() {
         <Route path="/articles/from-chaos-to-cash" element={<FromChaosToCashArticle />} />
         <Route path="/articles/google-reviews-strategies" element={<GoogleReviewsStrategies />} />
         <Route path="/articles/restaurant-sms-marketing" element={<SmsMarketingGuide />} />
-        <Route path="/articles/email-marketing-best-practices-2025" element={<EmailMarketingPage />} />
+        <Route path="/articles/email-marketing-best-practices-2025" element={<EmailMarketingGuide />} />
         <Route path="/articles/personalized-marketing-guide" element={<PersonalizedMarketingArticle />} />
         <Route path="/articles/ai-in-restaurants-complete-guide" element={<AIInRestaurantsGuide />} />
         <Route path="/articles/building-five-star-reputation" element={<BuildingFiveStarReputation />} />

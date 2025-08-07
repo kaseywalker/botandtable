@@ -1,5 +1,5 @@
 import { Check, Phone, ArrowRight, TrendingUp, DollarSign } from "lucide-react";
-import { AnimatedBeamDemo } from "@/components/ui/animated-beam-demo";
+import { AnimatedBeamDemoCompact } from "@/components/ui/animated-beam-demo-compact";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -102,7 +102,7 @@ function Feature() {
                 </div>
 
                 <div className="mb-6">
-                  <AnimatedBeamDemo />
+                  <AnimatedBeamDemoCompact />
                 </div>
 
                 <div className="bg-gradient-to-r from-slate-50 to-gray-50 p-4 rounded-xl border border-slate-100">

@@ -1,1316 +1,1756 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { motion, useInView } from 'framer-motion';
 import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from './ui/accordion';
+import { Mail, TrendingUp, Users, Zap } from 'lucide-react';
+import ArticlesSection from './ArticlesSection';
 import DemoBookingForm from './ui/DemoBookingForm';
-import { 
-  ArrowLeft, 
-  Clock, 
-  User, 
-  Calendar, 
-  Share2, 
-  Facebook, 
-  Twitter, 
-  Linkedin,
-  TrendingUp,
-  Mail,
-  Users,
-  BarChart3,
-  CheckCircle,
-  AlertTriangle,
-  Phone,
-  Download,
-
-  Calculator,
-  Target,
-  Award,
-  Zap,
-  Star,
-  Eye,
-  MousePointer,
-  DollarSign,
-  Timer,
-  Settings,
-  Shield,
-  Brain,
-  Smartphone,
-  Globe,
-  ChartBar
-} from 'lucide-react';
 
 const coral = '#FF6B47';
-const blue = '#1a365d';
+const blue = '#1e293b';
+const gray = '#f7f7fa';
 
-const EmailMarketingPage = () => {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeSection, setActiveSection] = useState('introduction');
-  const [expandedFAQ, setExpandedFAQ] = useState(null);
-  
-  // Email ROI Calculator State
-  const [roiCalculatorData, setRoiCalculatorData] = useState({
-    subscribers: '',
-    orderValue: '',
-    openRate: '',
-    clickRate: ''
-  });
-  const [roiResults, setRoiResults] = useState(null);
-  
-  // Email Readiness Assessment State
-  const [assessmentStep, setAssessmentStep] = useState(0);
-  const [assessmentAnswers, setAssessmentAnswers] = useState([]);
-  const [showAssessmentResult, setShowAssessmentResult] = useState(false);
+function GoogleEmailMockup() {
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 50, rotateY: -15 }}
+      animate={{ opacity: 1, y: 0, rotateY: 0 }}
+      transition={{ duration: 1, delay: 0.5 }}
+      className="relative w-full max-w-[500px] rounded-2xl bg-white shadow-2xl border border-gray-200 flex flex-col overflow-hidden"
+    >
+      {/* Animated glow effect around email */}
+      <motion.div
+        animate={{ 
+          scale: [1, 1.05, 1],
+          opacity: [0.3, 0.6, 0.3]
+        }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500/20 via-red-500/20 to-yellow-500/20 blur-xl -z-10"
+        style={{ transform: 'scale(1.1)' }}
+      />
 
-  useEffect(() => {
-    // SEO optimization
-    document.title = "Email Marketing Best Practices for Restaurants in 2025 | Bot and Table";
-    
-    // Meta description
-    const metaDescription = document.querySelector('meta[name="description"]') || document.createElement('meta');
-    metaDescription.setAttribute('name', 'description');
-    metaDescription.setAttribute('content', 'Complete guide to restaurant email marketing in 2025. Learn proven strategies that generate $36 ROI, increase repeat customers by 70%, and automate your marketing success.');
-    if (!document.querySelector('meta[name="description"]')) {
-      document.head.appendChild(metaDescription);
-    }
+      {/* Gmail header */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+        className="flex items-center justify-between px-4 py-2 bg-[#f5f5f5] border-b border-gray-200"
+      >
+        <div className="flex items-center gap-2">
+          <motion.span 
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="w-3 h-3 rounded-full bg-red-500 inline-block" 
+          />
+          <motion.span 
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
+            className="w-3 h-3 rounded-full bg-yellow-400 inline-block" 
+          />
+          <motion.span 
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}
+            className="w-3 h-3 rounded-full bg-green-500 inline-block" 
+          />
+        </div>
+        <div className="text-xs text-gray-500 font-semibold">Gmail</div>
+        <div className="flex items-center gap-2">
+          <span className="w-4 h-4 bg-gray-300 rounded-full inline-block" />
+        </div>
+      </motion.div>
 
-    // Open Graph tags
-    const ogTitle = document.querySelector('meta[property="og:title"]') || document.createElement('meta');
-    ogTitle.setAttribute('property', 'og:title');
-    ogTitle.setAttribute('content', 'Email Marketing Best Practices for Restaurants in 2025');
-    if (!document.querySelector('meta[property="og:title"]')) {
-      document.head.appendChild(ogTitle);
-    }
-
-    const ogDescription = document.querySelector('meta[property="og:description"]') || document.createElement('meta');
-    ogDescription.setAttribute('property', 'og:description');
-    ogDescription.setAttribute('content', 'Master restaurant email marketing with proven strategies that deliver $36 ROI. Complete guide with interactive tools and automation workflows.');
-    if (!document.querySelector('meta[property="og:description"]')) {
-      document.head.appendChild(ogDescription);
-    }
-
-    const ogImage = document.querySelector('meta[property="og:image"]') || document.createElement('meta');
-    ogImage.setAttribute('property', 'og:image');
-    ogImage.setAttribute('content', '/email-marketing.jpg');
-    if (!document.querySelector('meta[property="og:image"]')) {
-      document.head.appendChild(ogImage);
-    }
-
-    // Schema markup for article
-    const schemaScript = document.getElementById('article-schema') || document.createElement('script');
-    schemaScript.id = 'article-schema';
-    schemaScript.type = 'application/ld+json';
-    schemaScript.textContent = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "Email Marketing Best Practices for Restaurants in 2025",
-      "description": "Complete guide to restaurant email marketing with proven strategies that deliver $36 ROI and increase repeat customers by 70%",
-      "author": {
-        "@type": "Organization",
-        "name": "Bot and Table"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "Bot and Table",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "/src/assets/bot-table-logo.png"
-        }
-      },
-      "datePublished": new Date().toISOString(),
-      "dateModified": new Date().toISOString(),
-      "image": "/email-marketing.jpg",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": window.location.href
-      }
-    });
-    if (!document.getElementById('article-schema')) {
-      document.head.appendChild(schemaScript);
-    }
-
-    return () => {
-      // Cleanup on unmount
-      document.title = "Bot and Table - AI-Powered Restaurant Marketing";
-      const elementsToRemove = [
-        'meta[name="description"]',
-        'meta[property="og:title"]',
-        'meta[property="og:description"]',
-        'meta[property="og:image"]',
-        '#article-schema'
-      ];
-      elementsToRemove.forEach(selector => {
-        const element = document.querySelector(selector);
-        if (element && element.getAttribute('content')?.includes('email')) {
-          element.remove();
-        }
-      });
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const totalScroll = document.documentElement.scrollTop;
-      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scroll = `${totalScroll / windowHeight}`;
-      setScrollProgress(scroll);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-
-
-  // Email ROI Calculator
-  const calculateROI = () => {
-    const subscribers = parseInt(roiCalculatorData.subscribers) || 0;
-    const orderValue = parseFloat(roiCalculatorData.orderValue) || 0;
-    const openRate = parseFloat(roiCalculatorData.openRate) || 0;
-    const clickRate = parseFloat(roiCalculatorData.clickRate) || 0;
-    
-    // Industry averages and calculations
-    const emailsPerMonth = 4; // Average restaurant email frequency
-    const conversionRate = 0.05; // 5% of clicks convert
-    const emailCostPerSubscriber = 0.10; // Monthly cost per subscriber
-    
-    const monthlyOpens = (subscribers * emailsPerMonth * openRate) / 100;
-    const monthlyClicks = (monthlyOpens * clickRate) / 100;
-    const monthlyOrders = monthlyClicks * conversionRate;
-    const monthlyRevenue = monthlyOrders * orderValue;
-    const monthlyCost = subscribers * emailCostPerSubscriber;
-    const monthlyROI = monthlyCost > 0 ? (monthlyRevenue / monthlyCost) : 0;
-    
-    const annualRevenue = monthlyRevenue * 12;
-    const annualCost = monthlyCost * 12;
-    const annualROI = annualCost > 0 ? (annualRevenue / annualCost) : 0;
-    
-    setRoiResults({
-      monthlyRevenue: Math.round(monthlyRevenue),
-      annualRevenue: Math.round(annualRevenue),
-      monthlyROI: Math.round(monthlyROI * 100) / 100,
-      annualROI: Math.round(annualROI * 100) / 100,
-      monthlyOrders: Math.round(monthlyOrders),
-      potentialIncrease: Math.round((annualRevenue - annualRevenue * 0.3)) // 70% improvement potential
-    });
-  };
-
-  // Email Readiness Assessment
-  const assessmentQuestions = [
-    {
-      question: "How many email subscribers does your restaurant currently have?",
-      options: ["Less than 100", "100-500", "500-1,000", "1,000-5,000", "5,000+"],
-      scores: [1, 2, 3, 4, 5]
-    },
-    {
-      question: "How often do you send marketing emails to customers?",
-      options: ["Never", "Rarely (monthly or less)", "Sometimes (2-3 times/month)", "Regularly (weekly)", "Very frequently (2+ times/week)"],
-      scores: [0, 1, 2, 3, 2] // Too frequent can be bad
-    },
-    {
-      question: "Do you segment your email list based on customer behavior?",
-      options: ["No segmentation", "Basic demographics only", "Purchase history", "Behavior + preferences", "Advanced AI segmentation"],
-      scores: [0, 1, 2, 3, 4]
-    },
-    {
-      question: "What email automation do you currently use?",
-      options: ["No automation", "Welcome emails only", "Basic workflows", "Advanced sequences", "AI-powered automation"],
-      scores: [0, 1, 2, 3, 4]
-    },
-    {
-      question: "How do you personalize your email content?",
-      options: ["No personalization", "Name only", "Basic preferences", "Purchase-based content", "AI-driven hyper-personalization"],
-      scores: [0, 1, 2, 3, 4]
-    },
-    {
-      question: "What's your average email open rate?",
-      options: ["I don't track this", "Below 15%", "15-25%", "25-35%", "Above 35%"],
-      scores: [0, 1, 2, 3, 4]
-    },
-    {
-      question: "How do you collect email addresses?",
-      options: ["We don't actively collect", "Point of sale only", "Website signup", "Multiple touchpoints", "Integrated omnichannel strategy"],
-      scores: [0, 1, 2, 3, 4]
-    },
-    {
-      question: "Do you A/B test your email campaigns?",
-      options: ["Never", "Rarely", "Sometimes", "Regularly", "Systematically with AI optimization"],
-      scores: [0, 1, 2, 3, 4]
-    },
-    {
-      question: "How do you measure email marketing ROI?",
-      options: ["We don't measure", "Open/click rates only", "Revenue tracking", "Full attribution", "Advanced analytics with lifetime value"],
-      scores: [0, 1, 2, 3, 4]
-    },
-    {
-      question: "Are your emails mobile-optimized?",
-      options: ["Not optimized", "Basic responsive design", "Mobile-friendly", "Mobile-first design", "Advanced mobile optimization with AMP"],
-      scores: [0, 1, 2, 3, 4]
-    }
-  ];
-
-  const handleAssessmentAnswer = (score) => {
-    const newAnswers = [...assessmentAnswers, score];
-    setAssessmentAnswers(newAnswers);
-    
-    if (assessmentStep < assessmentQuestions.length - 1) {
-      setAssessmentStep(assessmentStep + 1);
-    } else {
-      setShowAssessmentResult(true);
-    }
-  };
-
-  const getAssessmentResult = () => {
-    const totalScore = assessmentAnswers.reduce((sum, score) => sum + score, 0);
-    const percentage = Math.round((totalScore / 36) * 100);
-    
-    if (totalScore <= 8) return { 
-      level: "Email Marketing Beginner", 
-      color: "red", 
-      message: "You're missing significant opportunities. Let's build your email marketing foundation.",
-      recommendations: [
-        "Start collecting email addresses at every touchpoint",
-        "Set up basic welcome email automation",
-        "Implement simple segmentation by customer type",
-        "Begin tracking open and click rates"
-      ]
-    };
-    if (totalScore <= 18) return { 
-      level: "Email Marketing Intermediate", 
-      color: "orange", 
-      message: "You have the basics covered but there's room for major improvements.",
-      recommendations: [
-        "Implement advanced segmentation strategies",
-        "Add behavioral triggers to your automation",
-        "Start A/B testing subject lines and content",
-        "Integrate email with your POS system"
-      ]
-    };
-    if (totalScore <= 28) return { 
-      level: "Email Marketing Advanced", 
-      color: "blue", 
-      message: "You're doing well but can optimize for even better results.",
-      recommendations: [
-        "Implement AI-powered personalization",
-        "Add predictive analytics to your strategy",
-        "Optimize for advanced mobile experiences",
-        "Integrate cross-channel marketing attribution"
-      ]
-    };
-    return { 
-      level: "Email Marketing Expert", 
-      color: "green", 
-      message: "Excellent! You're ahead of most restaurants. Let's explore cutting-edge strategies.",
-      recommendations: [
-        "Explore AI-driven content generation",
-        "Implement advanced lifecycle marketing",
-        "Add machine learning optimization",
-        "Test emerging email technologies"
-      ]
-    };
-  };
-
-  const resetAssessment = () => {
-    setAssessmentStep(0);
-    setAssessmentAnswers([]);
-    setShowAssessmentResult(false);
-  };
-
-  // Inline CTA Components
-  const InlineCTA = ({ variant, children }) => (
-    <div className="my-8 p-6 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl border border-orange-200">
-      <div className="text-center">
-        <p className="text-lg font-semibold text-gray-800 mb-4">{children}</p>
-        <Link to="/funnel">
-          <Button className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-8 py-3 text-lg transform hover:scale-105 transition-all">
-            {variant === 'strategy' && 'Book Free Strategy Session →'}
-            {variant === 'analysis' && 'Get Custom Email Analysis →'}
-            {variant === 'demo' && 'See Email Platform Demo →'}
-            {variant === 'toolkit' && 'Download Email Marketing Toolkit →'}
+      {/* Email content */}
+      <div className="flex flex-col p-6 gap-4 bg-white">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1 }}
+          className="flex items-center gap-2 mb-1"
+        >
+          <motion.img 
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            src="https://ui-avatars.com/api/?name=Leo%27s+Pizza&background=FF6B47&color=fff&size=128" 
+            alt="Leo's Pizza Logo" 
+            className="w-8 h-8 rounded-full border-2 border-white shadow" 
+          />
+          <div>
+            <div className="font-semibold text-sm text-gray-900">Leo's Pizza <span className="text-xs text-gray-400">&lt;info@leospizza.com&gt;</span></div>
+            <div className="text-xs text-gray-500">to me</div>
+          </div>
+        </motion.div>
+        
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+          className="text-xs text-gray-400 mb-1"
+        >
+          Fri, Jul 12, 2024, 10:02 AM
+        </motion.div>
+        
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.4 }}
+          className="rounded-lg overflow-hidden mb-2 relative"
+        >
+          <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=80" alt="Pizza Special" className="w-full h-32 object-cover" />
+          {/* Animated shimmer effect */}
+          <motion.div
+            animate={{ x: [-100, 500] }}
+            transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
+            style={{ width: '100px' }}
+          />
+        </motion.div>
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.6 }}
+          className="text-base font-bold text-gray-900 mb-1"
+        >
+          🍕 Friday Feast: Free Appetizer with Any Large Pizza!
+        </motion.div>
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.8 }}
+          className="text-sm text-gray-700 mb-2 leading-relaxed"
+        >
+          Hi Sarah,<br />
+          Celebrate Friday with us! Show this email at Leo's Pizza today and enjoy a free garlic bread appetizer with any large pizza order. Offer valid 2–5pm only.<br /><br />
+          <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">Click below to reserve your table now!</span>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <Button className="w-full font-bold py-2 text-sm rounded-lg shadow-lg hover:shadow-xl transition-all duration-300" style={{ background: coral, color: '#fff' }}>
+            Reserve Table
           </Button>
-        </Link>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
+
+// Compact email mockup for inside the ROI card
+function EmailPreviewMockup() {
+  return (
+    <div className="mt-6 w-full max-w-md mx-auto rounded-xl border border-gray-200 bg-white shadow flex flex-col overflow-hidden">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 bg-[#f5f5f5]">
+        <img src="https://ui-avatars.com/api/?name=Leo%27s+Pizza&background=FF6B47&color=fff&size=64" alt="Leo's Pizza Logo" className="w-8 h-8 rounded-full border-2 border-white shadow" />
+        <div className="flex-1">
+          <div className="font-semibold text-sm text-gray-900">Leo's Pizza <span className="text-xs text-gray-400">&lt;info@leospizza.com&gt;</span></div>
+          <div className="text-xs text-gray-500">to me</div>
+        </div>
+        <div className="text-xs text-gray-400">10:02 AM</div>
+      </div>
+      <div className="flex items-start gap-4 px-4 py-3 bg-white">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=200&q=80" alt="Pizza Special" className="w-20 h-16 object-cover rounded-lg" />
+        <div className="flex-1">
+          <div className="font-bold text-gray-900 text-sm mb-1">🍕 Friday Feast: Free Appetizer with Any Large Pizza!</div>
+          <div className="text-xs text-gray-700 leading-snug">Hi Sarah, Celebrate Friday with us! Show this email at Leo's Pizza today and enjoy a free garlic bread appetizer with any large pizza order. Offer valid 2–5pm only.</div>
+        </div>
       </div>
     </div>
   );
+}
 
-  // Statistics Components
-  const StatBox = ({ number, label, description, color = "orange", icon: Icon }) => (
-    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 text-center">
-      <div className="flex items-center justify-center mb-3">
-        <Icon className={`w-8 h-8 text-${color}-600`} />
+function EmailPreviewMockup2() {
+  return (
+    <div className="mt-4 w-full max-w-md mx-auto rounded-xl border border-gray-200 bg-white shadow flex flex-col overflow-hidden">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 bg-[#f5f5f5]">
+        <img src="https://ui-avatars.com/api/?name=Bella+Cucina&background=FF6B47&color=fff&size=64" alt="Bella Cucina Logo" className="w-8 h-8 rounded-full border-2 border-white shadow" />
+        <div className="flex-1">
+          <div className="font-semibold text-sm text-gray-900">Bella Cucina <span className="text-xs text-gray-400">&lt;info@bellacucina.com&gt;</span></div>
+          <div className="text-xs text-gray-500">to me</div>
+        </div>
+        <div className="text-xs text-gray-400">8:15 AM</div>
       </div>
-      <div className={`text-3xl font-bold text-${color}-600 mb-2`}>{number}</div>
-      <div className="text-lg font-semibold text-gray-800 mb-2">{label}</div>
-      <div className="text-sm text-gray-600">{description}</div>
+      <div className="flex items-start gap-4 px-4 py-3 bg-white">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=200&q=80" alt="Pasta Special" className="w-20 h-16 object-cover rounded-lg" />
+        <div className="flex-1">
+          <div className="font-bold text-gray-900 text-sm mb-1">🍝 Pasta Night: 2-for-1 on All Pasta Dishes!</div>
+          <div className="text-xs text-gray-700 leading-snug">Hi Marco, Join us for Pasta Night! Enjoy two pasta dishes for the price of one this Thursday at Bella Cucina. Reserve your table now—offer valid dine-in only.</div>
+        </div>
+      </div>
     </div>
   );
+}
 
-  // ROI Comparison Chart Component
-  const ROIChart = () => {
-    const channels = [
-      { name: 'Email Marketing', roi: 36, color: 'orange' },
-      { name: 'Social Media', roi: 10, color: 'blue' },
-      { name: 'Paid Search', roi: 8, color: 'purple' },
-      { name: 'Display Ads', roi: 4, color: 'red' }
-    ];
+export default function EmailMarketingPage() {
+  return (
+    <div className="bg-white text-gray-900">
+      {/* Enhanced Hero Section */}
+      <section className="relative w-full py-20 lg:py-40 overflow-hidden bg-gradient-to-br from-gray-50 via-white to-orange-50">
+        {/* Dynamic Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Animated Gradient Orbs */}
+          <motion.div
+            animate={{ 
+              x: [0, 100, 0],
+              y: [0, -50, 0],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-br from-orange-400/20 to-red-400/20 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{ 
+              x: [0, -80, 0],
+              y: [0, 60, 0],
+              scale: [1.2, 1, 1.2]
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{ 
+              x: [0, 50, 0],
+              y: [0, -30, 0],
+              rotate: [0, 180, 360]
+            }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/2 left-1/2 w-48 h-48 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full blur-2xl"
+          />
 
-    return (
-      <div className="bg-gray-50 p-8 rounded-xl my-8">
-        <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">Email Marketing ROI vs Other Channels</h3>
-        <div className="space-y-4">
-          {channels.map((channel, index) => (
-            <div key={index} className="flex items-center space-x-4">
-              <div className="w-32 text-sm font-semibold text-gray-700">{channel.name}</div>
-              <div className="flex-1 bg-gray-200 rounded-full h-6 relative">
-                <div 
-                  className={`bg-${channel.color}-500 h-6 rounded-full flex items-center justify-end pr-2 transition-all duration-1000`}
-                  style={{ width: `${(channel.roi / 36) * 100}%` }}
-                >
-                  <span className="text-white text-sm font-bold">${channel.roi}:1</span>
+          {/* Floating Email Icons */}
+          <motion.div
+            animate={{ y: [-20, 20, -20], rotate: [0, 10, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-32 right-32 p-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+          >
+            <Mail className="w-6 h-6 text-orange-600" />
+          </motion.div>
+          <motion.div
+            animate={{ y: [20, -20, 20], rotate: [0, -10, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute bottom-32 left-32 p-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+          >
+            <TrendingUp className="w-6 h-6 text-blue-600" />
+          </motion.div>
+          <motion.div
+            animate={{ y: [-15, 15, -15], rotate: [0, 5, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute top-1/2 right-20 p-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+          >
+            <Users className="w-6 h-6 text-green-600" />
+          </motion.div>
+        </div>
+
+                 <div className="container mx-auto max-w-7xl relative z-10">
+           <div className="grid grid-cols-1 lg:grid-cols-5 items-center gap-16">
+                         <motion.div 
+               initial={{ opacity: 0, x: -50 }}
+               animate={{ opacity: 1, x: 0 }}
+               transition={{ duration: 0.8 }}
+               className="flex flex-col justify-start gap-6 pt-0 lg:col-span-3"
+             >
+              {/* Enhanced Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                <div className="inline-flex items-center bg-gradient-to-r from-orange-100 to-red-100 px-4 py-2 rounded-full text-sm font-semibold border border-orange-200 shadow-sm text-orange-700 mb-2">
+                  <Mail className="w-4 h-4 mr-2" />
+                  EMAIL MARKETING SOLUTIONS
                 </div>
+              </motion.div>
+
+              {/* Enhanced Headlines */}
+              <div className="flex gap-6 flex-col">
+                <motion.h1 
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  className="text-5xl md:text-6xl lg:text-7xl max-w-4xl tracking-tighter text-left font-bold leading-tight"
+                  style={{ color: blue }}
+                >
+                  Turn Every Email Into{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-orange-600">
+                    Restaurant Revenue
+                  </span>
+                </motion.h1>
+
+                {/* Animated underline */}
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 1, delay: 0.8 }}
+                  className="h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full max-w-2xl"
+                />
+
+                <motion.p 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  className="text-xl leading-relaxed tracking-tight text-gray-700 max-w-2xl text-left"
+                >
+                  Build lasting relationships with your customers and drive consistent revenue through personalized email campaigns that deliver{' '}
+                  <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">
+                    $36 for every $1 spent.
+                  </span>
+                </motion.p>
               </div>
+
+              {/* Enhanced CTA Buttons */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.7 }}
+                className="flex flex-col sm:flex-row gap-4 mt-4"
+              >
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button 
+                    size="lg" 
+                    className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-8 py-4 rounded-xl"
+                  >
+                    <Mail className="w-5 h-5 mr-2" />
+                    Book Your Revenue Growth Strategy Call
+                  </Button>
+                </motion.div>
+                
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    className="border-2 border-gray-300 hover:border-orange-400 text-gray-700 hover:text-orange-600 font-semibold text-lg px-8 py-4 rounded-xl bg-white/80 backdrop-blur-sm hover:bg-orange-50 transition-all duration-300"
+                  >
+                    <Zap className="w-5 h-5 mr-2" />
+                    Jump on a call
+                  </Button>
+                </motion.div>
+              </motion.div>
+
+                             {/* Trust Indicators */}
+               <motion.div
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ duration: 0.8, delay: 0.9 }}
+                 className="flex items-center gap-6 mt-4"
+               >
+                 <div className="text-sm text-gray-600">
+                   <span className="font-semibold text-green-600">$36 ROI</span> average return
+                 </div>
+               </motion.div>
+            </motion.div>
+
+                         <motion.div 
+               initial={{ opacity: 0, x: 50 }}
+               animate={{ opacity: 1, x: 0 }}
+               transition={{ duration: 0.8, delay: 0.3 }}
+               className="flex justify-center items-center lg:col-span-2 lg:justify-end"
+             >
+              <GoogleEmailMockup />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+                {/* Enhanced Key Benefits Section */}
+          <section className="relative w-full py-20 px-4 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 overflow-hidden">
+            {/* Dynamic Background Elements */}
+            <div className="absolute inset-0 overflow-hidden">
+              {/* Animated Gradient Orbs */}
+              <motion.div
+                animate={{ 
+                  x: [0, 80, 0],
+                  y: [0, -40, 0],
+                  scale: [1, 1.3, 1]
+                }}
+                transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-32 left-32 w-72 h-72 bg-gradient-to-br from-blue-400/15 to-purple-400/15 rounded-full blur-3xl"
+              />
+              <motion.div
+                animate={{ 
+                  x: [0, -60, 0],
+                  y: [0, 50, 0],
+                  scale: [1.2, 1, 1.2]
+                }}
+                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute bottom-32 right-32 w-64 h-64 bg-gradient-to-br from-orange-400/15 to-red-400/15 rounded-full blur-3xl"
+              />
+              
+              {/* Floating Icons */}
+              <motion.div
+                animate={{ y: [-15, 15, -15], rotate: [0, 8, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-24 right-24 p-4 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+              >
+                <TrendingUp className="w-8 h-8 text-blue-600" />
+              </motion.div>
+              <motion.div
+                animate={{ y: [20, -20, 20], rotate: [0, -8, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute bottom-24 left-24 p-4 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+              >
+                <Mail className="w-8 h-8 text-orange-600" />
+              </motion.div>
+            </div>
+
+            <div className="max-w-6xl mx-auto mb-16 relative z-10">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="text-center"
+              >
+                {/* Enhanced Badge */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                  className="inline-flex items-center bg-gradient-to-r from-blue-100 to-purple-100 px-4 py-2 rounded-full text-sm font-semibold border border-blue-200 shadow-sm text-blue-700 mb-6"
+                >
+                  <TrendingUp className="w-4 h-4 mr-2" />
+                  PROVEN RESULTS
+                </motion.div>
+
+                <motion.h2 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  viewport={{ once: true }}
+                  className="text-4xl md:text-5xl font-bold text-center mb-4"
+                  style={{ color: blue }}
+                >
+                  Why Email Marketing Works for{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-orange-600">
+                    Restaurants
+                  </span>
+                </motion.h2>
+
+                                 {/* Animated underline */}
+                 <motion.div
+                   initial={{ width: 0 }}
+                   whileInView={{ width: "100%" }}
+                   transition={{ duration: 1, delay: 0.8 }}
+                   viewport={{ once: true }}
+                   className="h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mx-auto mb-6 max-w-4xl"
+                 />
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  viewport={{ once: true }}
+                  className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed"
+                >
+                  Transform one-time diners into loyal customers with personalized email campaigns that drive real revenue growth.
+                </motion.p>
+              </motion.div>
+            </div>
+                    {/* Enhanced Desktop bento grid */}
+            <div className="hidden md:grid gap-8 max-w-6xl mx-auto relative z-10"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gridTemplateRows: 'repeat(3, minmax(200px, auto))',
+                gridTemplateAreas: `
+                  'main main side1'
+                  'main main side2'
+                  'wide wide side3'
+                `
+              }}
+            >
+              {/* Enhanced Main Card: ROI */}
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5, scale: 1.02 }}
+                style={{ gridArea: 'main' }} 
+                className="bg-white rounded-3xl shadow-xl p-10 border border-gray-100 hover:shadow-2xl transition-all duration-500 flex flex-col h-full relative overflow-hidden group"
+              >
+                {/* Card background gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg">
+                      <TrendingUp className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600 font-bold text-sm uppercase tracking-wide">
+                      Highest ROI Channel
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-3xl font-bold mb-3 text-gray-900">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600">$36</span> Return for Every $1 Spent
+                  </h3>
+                  
+                  <p className="text-gray-700 mb-6 text-lg leading-relaxed">
+                    Email marketing delivers the highest ROI of any digital channel. Direct access to your customers means higher engagement and measurable revenue growth.
+                  </p>
+                  
+                  {/* Enhanced comparison table */}
+                  <div className="bg-gray-50 rounded-2xl p-4 mb-6">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center p-3 bg-green-100 rounded-xl">
+                        <span className="font-semibold text-gray-800">Email Marketing</span>
+                        <span className="text-green-600 font-bold text-xl">$36</span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-white rounded-xl">
+                        <span className="font-semibold text-gray-600">SMS Marketing</span>
+                        <span className="text-gray-500 font-semibold">$29</span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-white rounded-xl">
+                        <span className="font-semibold text-gray-600">Social Media</span>
+                        <span className="text-gray-500 font-semibold">$2.80</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <EmailPreviewMockup />
+                  <EmailPreviewMockup2 />
+                </div>
+              </motion.div>
+                        {/* Enhanced Side Card 1 */}
+              <motion.div 
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5, scale: 1.02 }}
+                style={{ gridArea: 'side1' }} 
+                className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 hover:shadow-2xl transition-all duration-500 flex flex-col h-full relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-lg">
+                      <Users className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 font-bold text-xs uppercase tracking-wide">
+                      40x More Effective
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-xl font-bold mb-3 text-gray-900 leading-tight">
+                    Convert First-Time Guests Into Loyal Regulars
+                  </h3>
+                  
+                  <p className="text-gray-700 text-base leading-relaxed">
+                    Email is 40x more effective at building repeat business than social media. Automated campaigns nurture guests into regulars.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Enhanced Side Card 2 */}
+              <motion.div 
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5, scale: 1.02 }}
+                style={{ gridArea: 'side2' }} 
+                className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 hover:shadow-2xl transition-all duration-500 flex flex-col h-full relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 to-red-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl shadow-lg">
+                      <TrendingUp className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600 font-bold text-xs uppercase tracking-wide">
+                      17% Higher Orders
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-xl font-bold mb-3 text-gray-900 leading-tight">
+                    Drive Higher Order Values
+                  </h3>
+                  
+                  <p className="text-gray-700 text-base leading-relaxed">
+                    17% higher average order value from email-driven purchases. Upsell, cross-sell, and promote specials with every send.
+                  </p>
+                </div>
+              </motion.div>
+                        {/* Enhanced Wide Card (bottom left) */}
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5, scale: 1.02 }}
+                style={{ gridArea: 'wide' }} 
+                className="bg-white rounded-3xl shadow-xl p-10 border border-gray-100 hover:shadow-2xl transition-all duration-500 flex flex-col h-full relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-pink-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-lg">
+                      <Users className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 font-bold text-sm uppercase tracking-wide">
+                      75% Customer Preference
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold mb-3 text-gray-900">
+                    Build Authentic Relationships
+                  </h3>
+                  
+                  <p className="text-gray-700 mb-6 text-lg leading-relaxed">
+                    75% of customers prefer email communication from restaurant brands. Tell your story, share your values, and connect deeply.
+                  </p>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {[
+                      "Share your restaurant's story and values",
+                      "Build trust with regular, authentic updates", 
+                      "Highlight customer stories and testimonials",
+                      "Invite feedback and foster two-way communication"
+                    ].map((item, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 1 + index * 0.1 }}
+                        viewport={{ once: true }}
+                        className="flex items-center gap-3 text-sm text-gray-700 bg-gray-50 rounded-xl p-3"
+                      >
+                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                          <svg width="14" height="14" fill="none" stroke="white" strokeWidth="3" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <span className="font-medium">{item}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Enhanced Side Card 3 (bottom right) */}
+              <motion.div 
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 1.0 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5, scale: 1.02 }}
+                style={{ gridArea: 'side3' }} 
+                className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 hover:shadow-2xl transition-all duration-500 flex flex-col h-full relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl shadow-lg">
+                      <Zap className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600 font-bold text-xs uppercase tracking-wide">
+                      Smart Automation
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-xl font-bold mb-3 text-gray-900 leading-tight">
+                    Automated, Personalized Campaigns
+                  </h3>
+                  
+                  <p className="text-gray-700 text-base leading-relaxed">
+                    Segment your audience and send the right message at the right time—automatically. Save time and maximize results.
+                  </p>
+                </div>
+              </motion.div>
+        </div>
+        {/* Mobile fallback: simple stack */}
+        <div className="md:hidden flex flex-col gap-8 max-w-2xl mx-auto">
+          {/* Main Card: ROI */}
+          <div className="bg-white rounded-2xl shadow-lg p-10 border hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+            <h3 className="text-2xl font-bold mb-2" style={{ color: blue }}>$36 Return for Every $1 Spent</h3>
+            <div className="text-coral-600 font-semibold mb-2">Highest ROI of Any Channel</div>
+            <p className="text-gray-700 mb-4 text-lg">Email marketing delivers the highest ROI of any digital channel. Direct access to your customers means higher engagement and measurable revenue growth.</p>
+            <table className="w-full text-sm mt-2">
+              <tbody>
+                <tr><td className="font-semibold text-gray-700">Email Marketing</td><td className="text-green-600 font-bold">$36</td></tr>
+                <tr><td className="font-semibold text-gray-700">Social Media</td><td className="text-gray-500">$2.80</td></tr>
+                <tr><td className="font-semibold text-gray-700">SMS Marketing</td><td className="text-gray-500">$29</td></tr>
+              </tbody>
+            </table>
+          </div>
+          {/* Other cards stacked */}
+          {[1,2,3,4].map(i => (
+            <div key={i} className="bg-white rounded-2xl shadow-lg p-10 border hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+              {i === 1 && <><div className="text-coral-600 font-semibold mb-2">40x More Effective Than Social</div></>}
+              {i === 2 && <><div className="text-coral-600 font-semibold mb-2">17% Higher Order Value</div></>}
+              {i === 3 && <><div className="text-coral-600 font-semibold mb-2">75% Prefer Email from Restaurants</div></>}
+              {i === 4 && <><div className="text-coral-600 font-semibold mb-2">Segmentation & Automation</div></>}
+              <h3 className="text-2xl font-bold mb-2" style={{ color: blue }}>
+                {[
+                  'Convert First-Time Guests Into Loyal Regulars',
+                  'Drive Higher Order Values',
+                  'Build Authentic Relationships',
+                  'Automated, Personalized Campaigns',
+                ][i-1]}
+              </h3>
+              <p className="text-gray-700 mb-4 text-lg">{[
+                'Email is 40x more effective at building repeat business than social media. Automated campaigns nurture guests into regulars.',
+                '17% higher average order value from email-driven purchases. Upsell, cross-sell, and promote specials with every send.',
+                '75% of customers prefer email communication from restaurant brands. Tell your story, share your values, and connect deeply.',
+                'Segment your audience and send the right message at the right time—automatically. Save time and maximize results.',
+              ][i-1]}</p>
             </div>
           ))}
         </div>
-        <div className="mt-6 text-center">
-          <p className="text-gray-600 mb-4">Email marketing delivers 3.6x better ROI than the next best channel</p>
-          <Link to="/funnel">
-            <Button className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3">
-              See How We Achieve These Results →
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <div className="bg-white text-gray-900 min-h-screen">
-      {/* Scroll Progress Bar */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
-        <div 
-          className="h-full bg-orange-600 transition-all duration-150"
-          style={{ width: `${scrollProgress * 100}%` }}
-        />
-      </div>
-
-      {/* Breadcrumb */}
-      <section className="bg-gray-50 py-4 mt-20">
-        <div className="container mx-auto max-w-7xl px-4">
-          <div className="flex items-center text-sm text-gray-600">
-            <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
-            <span className="mx-2">/</span>
-            <Link to="/resources" className="hover:text-orange-600 transition-colors">Blog</Link>
-            <span className="mx-2">/</span>
-            <span className="text-gray-400">Email Marketing Best Practices for Restaurants in 2025</span>
-          </div>
-        </div>
       </section>
 
-      <div className="container mx-auto max-w-7xl px-4 py-12">
-        <div className="grid lg:grid-cols-4 gap-12">
-          {/* Main Content */}
-          <article className="lg:col-span-3">
-            {/* Article Header */}
-            <header className="mb-12">
-              <div className="mb-4">
-                <span className="inline-block px-4 py-2 bg-orange-100 text-orange-700 rounded-full text-sm font-semibold">
-                  Email Marketing
-                </span>
-              </div>
-              
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight" style={{ color: blue }}>
-                Email Marketing Best Practices for Restaurants in 2025
-              </h1>
-              
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                Master the email marketing strategies that deliver $36 ROI, increase repeat customers by 70%, and automate your restaurant's marketing success
-              </p>
-
-              <div className="flex flex-wrap items-center gap-6 text-gray-500 text-sm mb-8">
-                <div className="flex items-center">
-                  <User className="w-4 h-4 mr-2" />
-                  <span>By Bot and Table</span>
-                </div>
-                <div className="flex items-center">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  <span>{new Date().toLocaleDateString()}</span>
-                </div>
-                <div className="flex items-center">
-                  <Clock className="w-4 h-4 mr-2" />
-                  <span>10 min read</span>
-                </div>
-              </div>
-
-              {/* Key Statistics Row */}
-              <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <StatBox 
-                  number="$36" 
-                  label="ROI per $1" 
-                  description="Average email marketing return"
-                  color="green"
-                  icon={DollarSign}
-                />
-                <StatBox 
-                  number="35%" 
-                  label="Open Rate" 
-                  description="Restaurant industry average"
-                  color="blue"
-                  icon={Eye}
-                />
-                <StatBox 
-                  number="70%" 
-                  label="Repeat Customers" 
-                  description="Increase with proper segmentation"
-                  color="purple"
-                  icon={Users}
-                />
-              </div>
-
-              {/* Social Share */}
-              <div className="flex items-center gap-4 pb-8 border-b border-gray-200">
-                <span className="text-sm font-semibold text-gray-600">Share:</span>
-                <div className="flex gap-2">
-                  <button className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                    <Facebook className="w-4 h-4" />
-                  </button>
-                  <button className="p-2 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition-colors">
-                    <Twitter className="w-4 h-4" />
-                  </button>
-                  <button className="p-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors">
-                    <Linkedin className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </header>
-
-            {/* Hero Image */}
-            <div className="mb-12">
-              <div className="aspect-video rounded-xl overflow-hidden relative">
-                <img 
-                  src="/email-marketing.jpg"
-                  alt="Restaurant email marketing dashboard showing campaign analytics and ROI metrics"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-900/60 to-blue-900/60"></div>
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-8">
-                  <div className="text-white">
-                    <div className="flex items-center mb-2">
-                      <Mail className="w-6 h-6 mr-2 text-orange-400" />
-                      <span className="text-sm font-semibold">EMAIL MARKETING 2025</span>
-                    </div>
-                    <h3 className="text-2xl font-bold mb-2">The Complete Guide to Restaurant Email Success</h3>
-                    <p className="text-gray-200">Proven strategies that generate $36 ROI and build lasting customer relationships.</p>
+                {/* Enhanced Metrics/Proof Section */}
+          <section className="w-full py-16 px-4">
+            <div className="max-w-5xl mx-auto text-center">
+              <motion.h3 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="text-3xl font-bold mb-8" 
+                style={{ color: blue }}
+              >
+                Proof That Email Marketing Works
+              </motion.h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5, scale: 1.05 }}
+                  className="bg-gradient-to-br from-orange-500 via-red-500 to-orange-600 rounded-3xl shadow-xl p-8 border border-orange-200 hover:shadow-2xl transition-all duration-500 relative overflow-hidden group"
+                >
+                  {/* Animated glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-red-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
+                  
+                  <div className="relative z-10">
+                    <div className="text-5xl font-bold text-white mb-2 drop-shadow-lg">$36</div>
+                    <div className="text-white/90 font-medium">Average ROI per $1 spent</div>
                   </div>
-                </div>
+                </motion.div>
+
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5, scale: 1.05 }}
+                  className="bg-gradient-to-br from-orange-500 via-red-500 to-orange-600 rounded-3xl shadow-xl p-8 border border-orange-200 hover:shadow-2xl transition-all duration-500 relative overflow-hidden group"
+                >
+                  {/* Animated glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-red-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
+                  
+                  <div className="relative z-10">
+                    <div className="text-5xl font-bold text-white mb-2 drop-shadow-lg">4B+</div>
+                    <div className="text-white/90 font-medium">Global email users</div>
+                  </div>
+                </motion.div>
+
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5, scale: 1.05 }}
+                  className="bg-gradient-to-br from-orange-500 via-red-500 to-orange-600 rounded-3xl shadow-xl p-8 border border-orange-200 hover:shadow-2xl transition-all duration-500 relative overflow-hidden group"
+                >
+                  {/* Animated glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-red-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
+                  
+                  <div className="relative z-10">
+                    <div className="text-5xl font-bold text-white mb-2 drop-shadow-lg">21%</div>
+                    <div className="text-white/90 font-medium">Average Open Rate</div>
+                    <div className="text-xs text-white/80 mt-1 font-medium">Industry-leading engagement</div>
+                  </div>
+                </motion.div>
               </div>
             </div>
+          </section>
 
-
-
-            {/* Article Content */}
-            <div className="prose prose-lg max-w-none">
+                {/* Enhanced Features Section */}
+          <section className="relative w-full py-20 px-4 bg-gradient-to-br from-gray-50 via-white to-blue-50 overflow-hidden">
+            {/* Dynamic Background Elements */}
+            <div className="absolute inset-0 overflow-hidden">
+              {/* Animated Gradient Orbs */}
+              <motion.div
+                animate={{ 
+                  x: [0, 60, 0],
+                  y: [0, -30, 0],
+                  scale: [1, 1.2, 1]
+                }}
+                transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-20 right-20 w-80 h-80 bg-gradient-to-br from-blue-400/10 to-indigo-400/10 rounded-full blur-3xl"
+              />
+              <motion.div
+                animate={{ 
+                  x: [0, -40, 0],
+                  y: [0, 40, 0],
+                  scale: [1.1, 1, 1.1]
+                }}
+                transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute bottom-20 left-20 w-64 h-64 bg-gradient-to-br from-orange-400/10 to-red-400/10 rounded-full blur-3xl"
+              />
               
-              {/* Introduction Section */}
-              <section id="introduction" className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6" style={{ color: blue }}>The $36 ROI Revolution: Why Email Marketing Dominates in 2025</h2>
-                
-                <p className="text-lg leading-relaxed text-gray-700 mb-6">
-                  While restaurants chase the latest social media trends and pour money into paid advertising, a quiet revolution is happening in email marketing. Smart restaurant owners are discovering that email marketing delivers a staggering $36 return for every $1 invested—making it the highest-ROI marketing channel available today.
-                </p>
+              {/* Floating Tech Icons */}
+              <motion.div
+                animate={{ y: [-10, 10, -10], rotate: [0, 5, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-32 left-32 p-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+              >
+                <Zap className="w-6 h-6 text-blue-600" />
+              </motion.div>
+              <motion.div
+                animate={{ y: [15, -15, 15], rotate: [0, -5, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute bottom-32 right-32 p-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+              >
+                <TrendingUp className="w-6 h-6 text-orange-600" />
+              </motion.div>
+            </div>
 
-                <p className="text-lg leading-relaxed text-gray-700 mb-6">
-                  But here's what most restaurants get wrong: they treat email marketing like a megaphone, blasting the same message to everyone. The restaurants winning in 2025 understand that email marketing is about building relationships, not just broadcasting offers.
-                </p>
+            <div className="max-w-7xl mx-auto relative z-10">
+              {/* Enhanced Header */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="text-center mb-16"
+              >
+                {/* Enhanced Badge */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                  className="inline-flex items-center bg-gradient-to-r from-blue-100 to-indigo-100 px-4 py-2 rounded-full text-sm font-semibold border border-blue-200 shadow-sm text-blue-700 mb-6"
+                >
+                  <Zap className="w-4 h-4 mr-2" />
+                  ENTERPRISE FEATURES
+                </motion.div>
 
-                <div className="bg-orange-50 border-l-4 border-orange-500 p-6 my-8">
-                  <p className="text-lg italic text-orange-800">
-                    "We increased our repeat customer rate by 127% and generated an additional $89,000 in revenue in the first six months just by implementing proper email segmentation and automation." - Maria Rodriguez, Owner of Authentico Mexican Grill (3 locations)
+                <motion.h3 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  viewport={{ once: true }}
+                  className="text-4xl md:text-5xl font-bold text-center mb-4"
+                  style={{ color: blue }}
+                >
+                  Why Top Restaurants Choose{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-orange-600">
+                    Bot & Table
+                  </span>
+                </motion.h3>
+
+                {/* Animated underline */}
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: "250px" }}
+                  transition={{ duration: 1, delay: 0.8 }}
+                  viewport={{ once: true }}
+                  className="h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mx-auto mb-6"
+                />
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  viewport={{ once: true }}
+                  className="text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed"
+                >
+                  Advanced email marketing technology designed specifically for restaurants, with powerful automation and deep integrations.
+                </motion.p>
+              </motion.div>
+
+              {/* Enhanced Features Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                {/* Feature 1: Smart Segmentation */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg">
+                        <Users className="w-8 h-8 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-2xl font-bold text-gray-900 mb-1">Smart Segmentation</h4>
+                        <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 font-bold text-sm uppercase tracking-wide">
+                          AI-Powered Targeting
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <p className="text-gray-700 mb-6 text-lg leading-relaxed">
+                      Automatically group guests by visit frequency, spend, and preferences for hyper-targeted campaigns that convert 3x better.
+                    </p>
+                    
+                    {/* Feature Benefits */}
+                    <div className="space-y-3">
+                      {[
+                        "Frequency-based segmentation (new, regular, VIP)",
+                        "Spending behavior analysis",
+                        "Preference tracking & targeting",
+                        "Automated list management"
+                      ].map((benefit, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
+                          viewport={{ once: true }}
+                          className="flex items-center gap-3 text-sm text-gray-700"
+                        >
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                            <svg width="12" height="12" fill="none" stroke="white" strokeWidth="3" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <span className="font-medium">{benefit}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                    
+                    {/* Stats */}
+                    <div className="mt-6 p-4 bg-blue-50 rounded-xl">
+                      <div className="text-2xl font-bold text-blue-600">3x</div>
+                      <div className="text-sm text-blue-700 font-medium">Higher conversion rates</div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Feature 2: Automated Campaign Triggers */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-emerald-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-4 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg">
+                        <Zap className="w-8 h-8 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-2xl font-bold text-gray-900 mb-1">Automated Campaign Triggers</h4>
+                        <div className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600 font-bold text-sm uppercase tracking-wide">
+                          Set & Forget Marketing
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <p className="text-gray-700 mb-6 text-lg leading-relaxed">
+                      Send welcome series, win-back, birthdays, and more—completely hands-free with intelligent timing optimization.
+                    </p>
+                    
+                    {/* Feature Benefits */}
+                    <div className="space-y-3">
+                      {[
+                        "Welcome series for new customers",
+                        "Win-back campaigns for lapsed guests",
+                        "Birthday & anniversary automation",
+                        "Behavioral trigger campaigns"
+                      ].map((benefit, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
+                          viewport={{ once: true }}
+                          className="flex items-center gap-3 text-sm text-gray-700"
+                        >
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                            <svg width="12" height="12" fill="none" stroke="white" strokeWidth="3" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <span className="font-medium">{benefit}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                    
+                    {/* Stats */}
+                    <div className="mt-6 p-4 bg-green-50 rounded-xl">
+                      <div className="text-2xl font-bold text-green-600">80%</div>
+                      <div className="text-sm text-green-700 font-medium">Time saved on marketing</div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Feature 3: Real-Time Analytics Dashboard */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.6 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-pink-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-4 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-lg">
+                        <TrendingUp className="w-8 h-8 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-2xl font-bold text-gray-900 mb-1">Real-Time Analytics Dashboard</h4>
+                        <div className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 font-bold text-sm uppercase tracking-wide">
+                          Data-Driven Insights
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <p className="text-gray-700 mb-6 text-lg leading-relaxed">
+                      Track open rates, revenue, guest frequency, and more in one comprehensive dashboard with actionable insights.
+                    </p>
+                    
+                    {/* Feature Benefits */}
+                    <div className="space-y-3">
+                      {[
+                        "Revenue attribution tracking",
+                        "Customer lifetime value metrics",
+                        "Campaign performance analytics",
+                        "Real-time reporting & alerts"
+                      ].map((benefit, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
+                          viewport={{ once: true }}
+                          className="flex items-center gap-3 text-sm text-gray-700"
+                        >
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                            <svg width="12" height="12" fill="none" stroke="white" strokeWidth="3" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <span className="font-medium">{benefit}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                    
+                    {/* Stats */}
+                    <div className="mt-6 p-4 bg-purple-50 rounded-xl">
+                      <div className="text-2xl font-bold text-purple-600">24/7</div>
+                      <div className="text-sm text-purple-700 font-medium">Real-time monitoring</div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Feature 4: Seamless Integrations */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.8 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 to-red-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-4 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl shadow-lg">
+                        <Zap className="w-8 h-8 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-2xl font-bold text-gray-900 mb-1">Seamless Integrations</h4>
+                        <div className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600 font-bold text-sm uppercase tracking-wide">
+                          Unified Marketing Engine
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <p className="text-gray-700 mb-6 text-lg leading-relaxed">
+                      Connect with POS, reservations, review, and loyalty systems for a unified marketing engine that works with your existing tools.
+                    </p>
+                    
+                    {/* Feature Benefits */}
+                    <div className="space-y-3">
+                      {[
+                        "POS system integration (Square, Toast, etc.)",
+                        "Reservation platform sync",
+                        "Review management connection",
+                        "Loyalty program integration"
+                      ].map((benefit, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.5, delay: 1.0 + index * 0.1 }}
+                          viewport={{ once: true }}
+                          className="flex items-center gap-3 text-sm text-gray-700"
+                        >
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                            <svg width="12" height="12" fill="none" stroke="white" strokeWidth="3" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <span className="font-medium">{benefit}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                    
+                    {/* Stats */}
+                    <div className="mt-6 p-4 bg-orange-50 rounded-xl">
+                      <div className="text-2xl font-bold text-orange-600">50+</div>
+                      <div className="text-sm text-orange-700 font-medium">Platform integrations</div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Bottom CTA Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                viewport={{ once: true }}
+                className="text-center bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl p-12 shadow-2xl"
+              >
+                <h4 className="text-3xl font-bold text-white mb-4">
+                  Ready to Transform Your Email Marketing?
+                </h4>
+                <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+                  Join hundreds of restaurants already using Bot & Table to drive more revenue through smarter email campaigns.
+                </p>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button 
+                    size="lg" 
+                    className="bg-white text-orange-600 hover:bg-gray-50 font-bold shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-8 py-4 rounded-xl"
+                  >
+                    <Mail className="w-5 h-5 mr-2" />
+                    Book Your Strategy Call
+                  </Button>
+                </motion.div>
+              </motion.div>
+            </div>
+          </section>
+
+                {/* Enhanced Campaign Types Section */}
+          <section className="relative w-full py-20 px-4 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 overflow-hidden">
+            {/* Dynamic Background Elements */}
+            <div className="absolute inset-0 overflow-hidden">
+              {/* Animated Gradient Orbs */}
+              <motion.div
+                animate={{ 
+                  x: [0, 70, 0],
+                  y: [0, -35, 0],
+                  scale: [1, 1.3, 1]
+                }}
+                transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-24 left-24 w-96 h-96 bg-gradient-to-br from-indigo-400/10 to-purple-400/10 rounded-full blur-3xl"
+              />
+              <motion.div
+                animate={{ 
+                  x: [0, -50, 0],
+                  y: [0, 45, 0],
+                  scale: [1.2, 1, 1.2]
+                }}
+                transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute bottom-24 right-24 w-80 h-80 bg-gradient-to-br from-pink-400/10 to-red-400/10 rounded-full blur-3xl"
+              />
+              
+              {/* Floating Campaign Icons */}
+              <motion.div
+                animate={{ y: [-12, 12, -12], rotate: [0, 6, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-40 right-40 p-4 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+              >
+                <Mail className="w-8 h-8 text-purple-600" />
+              </motion.div>
+              <motion.div
+                animate={{ y: [18, -18, 18], rotate: [0, -6, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute bottom-40 left-40 p-4 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+              >
+                <Users className="w-8 h-8 text-pink-600" />
+              </motion.div>
+            </div>
+
+            <div className="max-w-7xl mx-auto relative z-10">
+              {/* Enhanced Header */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="text-center mb-16"
+              >
+                {/* Enhanced Badge */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                  className="inline-flex items-center bg-gradient-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full text-sm font-semibold border border-purple-200 shadow-sm text-purple-700 mb-6"
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  CAMPAIGN EXAMPLES
+                </motion.div>
+
+                <motion.h3 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  viewport={{ once: true }}
+                  className="text-4xl md:text-5xl font-bold text-center mb-4"
+                  style={{ color: blue }}
+                >
+                  Email Campaigns That Drive{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+                    Real Results
+                  </span>
+                </motion.h3>
+
+                {/* Animated underline */}
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: "100%" }}
+                  transition={{ duration: 1, delay: 0.8 }}
+                  viewport={{ once: true }}
+                  className="h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-6 max-w-4xl"
+                />
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  viewport={{ once: true }}
+                  className="text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed"
+                >
+                  See real examples of high-converting email campaigns that turn one-time diners into loyal customers and drive measurable revenue growth.
+                </motion.p>
+              </motion.div>
+
+              {/* Enhanced Campaign Examples Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+                {/* Welcome Series Campaign */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="bg-white rounded-3xl shadow-2xl border border-gray-100 hover:shadow-3xl transition-all duration-500 relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative z-10">
+                    {/* Campaign Header */}
+                    <div className="p-8 pb-4">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="p-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg">
+                          <Users className="w-8 h-8 text-white" />
+                        </div>
+                        <div>
+                          <h4 className="text-2xl font-bold text-gray-900 mb-1">Welcome Series</h4>
+                          <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 font-bold text-sm uppercase tracking-wide">
+                            First Impression Magic
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <p className="text-gray-700 mb-6 text-lg leading-relaxed">
+                        Turn new customers into regulars with a perfectly timed 3-email welcome series.
+                      </p>
+                    </div>
+
+                    {/* Email Preview Mockup */}
+                    <div className="px-8 mb-6">
+                      <div className="bg-gray-50 rounded-2xl p-4 border-2 border-gray-200">
+                        {/* Email Header */}
+                        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gray-300">
+                          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs font-bold">M</span>
+                          </div>
+                          <div>
+                            <div className="font-semibold text-sm text-gray-900">Mario's Italian Bistro</div>
+                            <div className="text-xs text-gray-500">Welcome to the family!</div>
+                          </div>
+                        </div>
+                        
+                        {/* Email Content */}
+                        <div className="space-y-3">
+                          <div className="text-sm font-bold text-gray-900">🍝 Welcome to Mario's Family, Sarah!</div>
+                          <div className="text-xs text-gray-700 leading-relaxed">
+                            Thank you for dining with us! Here's your <span className="font-semibold text-blue-600">20% off</span> next visit + our secret family recipe for garlic bread...
+                          </div>
+                          <div className="bg-blue-500 text-white text-xs font-bold py-2 px-4 rounded-lg text-center">
+                            Claim Your 20% Off
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Campaign Results */}
+                    <div className="px-8 pb-8">
+                      <div className="bg-blue-50 rounded-xl p-4">
+                        <div className="grid grid-cols-2 gap-4 text-center">
+                          <div>
+                            <div className="text-2xl font-bold text-blue-600">68%</div>
+                            <div className="text-xs text-blue-700 font-medium">Return Rate</div>
+                          </div>
+                          <div>
+                            <div className="text-2xl font-bold text-blue-600">$42</div>
+                            <div className="text-xs text-blue-700 font-medium">Avg Order Value</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Birthday & Anniversary Campaign */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="bg-white rounded-3xl shadow-2xl border border-gray-100 hover:shadow-3xl transition-all duration-500 relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-pink-50/50 to-red-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative z-10">
+                    {/* Campaign Header */}
+                    <div className="p-8 pb-4">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="p-4 bg-gradient-to-br from-pink-500 to-red-600 rounded-2xl shadow-lg">
+                          <span className="text-2xl">🎂</span>
+                        </div>
+                        <div>
+                          <h4 className="text-2xl font-bold text-gray-900 mb-1">Birthday & Anniversary</h4>
+                          <div className="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-red-600 font-bold text-sm uppercase tracking-wide">
+                            Celebration Marketing
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <p className="text-gray-700 mb-6 text-lg leading-relaxed">
+                        Celebrate special moments with personalized offers that create emotional connections.
+                      </p>
+                    </div>
+
+                    {/* Email Preview Mockup */}
+                    <div className="px-8 mb-6">
+                      <div className="bg-gray-50 rounded-2xl p-4 border-2 border-gray-200">
+                        {/* Email Header */}
+                        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gray-300">
+                          <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-red-600 rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs font-bold">T</span>
+                          </div>
+                          <div>
+                            <div className="font-semibold text-sm text-gray-900">The Steakhouse</div>
+                            <div className="text-xs text-gray-500">Happy Birthday!</div>
+                          </div>
+                        </div>
+                        
+                        {/* Email Content */}
+                        <div className="space-y-3">
+                          <div className="text-sm font-bold text-gray-900">🎉 Happy Birthday, Michael!</div>
+                          <div className="text-xs text-gray-700 leading-relaxed">
+                            It's your special day! Enjoy a <span className="font-semibold text-pink-600">FREE dessert</span> and 25% off your birthday dinner. Valid for 2 weeks...
+                          </div>
+                          <div className="bg-gradient-to-r from-pink-500 to-red-500 text-white text-xs font-bold py-2 px-4 rounded-lg text-center">
+                            Book Birthday Dinner
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Campaign Results */}
+                    <div className="px-8 pb-8">
+                      <div className="bg-pink-50 rounded-xl p-4">
+                        <div className="grid grid-cols-2 gap-4 text-center">
+                          <div>
+                            <div className="text-2xl font-bold text-pink-600">89%</div>
+                            <div className="text-xs text-pink-700 font-medium">Open Rate</div>
+                          </div>
+                          <div>
+                            <div className="text-2xl font-bold text-pink-600">$78</div>
+                            <div className="text-xs text-pink-700 font-medium">Avg Celebration Spend</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Win-Back Campaign */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.6 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="bg-white rounded-3xl shadow-2xl border border-gray-100 hover:shadow-3xl transition-all duration-500 relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-emerald-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative z-10">
+                    {/* Campaign Header */}
+                    <div className="p-8 pb-4">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="p-4 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg">
+                          <span className="text-2xl">💚</span>
+                        </div>
+                        <div>
+                          <h4 className="text-2xl font-bold text-gray-900 mb-1">Win-Back & Reactivation</h4>
+                          <div className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600 font-bold text-sm uppercase tracking-wide">
+                            Second Chance Success
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <p className="text-gray-700 mb-6 text-lg leading-relaxed">
+                        Bring back lapsed customers with irresistible offers and nostalgic messaging.
+                      </p>
+                    </div>
+
+                    {/* Email Preview Mockup */}
+                    <div className="px-8 mb-6">
+                      <div className="bg-gray-50 rounded-2xl p-4 border-2 border-gray-200">
+                        {/* Email Header */}
+                        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gray-300">
+                          <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs font-bold">C</span>
+                          </div>
+                          <div>
+                            <div className="font-semibold text-sm text-gray-900">Café Luna</div>
+                            <div className="text-xs text-gray-500">We miss you!</div>
+                          </div>
+                        </div>
+                        
+                        {/* Email Content */}
+                        <div className="space-y-3">
+                          <div className="text-sm font-bold text-gray-900">☕ We Miss You, Jessica!</div>
+                          <div className="text-xs text-gray-700 leading-relaxed">
+                            Your favorite latte is waiting! Come back and enjoy <span className="font-semibold text-green-600">50% off</span> your next visit. Plus, we have new pastries you'll love...
+                          </div>
+                          <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold py-2 px-4 rounded-lg text-center">
+                            Welcome Back - 50% Off
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Campaign Results */}
+                    <div className="px-8 pb-8">
+                      <div className="bg-green-50 rounded-xl p-4">
+                        <div className="grid grid-cols-2 gap-4 text-center">
+                          <div>
+                            <div className="text-2xl font-bold text-green-600">34%</div>
+                            <div className="text-xs text-green-700 font-medium">Reactivation Rate</div>
+                          </div>
+                          <div>
+                            <div className="text-2xl font-bold text-green-600">$31</div>
+                            <div className="text-xs text-green-700 font-medium">Return Visit Value</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Additional Campaign Types */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                viewport={{ once: true }}
+                className="bg-white rounded-3xl shadow-2xl p-12 border border-gray-100"
+              >
+                <div className="text-center mb-12">
+                  <h4 className="text-3xl font-bold text-gray-900 mb-4">
+                    Plus Many More Campaign Types
+                  </h4>
+                  <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+                    Our platform includes dozens of pre-built campaign templates designed specifically for restaurants.
                   </p>
                 </div>
 
-                <p className="text-lg leading-relaxed text-gray-700 mb-6">
-                  This comprehensive guide reveals the exact email marketing strategies that top-performing restaurants use to dominate their markets in 2025. You'll discover advanced segmentation techniques, AI-powered personalization, automation workflows that work while you sleep, and the psychology behind emails that customers actually want to open.
-                </p>
-
-                <p className="text-lg leading-relaxed text-gray-700 mb-6">
-                  More importantly, you'll learn how to integrate email marketing with your POS system, online ordering platform, and customer data to create a unified marketing machine that turns one-time diners into lifelong brand advocates.
-                </p>
-              </section>
-
-              <InlineCTA variant="analysis">
-                Get your free email marketing analysis and discover your restaurant's untapped potential
-              </InlineCTA>
-
-              {/* Email ROI Calculator */}
-              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-8 rounded-xl border border-blue-200 my-8">
-                <h3 className="text-2xl font-bold text-blue-800 mb-6 text-center">Email Marketing ROI Calculator</h3>
-                <p className="text-blue-700 text-center mb-6">Calculate your potential email marketing revenue</p>
-                
-                <div className="grid md:grid-cols-2 gap-4 mb-6">
-                  <div>
-                    <Label htmlFor="subscribers" className="text-blue-700 font-semibold">Email Subscribers</Label>
-                    <Input
-                      id="subscribers"
-                      type="number"
-                      value={roiCalculatorData.subscribers}
-                      onChange={(e) => setRoiCalculatorData({...roiCalculatorData, subscribers: e.target.value})}
-                      placeholder="e.g., 1500"
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="orderValue" className="text-blue-700 font-semibold">Average Order Value</Label>
-                    <Input
-                      id="orderValue"
-                      type="number"
-                      value={roiCalculatorData.orderValue}
-                      onChange={(e) => setRoiCalculatorData({...roiCalculatorData, orderValue: e.target.value})}
-                      placeholder="e.g., 45"
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="openRate" className="text-blue-700 font-semibold">Open Rate (%)</Label>
-                    <Input
-                      id="openRate"
-                      type="number"
-                      value={roiCalculatorData.openRate}
-                      onChange={(e) => setRoiCalculatorData({...roiCalculatorData, openRate: e.target.value})}
-                      placeholder="e.g., 28"
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="clickRate" className="text-blue-700 font-semibold">Click Rate (%)</Label>
-                    <Input
-                      id="clickRate"
-                      type="number"
-                      value={roiCalculatorData.clickRate}
-                      onChange={(e) => setRoiCalculatorData({...roiCalculatorData, clickRate: e.target.value})}
-                      placeholder="e.g., 4.5"
-                      className="mt-1"
-                    />
-                  </div>
-                </div>
-
-                <div className="text-center mb-6">
-                  <Button 
-                    onClick={calculateROI} 
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
-                    disabled={!roiCalculatorData.subscribers || !roiCalculatorData.orderValue}
-                  >
-                    <Calculator className="w-5 h-5 mr-2" />
-                    Calculate My Email ROI
-                  </Button>
-                </div>
-
-                {roiResults && (
-                  <div className="bg-white p-6 rounded-lg border border-blue-300">
-                    <h4 className="text-xl font-bold text-gray-800 mb-4 text-center">Your Email Marketing Potential</h4>
-                    <div className="grid md:grid-cols-3 gap-6 mb-6">
-                      <div className="text-center">
-                        <div className="text-3xl font-bold text-green-600 mb-2">${roiResults.monthlyRevenue.toLocaleString()}</div>
-                        <div className="text-sm text-gray-600">Monthly Revenue</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-3xl font-bold text-blue-600 mb-2">${roiResults.annualRevenue.toLocaleString()}</div>
-                        <div className="text-sm text-gray-600">Annual Revenue</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-3xl font-bold text-orange-600 mb-2">{roiResults.monthlyROI}:1</div>
-                        <div className="text-sm text-gray-600">ROI Ratio</div>
-                      </div>
-                    </div>
-                    <div className="bg-green-50 p-4 rounded-lg mb-4">
-                      <p className="text-green-800 text-center">
-                        <strong>Optimization Potential:</strong> With proper segmentation and automation, you could potentially increase this revenue by ${roiResults.potentialIncrease.toLocaleString()} annually.
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <Link to="/funnel">
-                        <Button className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2">
-                          Get Your Custom Email Strategy →
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* ROI Comparison Chart */}
-              <ROIChart />
-
-              {/* Psychology of Email Marketing */}
-              <section id="psychology" className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6" style={{ color: blue }}>The Psychology Behind Email Marketing Success</h2>
-                
-                <p className="text-lg leading-relaxed text-gray-700 mb-6">
-                  Understanding why customers open, read, and act on emails is the foundation of successful email marketing. In 2025, the most successful restaurants leverage behavioral psychology to create emails that feel personal, timely, and valuable.
-                </p>
-
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4">The Three Pillars of Email Psychology</h3>
-                
-                <div className="bg-gradient-to-br from-purple-50 to-blue-50 p-8 rounded-xl mb-8">
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div className="text-center">
-                      <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Brain className="w-8 h-8 text-blue-600" />
-                      </div>
-                      <h4 className="font-bold text-blue-800 mb-2">Relevance</h4>
-                      <p className="text-sm text-blue-700">Content that matches the customer's current needs, preferences, and dining stage.</p>
-                    </div>
-                    
-                    <div className="text-center">
-                      <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Timer className="w-8 h-8 text-purple-600" />
-                      </div>
-                      <h4 className="font-bold text-purple-800 mb-2">Timing</h4>
-                      <p className="text-sm text-purple-700">Reaching customers when they're most likely to be thinking about dining out.</p>
-                    </div>
-                    
-                    <div className="text-center">
-                      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Target className="w-8 h-8 text-green-600" />
-                      </div>
-                      <h4 className="font-bold text-green-800 mb-2">Value</h4>
-                      <p className="text-sm text-green-700">Every email must provide clear value, whether it's savings, information, or exclusive access.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4">The Hierarchy of Email Motivation</h3>
-                
-                <p className="text-lg leading-relaxed text-gray-700 mb-6">
-                  Research shows that customers are motivated to open restaurant emails in this order of priority:
-                </p>
-
-                <ol className="list-decimal pl-6 space-y-3 text-lg text-gray-700 mb-6">
-                  <li><strong>Exclusive offers (67% open rate):</strong> Limited-time deals that make them feel special</li>
-                  <li><strong>Event notifications (54% open rate):</strong> Information about special events, new menu items, or seasonal offerings</li>
-                  <li><strong>Birthday/anniversary rewards (73% open rate):</strong> Personal celebration emails with special offers</li>
-                  <li><strong>Reactivation campaigns (45% open rate):</strong> "We miss you" emails with comeback incentives</li>
-                  <li><strong>Menu updates (38% open rate):</strong> New dishes, seasonal menus, or chef specials</li>
-                </ol>
-
-                <div className="bg-yellow-50 border border-yellow-200 p-6 rounded-xl my-8">
-                  <div className="flex items-start space-x-3">
-                    <AlertTriangle className="w-6 h-6 text-yellow-600 mt-1" />
-                    <div>
-                      <h4 className="text-lg font-bold text-yellow-800 mb-2">The Frequency Sweet Spot</h4>
-                      <p className="text-yellow-700">
-                        Most restaurants email too little or too much. The optimal frequency for restaurants is 2-3 emails per month, with special occasion emails (birthdays, holidays) as additional touchpoints. More than 4 emails per month leads to a 23% increase in unsubscribe rates.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <InlineCTA variant="strategy">
-                Book a free strategy session to learn how psychology-driven emails can increase your revenue by 200%
-              </InlineCTA>
-
-              {/* Advanced Customer Segmentation */}
-              <section id="segmentation" className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6" style={{ color: blue }}>Advanced Customer Segmentation: Beyond Demographics</h2>
-                
-                <p className="text-lg leading-relaxed text-gray-700 mb-6">
-                  The days of "Dear Valued Customer" emails are over. In 2025, successful restaurants use sophisticated segmentation that goes far beyond age and location. They segment based on behavior, preferences, lifetime value, and dining patterns to create hyper-targeted campaigns that feel personally crafted.
-                </p>
-
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4">The 8-Segment Framework</h3>
-                
-                <div className="grid md:grid-cols-2 gap-6 mb-8">
-                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <Star className="w-5 h-5 mr-2 text-yellow-500" />
-                      VIP Customers
-                    </h4>
-                    <p className="text-gray-700 mb-3">Top 20% by lifetime value, frequent diners, high average order value.</p>
-                    <div className="text-sm text-gray-600">
-                      <strong>Email Strategy:</strong> Exclusive previews, chef's table events, loyalty rewards, first access to new menus
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <Users className="w-5 h-5 mr-2 text-blue-500" />
-                      Regular Diners
-                    </h4>
-                    <p className="text-gray-700 mb-3">Visit 1-2 times monthly, consistent order patterns, good engagement.</p>
-                    <div className="text-sm text-gray-600">
-                      <strong>Email Strategy:</strong> Menu highlights, special occasion reminders, referral incentives, seasonal promotions
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <TrendingUp className="w-5 h-5 mr-2 text-green-500" />
-                      Growing Customers
-                    </h4>
-                    <p className="text-gray-700 mb-3">Increasing visit frequency, trying new menu items, good potential.</p>
-                    <div className="text-sm text-gray-600">
-                      <strong>Email Strategy:</strong> Menu education, pairing suggestions, loyalty program benefits, experience upgrades
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <Timer className="w-5 h-5 mr-2 text-orange-500" />
-                      New Customers
-                    </h4>
-                    <p className="text-gray-700 mb-3">First visit within 30 days, learning about your restaurant.</p>
-                    <div className="text-sm text-gray-600">
-                      <strong>Email Strategy:</strong> Welcome series, menu education, second visit incentives, story telling
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <Calendar className="w-5 h-5 mr-2 text-purple-500" />
-                      Occasional Diners
-                    </h4>
-                    <p className="text-gray-700 mb-3">Visit 3-4 times per year, often for special occasions.</p>
-                    <div className="text-sm text-gray-600">
-                      <strong>Email Strategy:</strong> Holiday promotions, anniversary reminders, special event notifications, gift certificates
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <ChartBar className="w-5 h-5 mr-2 text-red-500" />
-                      At-Risk Customers
-                    </h4>
-                    <p className="text-gray-700 mb-3">Declining visit frequency, lower engagement, may be lost soon.</p>
-                    <div className="text-sm text-gray-600">
-                      <strong>Email Strategy:</strong> Win-back campaigns, feedback requests, special offers, personal outreach
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <AlertTriangle className="w-5 h-5 mr-2 text-gray-500" />
-                      Dormant Customers
-                    </h4>
-                    <p className="text-gray-700 mb-3">No visits in 90+ days, low email engagement.</p>
-                    <div className="text-sm text-gray-600">
-                      <strong>Email Strategy:</strong> Reactivation campaigns, "We miss you" messages, limited-time comeback offers
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <Globe className="w-5 h-5 mr-2 text-indigo-500" />
-                      Online-Only Customers
-                    </h4>
-                    <p className="text-gray-700 mb-3">Only order delivery/takeout, never dined in-restaurant.</p>
-                    <div className="text-sm text-gray-600">
-                      <strong>Email Strategy:</strong> Dine-in incentives, atmosphere highlighting, experience invitations, exclusive in-restaurant offers
-                    </div>
-                  </div>
-                </div>
-
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4">Behavioral Segmentation Triggers</h3>
-                
-                <p className="text-lg leading-relaxed text-gray-700 mb-6">
-                  Beyond static segments, smart restaurants use behavioral triggers to automatically move customers between segments and trigger relevant email sequences:
-                </p>
-
-                <ul className="list-disc pl-6 space-y-2 text-lg text-gray-700 mb-6">
-                  <li><strong>Order frequency changes:</strong> Automatically detect when a regular becomes occasional</li>
-                  <li><strong>Spending pattern shifts:</strong> Notice when customers start ordering more expensive items</li>
-                  <li><strong>Time-based behaviors:</strong> Track customers who only order during lunch vs. dinner</li>
-                  <li><strong>Seasonal patterns:</strong> Identify customers who visit more during certain seasons</li>
-                  <li><strong>Channel preferences:</strong> Segment by dine-in vs. delivery vs. takeout preferences</li>
-                </ul>
-              </section>
-
-              {/* Email Marketing Readiness Assessment */}
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-xl border border-purple-200 my-8">
-                <h3 className="text-2xl font-bold text-purple-800 mb-6 text-center">Email Marketing Readiness Assessment</h3>
-                <p className="text-purple-700 text-center mb-6">Discover how your restaurant's email marketing stacks up</p>
-                
-                {!showAssessmentResult ? (
-                  <>
-                    <div className="mb-6">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm text-purple-600">Question {assessmentStep + 1} of {assessmentQuestions.length}</span>
-                        <span className="text-sm text-purple-600">{Math.round(((assessmentStep) / assessmentQuestions.length) * 100)}% Complete</span>
-                      </div>
-                      <div className="w-full bg-purple-200 rounded-full h-2">
-                        <div 
-                          className="bg-purple-600 h-2 rounded-full transition-all duration-300"
-                          style={{ width: `${((assessmentStep) / assessmentQuestions.length) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="mb-6">
-                      <h4 className="text-lg font-semibold text-purple-800 mb-4">{assessmentQuestions[assessmentStep].question}</h4>
-                      <div className="space-y-3">
-                        {assessmentQuestions[assessmentStep].options.map((option, index) => (
-                          <button
-                            key={index}
-                            onClick={() => handleAssessmentAnswer(assessmentQuestions[assessmentStep].scores[index])}
-                            className="w-full p-4 text-left bg-white hover:bg-purple-100 border border-purple-200 rounded-lg transition-colors"
-                          >
-                            {option}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-center">
-                    {(() => {
-                      const result = getAssessmentResult();
-                      return (
-                        <>
-                          <h4 className="text-2xl font-bold text-purple-800 mb-4">Your Email Marketing Level</h4>
-                          <div className={`text-4xl font-bold mb-4 text-${result.color}-600`}>{result.level}</div>
-                          <p className="text-lg text-purple-700 mb-6">{result.message}</p>
-                          
-                          <div className="bg-white p-6 rounded-lg mb-6">
-                            <h5 className="text-lg font-bold text-gray-800 mb-4">Your Personalized Recommendations:</h5>
-                            <ul className="text-left space-y-2">
-                              {result.recommendations.map((rec, index) => (
-                                <li key={index} className="flex items-start space-x-2">
-                                  <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
-                                  <span className="text-gray-700">{rec}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          
-                          <div className="space-y-4">
-                            <Link to="/funnel">
-                              <Button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 mr-4">
-                                Get Personalized Email Strategy
-                              </Button>
-                            </Link>
-                            <Button onClick={resetAssessment} variant="outline" className="border-purple-600 text-purple-600">
-                              Retake Assessment
-                            </Button>
-                          </div>
-                        </>
-                      );
-                    })()}
-                  </div>
-                )}
-              </div>
-
-              {/* Continue with more sections... */}
-              {/* AI-Powered Email Automation */}
-              <section id="automation" className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6" style={{ color: blue }}>AI-Powered Email Automation: Marketing That Works While You Sleep</h2>
-                
-                <p className="text-lg leading-relaxed text-gray-700 mb-6">
-                  The most successful restaurants in 2025 don't manually send emails—they build intelligent automation systems that respond to customer behavior in real-time. These AI-powered workflows generate 5x more revenue than traditional batch-and-blast campaigns while requiring 80% less manual work.
-                </p>
-
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4">The Essential Automation Workflows</h3>
-                
-                <div className="space-y-6 mb-8">
-                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <Mail className="w-5 h-5 mr-2 text-blue-500" />
-                      Welcome Series (7-email sequence)
-                    </h4>
-                    <p className="text-gray-700 mb-3">Automatically triggered when someone joins your email list</p>
-                    <div className="text-sm text-gray-600 space-y-1">
-                      <div><strong>Email 1 (Immediate):</strong> Welcome & first visit incentive</div>
-                      <div><strong>Email 2 (Day 3):</strong> Restaurant story & chef introduction</div>
-                      <div><strong>Email 3 (Day 7):</strong> Menu highlights & dietary options</div>
-                      <div><strong>Email 4 (Day 14):</strong> Customer reviews & social proof</div>
-                      <div><strong>Email 5 (Day 21):</strong> Behind-the-scenes content</div>
-                      <div><strong>Email 6 (Day 30):</strong> Second visit incentive</div>
-                      <div><strong>Email 7 (Day 45):</strong> Loyalty program invitation</div>
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <TrendingUp className="w-5 h-5 mr-2 text-green-500" />
-                      Post-Visit Follow-Up
-                    </h4>
-                    <p className="text-gray-700 mb-3">Triggered 24 hours after each restaurant visit</p>
-                    <div className="text-sm text-gray-600 space-y-1">
-                      <div><strong>First-time visitors:</strong> Thank you + feedback request + return incentive</div>
-                      <div><strong>Return customers:</strong> Thank you + menu recommendations + special offers</div>
-                      <div><strong>VIP customers:</strong> Personal thank you + exclusive previews + loyalty rewards</div>
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <AlertTriangle className="w-5 h-5 mr-2 text-orange-500" />
-                      Win-Back Campaigns
-                    </h4>
-                    <p className="text-gray-700 mb-3">Automatically triggered based on customer inactivity</p>
-                    <div className="text-sm text-gray-600 space-y-1">
-                      <div><strong>30 days inactive:</strong> "New menu items you'll love"</div>
-                      <div><strong>60 days inactive:</strong> "We miss you" + 15% off incentive</div>
-                      <div><strong>90 days inactive:</strong> Personal message from chef + 25% off</div>
-                      <div><strong>120 days inactive:</strong> Final attempt with significant offer</div>
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <Star className="w-5 h-5 mr-2 text-yellow-500" />
-                      Birthday & Anniversary Campaigns
-                    </h4>
-                    <p className="text-gray-700 mb-3">Celebrate special occasions with personalized offers</p>
-                    <div className="text-sm text-gray-600 space-y-1">
-                      <div><strong>1 week before:</strong> Birthday announcement + celebration planning</div>
-                      <div><strong>On birthday:</strong> Special offer + party invitation</div>
-                      <div><strong>Visit anniversary:</strong> Thank you + loyalty appreciation + exclusive offer</div>
-                    </div>
-                  </div>
-                </div>
-
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4">AI Optimization Features</h3>
-                
-                <p className="text-lg leading-relaxed text-gray-700 mb-6">
-                  Advanced email marketing platforms now use artificial intelligence to optimize every aspect of your campaigns:
-                </p>
-
-                <ul className="list-disc pl-6 space-y-2 text-lg text-gray-700 mb-6">
-                  <li><strong>Send Time Optimization:</strong> AI learns when each customer is most likely to open emails</li>
-                  <li><strong>Subject Line Testing:</strong> Automatically tests multiple subject lines and uses the winner</li>
-                  <li><strong>Content Personalization:</strong> Dynamically adjusts content based on customer preferences</li>
-                  <li><strong>Frequency Optimization:</strong> Automatically adjusts email frequency to prevent unsubscribes</li>
-                  <li><strong>Churn Prediction:</strong> Identifies customers likely to stop visiting and triggers retention campaigns</li>
-                </ul>
-              </section>
-
-              <InlineCTA variant="demo">
-                See how AI-powered email automation can generate 5x more revenue for your restaurant
-              </InlineCTA>
-
-              {/* Continue with remaining sections... */}
-              <section id="personalization" className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6" style={{ color: blue }}>Hyper-Personalization: Making Every Customer Feel Special</h2>
-                
-                <p className="text-lg leading-relaxed text-gray-700 mb-6">
-                  Generic emails are dead. In 2025, customers expect emails that feel like they were written specifically for them. The restaurants dominating email marketing use sophisticated personalization that goes far beyond adding a first name to the subject line.
-                </p>
-
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4">The Personalization Pyramid</h3>
-                
-                <div className="grid md:grid-cols-4 gap-4 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {[
-                    { level: "Basic", elements: "Name, Location", color: "red" },
-                    { level: "Behavioral", elements: "Order History, Visit Frequency", color: "orange" },
-                    { level: "Predictive", elements: "Preferences, Timing", color: "blue" },
-                    { level: "AI-Driven", elements: "Dynamic Content, Real-time", color: "green" }
-                  ].map((tier, index) => (
-                    <div key={index} className={`bg-${tier.color}-50 p-4 rounded-lg border border-${tier.color}-200 text-center`}>
-                      <h4 className={`font-bold text-${tier.color}-800 mb-2`}>{tier.level}</h4>
-                      <p className={`text-sm text-${tier.color}-700`}>{tier.elements}</p>
-                    </div>
+                    { name: "Seasonal Promotions", desc: "Holiday & seasonal menu campaigns", icon: "🍂", results: "45% higher engagement" },
+                    { name: "Loyalty Rewards", desc: "Points, tiers, and VIP experiences", icon: "⭐", results: "23% increase in frequency" },
+                    { name: "Event Invitations", desc: "Wine tastings, chef specials, live music", icon: "🎵", results: "78% attendance rate" },
+                    { name: "Feedback Requests", desc: "Reviews, surveys, and testimonials", icon: "💬", results: "4.8★ average rating" }
+                  ].map((campaign, index) => (
+                    <motion.div
+                      key={campaign.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
+                      viewport={{ once: true }}
+                      whileHover={{ y: -5 }}
+                      className="text-center p-6 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-all duration-300"
+                    >
+                      <div className="text-4xl mb-4">{campaign.icon}</div>
+                      <h5 className="font-bold text-gray-900 mb-2">{campaign.name}</h5>
+                      <p className="text-sm text-gray-600 mb-3">{campaign.desc}</p>
+                      <div className="text-xs font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">
+                        {campaign.results}
+                      </div>
+                    </motion.div>
                   ))}
                 </div>
+              </motion.div>
 
-                <p className="text-lg leading-relaxed text-gray-700 mb-6">
-                  Restaurants using AI-driven personalization see 73% higher email open rates and 89% more revenue per email compared to those using basic personalization.
-                </p>
-              </section>
-
-              {/* Add more sections following the same pattern... */}
-              
-              {/* Implementation Roadmap */}
-              <section id="implementation" className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6" style={{ color: blue }}>90-Day Email Marketing Implementation Roadmap</h2>
-                
-                <div className="space-y-8">
-                  <div className="flex items-start space-x-6">
-                    <div className="bg-orange-100 text-orange-600 rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">1</div>
-                    <div className="flex-1">
-                      <h4 className="text-xl font-semibold text-gray-800 mb-2">Days 1-30: Foundation & Setup</h4>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <ul className="space-y-2 text-gray-700">
-                          <li>• Choose and configure email marketing platform</li>
-                          <li>• Set up basic segmentation (VIP, Regular, New, Dormant)</li>
-                          <li>• Create welcome email series (3-5 emails)</li>
-                          <li>• Implement email capture at POS and website</li>
-                          <li>• Design email templates matching brand</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-6">
-                    <div className="bg-orange-100 text-orange-600 rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">2</div>
-                    <div className="flex-1">
-                      <h4 className="text-xl font-semibold text-gray-800 mb-2">Days 31-60: Automation & Optimization</h4>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <ul className="space-y-2 text-gray-700">
-                          <li>• Launch post-visit follow-up automation</li>
-                          <li>• Set up birthday and anniversary campaigns</li>
-                          <li>• Begin A/B testing subject lines and content</li>
-                          <li>• Implement win-back campaign for dormant customers</li>
-                          <li>• Add advanced segmentation based on behavior</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-6">
-                    <div className="bg-orange-100 text-orange-600 rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">3</div>
-                    <div className="flex-1">
-                      <h4 className="text-xl font-semibold text-gray-800 mb-2">Days 61-90: Advanced Features & Scale</h4>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <ul className="space-y-2 text-gray-700">
-                          <li>• Implement AI-powered send time optimization</li>
-                          <li>• Add dynamic content personalization</li>
-                          <li>• Launch referral email campaigns</li>
-                          <li>• Integrate with loyalty program</li>
-                          <li>• Set up advanced analytics and reporting</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-green-50 border border-green-200 p-6 rounded-xl my-8">
-                  <h4 className="text-lg font-bold text-green-800 mb-2">Expected Results After 90 Days</h4>
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-green-600">300%</div>
-                      <div className="text-sm text-green-700">Increase in email revenue</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-green-600">45%</div>
-                      <div className="text-sm text-green-700">Higher open rates</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-green-600">70%</div>
-                      <div className="text-sm text-green-700">More repeat customers</div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* Related Articles Section */}
-              <section className="mb-12 pt-8 border-t border-gray-200">
-                <h2 className="text-3xl font-bold text-gray-900 mb-8" style={{ color: blue }}>Related Articles</h2>
-                <div className="grid md:grid-cols-3 gap-6">
-                  <Link to="/articles/restaurant-sms-marketing" className="group">
-                    <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow">
-                      <img src="/sms_marketing_guide.webp" alt="SMS Marketing Guide" className="w-full h-48 object-cover" />
-                      <div className="p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition-colors mb-2">
-                          The Ultimate Guide to Restaurant SMS Marketing
-                        </h3>
-                        <p className="text-gray-600 text-sm">Master SMS marketing strategies that deliver $36 for every $1 spent and drive immediate customer action.</p>
-                      </div>
-                    </div>
-                  </Link>
-                  <Link to="/articles/personalized-marketing-guide" className="group">
-                    <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow">
-                      <img src="/personalized_marketing.webp" alt="Personalized Marketing Guide" className="w-full h-48 object-cover" />
-                      <div className="p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition-colors mb-2">
-                          Personalized Marketing: How to Turn One-Time Diners into Regulars
-                        </h3>
-                        <p className="text-gray-600 text-sm">Use customer data and AI to create personalized experiences that build lasting relationships.</p>
-                      </div>
-                    </div>
-                  </Link>
-                  <Link to="/articles/google-reviews-strategies" className="group">
-                    <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow">
-                      <img src="/google-maps-phone.jpg.jpg" alt="Google Reviews Strategies" className="w-full h-48 object-cover" />
-                      <div className="p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition-colors mb-2">
-                          10 Proven Strategies to Get More Google Reviews for Your Restaurant
-                        </h3>
-                        <p className="text-gray-600 text-sm">Learn the most effective methods to encourage customers to leave positive reviews and boost your online reputation.</p>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              </section>
 
             </div>
-          </article>
+          </section>
 
-          {/* Sidebar */}
-          <aside className="lg:col-span-1">
-            <div className="sticky top-24 space-y-8">
+                {/* Enhanced Implementation Process Section */}
+          <section className="relative w-full py-20 px-4 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 overflow-hidden">
+            {/* Dynamic Background Elements */}
+            <div className="absolute inset-0 overflow-hidden">
+              {/* Animated Gradient Orbs */}
+              <motion.div
+                animate={{ 
+                  x: [0, 90, 0],
+                  y: [0, -45, 0],
+                  scale: [1, 1.4, 1]
+                }}
+                transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-16 right-16 w-96 h-96 bg-gradient-to-br from-emerald-400/10 to-teal-400/10 rounded-full blur-3xl"
+              />
+              <motion.div
+                animate={{ 
+                  x: [0, -70, 0],
+                  y: [0, 55, 0],
+                  scale: [1.3, 1, 1.3]
+                }}
+                transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute bottom-16 left-16 w-80 h-80 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 rounded-full blur-3xl"
+              />
               
-              {/* Primary Lead Capture */}
-              <Card className="border-orange-200 shadow-lg">
-                <CardHeader className="bg-orange-50">
-                  <CardTitle className="text-lg text-orange-800">Get Your Free Email Marketing Analysis</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <p className="text-sm text-gray-600 mb-4">
-                    Discover how email marketing can generate $36 ROI for your restaurant with our personalized analysis.
-                  </p>
-                  <form className="space-y-4">
-                    <div>
-                      <Input placeholder="Restaurant Name" className="border-orange-200" />
-                    </div>
-                    <div>
-                      <Input placeholder="Current Email Subscribers" className="border-orange-200" />
-                    </div>
-                    <div>
-                      <Input placeholder="Email Address" type="email" className="border-orange-200" />
-                    </div>
-                    <div>
-                      <Input placeholder="Phone Number (Optional)" className="border-orange-200" />
-                    </div>
-                    <Link to="/funnel">
-                      <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
-                        Get Free Analysis
-                      </Button>
-                    </Link>
-                  </form>
-                  <div className="mt-3 text-xs text-gray-500 text-center">
-                    Join 500+ successful restaurants
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Floating Process Icons */}
+              <motion.div
+                animate={{ y: [-14, 14, -14], rotate: [0, 7, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-32 left-32 p-4 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+              >
+                <Zap className="w-8 h-8 text-emerald-600" />
+              </motion.div>
+              <motion.div
+                animate={{ y: [20, -20, 20], rotate: [0, -7, 0] }}
+                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute bottom-32 right-32 p-4 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+              >
+                <TrendingUp className="w-8 h-8 text-teal-600" />
+              </motion.div>
+            </div>
 
-              {/* Social Proof */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Recent Success Stories</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="bg-green-50 p-4 rounded-lg">
-                      <div className="font-semibold text-green-800">Bella Vista Italian</div>
-                      <div className="text-sm text-green-700">+342% email revenue increase</div>
-                      <div className="text-xs text-green-600">Open rate: 18% → 47%</div>
-                    </div>
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <div className="font-semibold text-blue-800">Dragon Palace Asian</div>
-                      <div className="text-sm text-blue-700">$89K additional annual revenue</div>
-                      <div className="text-xs text-blue-600">Repeat customers: +127%</div>
-                    </div>
-                    <div className="bg-purple-50 p-4 rounded-lg">
-                      <div className="font-semibold text-purple-800">Farm Table Bistro</div>
-                      <div className="text-sm text-purple-700">5x email automation ROI</div>
-                      <div className="text-xs text-purple-600">Setup time: 2 weeks</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="max-w-7xl mx-auto relative z-10">
+              {/* Enhanced Header */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="text-center mb-16"
+              >
+                {/* Enhanced Badge */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                  className="inline-flex items-center bg-gradient-to-r from-emerald-100 to-teal-100 px-4 py-2 rounded-full text-sm font-semibold border border-emerald-200 shadow-sm text-emerald-700 mb-6"
+                >
+                  <Zap className="w-4 h-4 mr-2" />
+                  SIMPLE 4-STEP PROCESS
+                </motion.div>
 
-              {/* Free Resources */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Free Email Marketing Resources</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <Link to="/funnel" className="flex items-center text-sm text-orange-600 hover:text-orange-700 transition-colors">
-                      <Download className="w-4 h-4 mr-2" />
-                      Email Segmentation Templates
-                    </Link>
-                    <Link to="/funnel" className="flex items-center text-sm text-orange-600 hover:text-orange-700 transition-colors">
-                      <Download className="w-4 h-4 mr-2" />
-                      Automation Workflow Templates
-                    </Link>
-                    <Link to="/funnel" className="flex items-center text-sm text-orange-600 hover:text-orange-700 transition-colors">
-                      <Download className="w-4 h-4 mr-2" />
-                      Email Compliance Checklist
-                    </Link>
-                    <Link to="/funnel" className="flex items-center text-sm text-orange-600 hover:text-orange-700 transition-colors">
-                      <Download className="w-4 h-4 mr-2" />
-                      ROI Tracking Spreadsheet
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
+                <motion.h3 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  viewport={{ once: true }}
+                  className="text-4xl md:text-5xl font-bold text-center mb-4"
+                  style={{ color: blue }}
+                >
+                  How Implementation{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600">
+                    Works
+                  </span>
+                </motion.h3>
 
-              {/* Contact Info */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Speak to an Email Marketing Expert</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <a href="tel:+1234567890" className="flex items-center text-orange-600 hover:text-orange-700 transition-colors">
-                      <Phone className="w-4 h-4 mr-2" />
-                      <span>(123) 456-7890</span>
-                    </a>
-                    <a href="mailto:support@botandtable.com" className="flex items-center text-orange-600 hover:text-orange-700 transition-colors">
-                      <Mail className="w-4 h-4 mr-2" />
-                      <span>support@botandtable.com</span>
-                    </a>
-                    <Link to="/funnel">
-                      <Button variant="outline" className="w-full border-orange-600 text-orange-600 hover:bg-orange-50">
-                        Schedule Free Consultation
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
+                {/* Animated underline */}
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: "100%" }}
+                  transition={{ duration: 1, delay: 0.8 }}
+                  viewport={{ once: true }}
+                  className="h-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full mx-auto mb-6 max-w-2xl"
+                />
 
-              {/* Related Articles */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Related Articles</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <Link to="/articles/restaurant-sms-marketing" className="block text-sm text-gray-600 hover:text-orange-600 transition-colors">
-                      The Ultimate Guide to Restaurant SMS Marketing
-                    </Link>
-                    <Link to="/articles/personalized-marketing-guide" className="block text-sm text-gray-600 hover:text-orange-600 transition-colors">
-                      Personalized Marketing: How to Turn One-Time Diners into Regulars
-                    </Link>
-                    <Link to="/articles/google-reviews-strategies" className="block text-sm text-gray-600 hover:text-orange-600 transition-colors">
-                      10 Proven Strategies to Get More Google Reviews for Your Restaurant
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  viewport={{ once: true }}
+                  className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed"
+                >
+                  From strategy to success in just 4 simple steps. We handle the technical setup while you focus on running your restaurant.
+                </motion.p>
+              </motion.div>
+
+              {/* Enhanced Process Steps */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                {[{
+                  step: 1,
+                  title: 'Strategy Call',
+                  desc: 'Book a call to discuss your goals and current marketing efforts.',
+                  icon: '📞',
+                  color: 'from-blue-500 to-indigo-600',
+                  bgColor: 'from-blue-50/50 to-indigo-50/50',
+                  statColor: 'text-blue-600',
+                  statBg: 'bg-blue-50',
+                  stat: '30 min',
+                  statLabel: 'Discovery call'
+                }, {
+                  step: 2,
+                  title: 'Onboarding & Setup',
+                  desc: 'We import your list, set up automations, and integrate with your systems.',
+                  icon: '⚙️',
+                  color: 'from-emerald-500 to-teal-600',
+                  bgColor: 'from-emerald-50/50 to-teal-50/50',
+                  statColor: 'text-emerald-600',
+                  statBg: 'bg-emerald-50',
+                  stat: '48 hrs',
+                  statLabel: 'Complete setup'
+                }, {
+                  step: 3,
+                  title: 'Launch Campaigns',
+                  desc: 'Start sending high-converting emails and watch your revenue grow.',
+                  icon: '🚀',
+                  color: 'from-orange-500 to-red-600',
+                  bgColor: 'from-orange-50/50 to-red-50/50',
+                  statColor: 'text-orange-600',
+                  statBg: 'bg-orange-50',
+                  stat: 'Day 1',
+                  statLabel: 'Campaigns live'
+                }, {
+                  step: 4,
+                  title: 'Ongoing Optimization',
+                  desc: 'We monitor results, optimize, and provide ongoing support.',
+                  icon: '📈',
+                  color: 'from-purple-500 to-pink-600',
+                  bgColor: 'from-purple-50/50 to-pink-50/50',
+                  statColor: 'text-purple-600',
+                  statBg: 'bg-purple-50',
+                  stat: '24/7',
+                  statLabel: 'Monitoring'
+                }].map((item, i) => (
+                  <motion.div
+                    key={item.step}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2 + i * 0.1 }}
+                    viewport={{ once: true }}
+                    whileHover={{ y: -8, scale: 1.05 }}
+                    className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100 hover:shadow-3xl transition-all duration-500 relative overflow-hidden group flex flex-col items-center text-center"
+                  >
+                    <div className={`absolute inset-0 bg-gradient-to-br ${item.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                    
+                    <div className="relative z-10 flex flex-col items-center">
+                      {/* Step Number with Icon */}
+                      <div className="relative mb-6">
+                        <div className={`w-20 h-20 bg-gradient-to-br ${item.color} rounded-full flex items-center justify-center shadow-2xl mb-2`}>
+                          <span className="text-3xl">{item.icon}</span>
+                        </div>
+                        <div className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-gray-100">
+                          <span className="text-sm font-bold text-gray-700">{item.step}</span>
+                        </div>
+                      </div>
+                      
+                      <h4 className="text-2xl font-bold text-gray-900 mb-4">{item.title}</h4>
+                      <p className="text-gray-700 mb-6 leading-relaxed">{item.desc}</p>
+                      
+                      {/* Timeline/Stats */}
+                      <div className={`${item.statBg} rounded-xl p-4 w-full`}>
+                        <div className={`text-2xl font-bold ${item.statColor} mb-1`}>{item.stat}</div>
+                        <div className={`text-sm ${item.statColor} font-medium`}>{item.statLabel}</div>
+                      </div>
+                    </div>
+
+                    {/* Connecting Line (except for last item) */}
+                    {i < 3 && (
+                      <motion.div
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        transition={{ duration: 1, delay: 0.5 + i * 0.2 }}
+                        viewport={{ once: true }}
+                        className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gradient-to-r from-gray-300 to-gray-400 transform -translate-y-1/2 z-20"
+                      />
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+
 
             </div>
-          </aside>
-        </div>
-      </div>
+          </section>
 
-      {/* Bottom CTA */}
-      <section className="bg-gray-50 py-16">
-        <div className="container mx-auto max-w-4xl px-4 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready to Generate $36 ROI with Email Marketing?</h2>
-          <p className="text-xl text-gray-600 mb-8">Join successful restaurants building lasting customer relationships through strategic email marketing.</p>
-          <div className="space-x-4">
-            <Link to="/funnel">
-              <Button className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-8 py-4 text-lg transform hover:scale-105 transition-all">
-                Book Free Strategy Session
-              </Button>
-            </Link>
-            <Link to="/funnel">
-              <Button variant="outline" className="border-orange-600 text-orange-600 font-bold px-8 py-4 text-lg">
-                Download Email Toolkit
-              </Button>
-            </Link>
-          </div>
-          <div className="mt-4 text-sm text-gray-500">
-            30-minute consultation • No obligation • Immediate implementation plan
-          </div>
+          {/* Book Demo Form Section */}
+          <section id="book-call" className="w-full py-16 bg-gray-50">
+            <DemoBookingForm />
+          </section>
+
+      {/* FAQ Section */}
+      <section className="w-full py-16 px-4 bg-gray-50">
+        <div className="max-w-3xl mx-auto">
+          <h3 className="text-3xl font-bold mb-8 text-center" style={{ color: blue }}>Frequently Asked Questions</h3>
+          <Accordion type="single" collapsible>
+            <AccordionItem value="faq-1">
+              <AccordionTrigger className="text-lg font-semibold" style={{ color: blue }}>How quickly can I see results from email marketing?</AccordionTrigger>
+              <AccordionContent className="text-gray-700 text-base">Most restaurants see increased engagement and bookings within the first month of launching their first campaign.</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="faq-2">
+              <AccordionTrigger className="text-lg font-semibold" style={{ color: blue }}>What types of emails work best for restaurants?</AccordionTrigger>
+              <AccordionContent className="text-gray-700 text-base">Promotions, event invites, feedback requests, and personalized offers perform best.</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="faq-3">
+              <AccordionTrigger className="text-lg font-semibold" style={{ color: blue }}>Can I integrate email marketing with my POS or reservation system?</AccordionTrigger>
+              <AccordionContent className="text-gray-700 text-base">Yes, our platform connects with POS, reservation, loyalty, and review systems.</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="faq-4">
+              <AccordionTrigger className="text-lg font-semibold" style={{ color: blue }}>How do I measure email marketing success?</AccordionTrigger>
+              <AccordionContent className="text-gray-700 text-base">Track open rates, bookings, revenue, and customer feedback in your dashboard.</AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </section>
-
-      {/* Mobile Sticky CTA */}
-      <div className="fixed bottom-0 left-0 right-0 bg-orange-600 p-4 lg:hidden z-40">
-        <Link to="/funnel">
-          <Button className="w-full bg-white text-orange-600 hover:bg-gray-100 font-bold py-3">
-            Get Free Email Analysis →
-          </Button>
-        </Link>
-      </div>
-
-      {/* Demo Booking Form */}
-      <DemoBookingForm />
+      {/* Related Articles Section */}
+      <ArticlesSection />
     </div>
   );
-};
-
-export default EmailMarketingPage; 
+} 

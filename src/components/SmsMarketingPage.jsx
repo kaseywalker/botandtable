@@ -599,27 +599,7 @@ export default function SmsMarketingPage() {
 
       {/* Enhanced Features Section */}
       <section className="relative w-full py-20 px-4 bg-gradient-to-br from-gray-50 via-white to-orange-50 overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 opacity-30">
-          <motion.div
-            animate={{ 
-              x: [0, 50, 0],
-              y: [0, -30, 0],
-              scale: [1, 1.1, 1]
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-br from-orange-200 to-red-200 rounded-full blur-2xl"
-          />
-          <motion.div
-            animate={{ 
-              x: [0, -40, 0],
-              y: [0, 40, 0],
-              rotate: [0, 180, 360]
-            }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute bottom-32 left-20 w-24 h-24 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full blur-xl"
-          />
-        </div>
+
 
         <div className="max-w-6xl mx-auto relative z-10">
           {/* Enhanced Header */}
@@ -672,23 +652,14 @@ export default function SmsMarketingPage() {
                   className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-red-500/5 rounded-3xl"
                 />
                 
-                {/* Icon with animated background */}
-                <motion.div
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  className="relative mb-6"
-                >
+                {/* Icon with subtle hover effects */}
+                <div className="relative mb-6">
                   <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl flex items-center justify-center group-hover:from-orange-200 group-hover:to-red-200 transition-all duration-300">
                     <div className="text-orange-600 group-hover:text-red-600 transition-colors duration-300">
                       {feature.icon}
                     </div>
                   </div>
-                  {/* Animated ring */}
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="absolute inset-0 border-2 border-orange-300 rounded-2xl"
-                  />
-                </motion.div>
+                </div>
 
                 <h4 className="text-xl font-bold mb-4 text-gray-900 group-hover:text-orange-600 transition-colors duration-300">
                   {feature.title}
