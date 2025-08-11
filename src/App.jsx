@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
-import Hero from './components/Hero';
+// import Hero from './components/Hero'; // removed old hero/funnel
 import ProblemSection from './components/ProblemSection';
 import SolutionSection from './components/SolutionSection';
 import { AICommunicationSectionWithRobot } from './components/ai-communication-section-with-robot';
@@ -10,7 +10,7 @@ import ServicesSection from './components/ServicesSection';
 import SocialProofSection from './components/SocialProofSection';
 import FinalCTASection from './components/FinalCTASection';
 import Footer from './components/Footer';
-import ReportPage from './components/ReportPage';
+// import ReportPage from './components/ReportPage'; // removed old report route
 import HomePage from './components/TestPage';
 import SmsMarketingPage from './components/SmsMarketingPage';
 import EmailMarketingPage from './components/EmailMarketingPage';
@@ -21,7 +21,7 @@ import GoogleReviewsPage from './components/GoogleReviewsPage';
 import ResourcesPage from './components/ResourcesPage';
 import ArticlePage from './components/ArticlePage';
 import WhyBestCustomersNeverLeaveReviews from './components/WhyBestCustomersNeverLeaveReviews';
-import FunnelPage from './components/FunnelPage';
+// import FunnelPage from './components/FunnelPage'; // removed old funnel page
 import TurningAngryCustomersIntoAdvocates from './components/TurningAngryCustomersIntoAdvocates';
 import PhoneProblemArticle from './components/PhoneProblemArticle';
 import FromChaosToCashArticle from './components/FromChaosToCashArticle';
@@ -44,8 +44,8 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/funnel" element={<FunnelPage />} />
-        <Route path="/report" element={<ReportPageWrapper />} />
+        {/* Removed: <Route path="/funnel" element={<FunnelPage />} /> */}
+        {/* Removed: <Route path="/report" element={<ReportPageWrapper />} /> */}
         <Route path="/sms-marketing" element={<SmsMarketingPage />} />
         <Route path="/email-marketing" element={<EmailMarketingPage />} />
         <Route path="/ai-phone-answering" element={<AiPhoneAnsweringPage />} />
@@ -72,11 +72,7 @@ function App() {
   );
 }
 
-// Wrapper to pass location state to ReportPage
-function ReportPageWrapper() {
-  const location = useLocation();
-  return <ReportPage location={location} />;
-}
+// Removed ReportPageWrapper since /report route is gone
 
 export default App;
 
